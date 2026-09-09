@@ -1,4 +1,4 @@
-name: flutter_init
+name: init
 description: "A new Flutter project."
 # 以下代码行可防止该包通过 `flutter pub publish` 被意外发布到
 # pub.dev。这对私有包是首选做法。

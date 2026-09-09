@@ -2,14 +2,14 @@ import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_localizations/flutter_localizations.dart'
     hide GlobalMaterialLocalizations;
-import 'package:flutter_init/core/constants/app_constants.dart';
-import 'package:flutter_init/core/providers/localization_providers.dart';
-import 'package:flutter_init/core/providers/storage_providers.dart';
-import 'package:flutter_init/core/router/app_router.dart';
-import 'package:flutter_init/core/theme/app_theme.dart';
-import 'package:flutter_init/core/updates/update_providers.dart';
-import 'package:flutter_init/l10n/app_localizations_delegate.dart';
-import 'package:flutter_init/l10n/l10n.dart';
+import 'package:init/core/constants/app_constants.dart';
+import 'package:init/core/providers/localization_providers.dart';
+import 'package:init/core/providers/storage_providers.dart';
+import 'package:init/core/router/app_router.dart';
+import 'package:init/core/theme/app_theme.dart';
+import 'package:init/core/updates/update_providers.dart';
+import 'package:init/l10n/app_localizations_delegate.dart';
+import 'package:init/l10n/l10n.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {

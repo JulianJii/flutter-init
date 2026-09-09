@@ -1,15 +1,15 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_init/core/constants/app_constants.dart';
-import 'package:flutter_init/core/error/exceptions.dart';
-import 'package:flutter_init/core/error/failures.dart';
-import 'package:flutter_init/core/providers/storage_providers.dart';
-import 'package:flutter_init/core/storage/local_storage_service.dart';
-import 'package:flutter_init/core/storage/secure_storage_service.dart';
-import 'package:flutter_init/features/auth/data/datasources/auth_remote_data_source.dart';
-import 'package:flutter_init/features/auth/data/models/user_model.dart';
-import 'package:flutter_init/features/auth/domain/entities/user_entity.dart';
-import 'package:flutter_init/features/auth/domain/repositories/auth_repository.dart';
+import 'package:init/core/constants/app_constants.dart';
+import 'package:init/core/error/exceptions.dart';
+import 'package:init/core/error/failures.dart';
+import 'package:init/core/providers/storage_providers.dart';
+import 'package:init/core/storage/local_storage_service.dart';
+import 'package:init/core/storage/secure_storage_service.dart';
+import 'package:init/features/auth/data/datasources/auth_remote_data_source.dart';
+import 'package:init/features/auth/data/models/user_model.dart';
+import 'package:init/features/auth/domain/entities/user_entity.dart';
+import 'package:init/features/auth/domain/repositories/auth_repository.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
   final AuthRemoteDataSource _remoteDataSource;

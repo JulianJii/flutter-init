@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:local_auth/local_auth.dart' as local_auth;
 // import 'package:local_auth/error_codes.dart' as auth_error;
-import 'package:flutter_init/core/auth/biometric_service.dart';
+import 'package:init/core/auth/biometric_service.dart';
 
 /// 使用 local_auth 包实现的 BiometricService
 class LocalBiometricService implements BiometricService {

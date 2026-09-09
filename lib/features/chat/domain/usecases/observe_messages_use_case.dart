@@ -1,5 +1,5 @@
-import 'package:flutter_init/features/chat/domain/entities/message_entity.dart';
-import 'package:flutter_init/features/chat/domain/repositories/chat_repository.dart';
+import 'package:init/features/chat/domain/entities/message_entity.dart';
+import 'package:init/features/chat/domain/repositories/chat_repository.dart';
 
 class ObserveMessagesUseCase {
   final ChatRepository _repository;

@@ -1,6 +1,6 @@
 import 'package:fpdart/fpdart.dart';
-import 'package:flutter_init/core/error/failures.dart';
-import 'package:flutter_init/features/posts/domain/entities/post_entity.dart';
+import 'package:init/core/error/failures.dart';
+import 'package:init/features/posts/domain/entities/post_entity.dart';
 
 abstract class PostRepository {
   /// 从远程数据源获取帖子列表，离线或出错时回退到上次成功缓存的列表。

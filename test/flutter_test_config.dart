@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:material_ui/material_ui.dart';
-import 'package:flutter_init/core/theme/app_theme.dart';
+import 'package:init/core/theme/app_theme.dart';
 import 'package:zoloto/zoloto.dart';
 
 Future<void> testExecutable(FutureOr<void> Function() testMain) async {

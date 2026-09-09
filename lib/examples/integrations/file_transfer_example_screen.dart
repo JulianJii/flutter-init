@@ -47,7 +47,7 @@ class _FileTransferExampleScreenState
           .upload(
             url: 'https://httpbin.org/post',
             filePath: path,
-            fields: {'source': 'flutter_init'},
+            fields: {'source': 'init'},
             onProgress: (progress) {
               if (mounted) setState(() => _uploadProgress = progress);
             },

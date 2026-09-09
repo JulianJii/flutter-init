@@ -45,7 +45,7 @@ analytics.logUserAction(
 );
 ```
 
-详情请参见[分析指南](https://jessejii.github.io/flutter_init/analytics.html)。
+详情请参见[分析指南](https://jessejii.github.io/init/analytics.html)。
 
 ## 推送通知
 
@@ -85,7 +85,7 @@ if (isAvailable) {
 }
 ```
 
-详情请参见[生物识别认证指南](https://jessejii.github.io/flutter_init/biometric_auth.html)。
+详情请参见[生物识别认证指南](https://jessejii.github.io/init/biometric_auth.html)。
 
 ## 功能开关
 
@@ -98,13 +98,13 @@ if (service.isFeatureEnabled('premium_features')) {
 }
 ```
 
-详情请参见[功能开关指南](https://jessejii.github.io/flutter_init/feature_flags.html)。
+详情请参见[功能开关指南](https://jessejii.github.io/init/feature_flags.html)。
 
 ## 高级图片处理
 
 支持缓存、SVG、特效和精美占位图的优化图片加载方案。
 
-详情请参见[图片处理指南](https://jessejii.github.io/flutter_init/image_handling.html)。
+详情请参见[图片处理指南](https://jessejii.github.io/init/image_handling.html)。
 
 ## 多语言支持
 
@@ -115,7 +115,7 @@ if (service.isFeatureEnabled('premium_features')) {
 Text(context.tr('welcome_message'));
 ```
 
-详情请参见[本地化指南](https://jessejii.github.io/flutter_init/localization.html)。
+详情请参见[本地化指南](https://jessejii.github.io/init/localization.html)。
 
 ## 高级缓存系统
 
@@ -148,7 +148,7 @@ return MaterialApp(
 
 让你的应用在有无网络连接的情况下都能无缝运行。
 
-详情请参见[离线架构指南](https://jessejii.github.io/flutter_init/offline_architecture.html)。
+详情请参见[离线架构指南](https://jessejii.github.io/init/offline_architecture.html)。
 
 ## 应用更新流程
 

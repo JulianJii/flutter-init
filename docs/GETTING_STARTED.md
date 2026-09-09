@@ -13,21 +13,21 @@
 ### 方式一：克隆仓库
 
 ```bash
-git clone https://github.com/jessejii/flutter_init.git
-cd flutter_init
+git clone https://github.com/jessejii/init.git
+cd init
 flutter pub get
 ```
 
 ### 方式二：作为模板使用
 
-1. 前往 [GitHub 仓库](https://github.com/jessejii/flutter_init)
+1. 前往 [GitHub 仓库](https://github.com/jessejii/init)
 2. 点击「Use this template」按钮
 3. 按照 GitHub 的指引创建你的仓库
 4. 将新仓库克隆到本地
 
 ### 方式三：基于模板创建新项目
 
-1. 前往 [GitHub 仓库](https://github.com/jessejii/flutter_init)
+1. 前往 [GitHub 仓库](https://github.com/jessejii/init)
 2. 点击「Use this template」创建新仓库
 3. 克隆新仓库到本地
 4. 运行 `flutter pub get` 安装依赖
@@ -46,4 +46,4 @@ flutter run
 
 - 浏览项目结构，了解整体架构
 - 查看 `lib/examples` 文件夹中的示例
-- 阅读[架构指南](https://jessejii.github.io/flutter_init/architecture.html)，深入了解项目架构
+- 阅读[架构指南](https://jessejii.github.io/init/architecture.html)，深入了解项目架构

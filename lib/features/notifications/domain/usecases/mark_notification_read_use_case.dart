@@ -1,6 +1,6 @@
 import 'package:fpdart/fpdart.dart';
-import 'package:flutter_init/core/error/failures.dart';
-import 'package:flutter_init/features/notifications/domain/repositories/notification_repository.dart';
+import 'package:init/core/error/failures.dart';
+import 'package:init/features/notifications/domain/repositories/notification_repository.dart';
 
 class MarkNotificationReadUseCase {
   final NotificationRepository _repository;

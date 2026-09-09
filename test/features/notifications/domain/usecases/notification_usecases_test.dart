@@ -1,13 +1,13 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:flutter_init/core/error/failures.dart';
-import 'package:flutter_init/features/notifications/domain/entities/notification_item_entity.dart';
-import 'package:flutter_init/features/notifications/domain/repositories/notification_repository.dart';
-import 'package:flutter_init/features/notifications/domain/usecases/clear_notifications_use_case.dart';
-import 'package:flutter_init/features/notifications/domain/usecases/get_notifications_use_case.dart';
-import 'package:flutter_init/features/notifications/domain/usecases/mark_notification_read_use_case.dart';
-import 'package:flutter_init/features/notifications/domain/usecases/upsert_notification_use_case.dart';
+import 'package:init/core/error/failures.dart';
+import 'package:init/features/notifications/domain/entities/notification_item_entity.dart';
+import 'package:init/features/notifications/domain/repositories/notification_repository.dart';
+import 'package:init/features/notifications/domain/usecases/clear_notifications_use_case.dart';
+import 'package:init/features/notifications/domain/usecases/get_notifications_use_case.dart';
+import 'package:init/features/notifications/domain/usecases/mark_notification_read_use_case.dart';
+import 'package:init/features/notifications/domain/usecases/upsert_notification_use_case.dart';
 
 class MockNotificationRepository extends Mock
     implements NotificationRepository {}

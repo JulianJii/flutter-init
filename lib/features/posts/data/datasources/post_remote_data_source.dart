@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_init/core/error/exceptions.dart';
-import 'package:flutter_init/core/utils/app_utils.dart';
-import 'package:flutter_init/features/posts/data/models/post_model.dart';
+import 'package:init/core/error/exceptions.dart';
+import 'package:init/core/utils/app_utils.dart';
+import 'package:init/features/posts/data/models/post_model.dart';
 
 abstract class PostRemoteDataSource {
   Future<List<PostModel>> getPosts();

@@ -51,7 +51,7 @@
 ### 2. 安装
 ```bash
 # 克隆仓库
-git clone https://github.com/jessejii/flutter_init.git
+git clone https://github.com/jessejii/init.git
 
 # 安装依赖
 flutter pub get

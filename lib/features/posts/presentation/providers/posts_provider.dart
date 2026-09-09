@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_init/features/posts/domain/entities/post_entity.dart';
-import 'package:flutter_init/features/posts/providers/post_providers.dart';
+import 'package:init/features/posts/domain/entities/post_entity.dart';
+import 'package:init/features/posts/providers/post_providers.dart';
 
 /// 表现层状态管理
 /// 本文件仅包含与 UI 相关的状态提供者

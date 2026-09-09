@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter_init/core/auth/biometric_service.dart';
+import 'package:init/core/auth/biometric_service.dart';
 
 /// BiometricService 的调试实现
 class DebugBiometricService implements BiometricService {

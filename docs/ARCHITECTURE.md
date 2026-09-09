@@ -132,4 +132,4 @@ class HomeScreen extends ConsumerWidget {
 }
 ```
 
-如需更详细的架构说明，请参阅[架构指南](https://jessejii.github.io/flutter_init/architecture.html)。
+如需更详细的架构说明，请参阅[架构指南](https://jessejii.github.io/init/architecture.html)。

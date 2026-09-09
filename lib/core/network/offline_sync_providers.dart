@@ -1,8 +1,8 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_init/core/network/offline_sync_service.dart';
-import 'package:flutter_init/core/providers/storage_providers.dart';
+import 'package:init/core/network/offline_sync_service.dart';
+import 'package:init/core/providers/storage_providers.dart';
 
 /// 连通性服务的 Provider
 final connectivityProvider = Provider<Connectivity>((ref) {

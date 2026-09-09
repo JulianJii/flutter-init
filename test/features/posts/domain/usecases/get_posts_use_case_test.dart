@@ -1,10 +1,10 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:flutter_init/core/error/failures.dart';
-import 'package:flutter_init/features/posts/domain/entities/post_entity.dart';
-import 'package:flutter_init/features/posts/domain/repositories/post_repository.dart';
-import 'package:flutter_init/features/posts/domain/usecases/get_posts_use_case.dart';
+import 'package:init/core/error/failures.dart';
+import 'package:init/features/posts/domain/entities/post_entity.dart';
+import 'package:init/features/posts/domain/repositories/post_repository.dart';
+import 'package:init/features/posts/domain/usecases/get_posts_use_case.dart';
 
 class MockPostRepository extends Mock implements PostRepository {}
 

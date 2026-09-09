@@ -1,4 +1,4 @@
-import 'package:flutter_init/features/chat/domain/entities/message_entity.dart';
+import 'package:init/features/chat/domain/entities/message_entity.dart';
 
 class MessageModel extends MessageEntity {
   const MessageModel({

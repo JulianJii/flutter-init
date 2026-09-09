@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:flutter_init/core/error/exceptions.dart';
+import 'package:init/core/error/exceptions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LocalStorageService {

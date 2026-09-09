@@ -1,7 +1,7 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_init/features/chat/presentation/providers/chat_provider.dart';
-import 'package:flutter_init/features/chat/presentation/widgets/chat_bubble.dart';
+import 'package:init/features/chat/presentation/providers/chat_provider.dart';
+import 'package:init/features/chat/presentation/widgets/chat_bubble.dart';
 
 class ChatScreen extends ConsumerStatefulWidget {
   const ChatScreen({super.key});

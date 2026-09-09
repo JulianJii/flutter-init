@@ -1,4 +1,4 @@
-import 'package:flutter_init/features/tasks/domain/entities/task_entity.dart';
+import 'package:init/features/tasks/domain/entities/task_entity.dart';
 
 class TaskModel extends TaskEntity {
   const TaskModel({

@@ -1,6 +1,6 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_init/features/auth/presentation/screens/login_screen.dart';
+import 'package:init/features/auth/presentation/screens/login_screen.dart';
 import 'package:zoloto/zoloto.dart';
 
 const _phoneEnv = TestEnvironment(

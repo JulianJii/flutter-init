@@ -9,7 +9,7 @@
 ### DateTime 扩展方法
 
 ```dart
-import 'package:flutter_init/core/utils/extensions/datetime_extensions.dart';
+import 'package:init/core/utils/extensions/datetime_extensions.dart';
 
 void exampleDateTimeExtensions() {
   final now = DateTime.now();
@@ -39,7 +39,7 @@ void exampleDateTimeExtensions() {
 ### BuildContext 扩展方法
 
 ```dart
-import 'package:flutter_init/core/utils/extensions/build_context_extensions.dart';
+import 'package:init/core/utils/extensions/build_context_extensions.dart';
 
 class MyWidget extends StatelessWidget {
   @override

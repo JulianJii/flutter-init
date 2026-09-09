@@ -1,8 +1,8 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:flutter_init/core/constants/app_constants.dart';
-import 'package:flutter_init/l10n/l10n.dart';
+import 'package:init/core/constants/app_constants.dart';
+import 'package:init/l10n/l10n.dart';
 
 /// 包含各种应用配置选项的设置页面
 class SettingsScreen extends ConsumerWidget {

@@ -1,4 +1,4 @@
-import 'package:flutter_init/features/auth/domain/entities/user_entity.dart';
+import 'package:init/features/auth/domain/entities/user_entity.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:equatable/equatable.dart';
 

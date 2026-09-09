@@ -1,4 +1,4 @@
-import 'package:flutter_init/features/posts/domain/entities/post_entity.dart';
+import 'package:init/features/posts/domain/entities/post_entity.dart';
 
 class PostModel extends PostEntity {
   const PostModel({

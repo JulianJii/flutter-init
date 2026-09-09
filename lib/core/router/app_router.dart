@@ -1,18 +1,18 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_init/core/constants/app_constants.dart';
-import 'package:flutter_init/core/providers/localization_providers.dart';
-import 'package:flutter_init/core/router/locale_aware_router.dart';
-import 'package:flutter_init/examples/localization_assets_demo.dart';
-import 'package:flutter_init/features/auth/presentation/screens/login_screen.dart';
-import 'package:flutter_init/features/auth/presentation/screens/register_screen.dart';
-import 'package:flutter_init/features/home/presentation/screens/home_screen.dart';
-import 'package:flutter_init/features/auth/presentation/providers/auth_provider.dart';
-import 'package:flutter_init/features/settings/presentation/screens/settings_screen.dart';
-import 'package:flutter_init/features/settings/presentation/screens/language_settings_screen.dart';
+import 'package:init/core/constants/app_constants.dart';
+import 'package:init/core/providers/localization_providers.dart';
+import 'package:init/core/router/locale_aware_router.dart';
+import 'package:init/examples/localization_assets_demo.dart';
+import 'package:init/features/auth/presentation/screens/login_screen.dart';
+import 'package:init/features/auth/presentation/screens/register_screen.dart';
+import 'package:init/features/home/presentation/screens/home_screen.dart';
+import 'package:init/features/auth/presentation/providers/auth_provider.dart';
+import 'package:init/features/settings/presentation/screens/settings_screen.dart';
+import 'package:init/features/settings/presentation/screens/language_settings_screen.dart';
 import 'package:go_router/go_router.dart';
-import 'package:flutter_init/features/chat/presentation/screens/chat_screen.dart';
-import 'package:flutter_init/features/survey/presentation/screens/survey_screen.dart';
+import 'package:init/features/chat/presentation/screens/chat_screen.dart';
+import 'package:init/features/survey/presentation/screens/survey_screen.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   final authState = ref.watch(authProvider);

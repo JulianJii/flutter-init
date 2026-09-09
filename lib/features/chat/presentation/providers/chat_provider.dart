@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_init/features/chat/domain/entities/message_entity.dart';
-import 'package:flutter_init/features/chat/providers/chat_providers.dart';
+import 'package:init/features/chat/domain/entities/message_entity.dart';
+import 'package:init/features/chat/providers/chat_providers.dart';
 
 /// 表现层状态管理
 /// 本文件只包含与 UI 相关的 state providers

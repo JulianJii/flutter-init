@@ -1,10 +1,10 @@
 import 'package:fpdart/fpdart.dart';
-import 'package:flutter_init/core/error/exceptions.dart';
-import 'package:flutter_init/core/error/failures.dart';
-import 'package:flutter_init/features/posts/data/datasources/post_cache_data_source.dart';
-import 'package:flutter_init/features/posts/data/datasources/post_remote_data_source.dart';
-import 'package:flutter_init/features/posts/domain/entities/post_entity.dart';
-import 'package:flutter_init/features/posts/domain/repositories/post_repository.dart';
+import 'package:init/core/error/exceptions.dart';
+import 'package:init/core/error/failures.dart';
+import 'package:init/features/posts/data/datasources/post_cache_data_source.dart';
+import 'package:init/features/posts/data/datasources/post_remote_data_source.dart';
+import 'package:init/features/posts/domain/entities/post_entity.dart';
+import 'package:init/features/posts/domain/repositories/post_repository.dart';
 
 class PostRepositoryImpl implements PostRepository {
   final PostRemoteDataSource _remoteDataSource;

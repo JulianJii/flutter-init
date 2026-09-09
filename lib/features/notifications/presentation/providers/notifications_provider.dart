@@ -1,8 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_init/core/notifications/notification_providers.dart';
-import 'package:flutter_init/core/notifications/notification_service.dart';
-import 'package:flutter_init/features/notifications/domain/entities/notification_item_entity.dart';
-import 'package:flutter_init/features/notifications/providers/notification_feature_providers.dart';
+import 'package:init/core/notifications/notification_providers.dart';
+import 'package:init/core/notifications/notification_service.dart';
+import 'package:init/features/notifications/domain/entities/notification_item_entity.dart';
+import 'package:init/features/notifications/providers/notification_feature_providers.dart';
 
 /// 表现层状态管理
 /// 本文件仅包含与 UI 相关的状态提供者

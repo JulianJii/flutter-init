@@ -1,14 +1,14 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:flutter_init/core/error/failures.dart';
-import 'package:flutter_init/features/tasks/domain/entities/task_entity.dart';
-import 'package:flutter_init/features/tasks/domain/repositories/task_repository.dart';
-import 'package:flutter_init/features/tasks/domain/usecases/add_task_use_case.dart';
-import 'package:flutter_init/features/tasks/domain/usecases/delete_task_use_case.dart';
-import 'package:flutter_init/features/tasks/domain/usecases/get_tasks_use_case.dart';
-import 'package:flutter_init/features/tasks/domain/usecases/toggle_task_use_case.dart';
-import 'package:flutter_init/features/tasks/domain/usecases/update_task_use_case.dart';
+import 'package:init/core/error/failures.dart';
+import 'package:init/features/tasks/domain/entities/task_entity.dart';
+import 'package:init/features/tasks/domain/repositories/task_repository.dart';
+import 'package:init/features/tasks/domain/usecases/add_task_use_case.dart';
+import 'package:init/features/tasks/domain/usecases/delete_task_use_case.dart';
+import 'package:init/features/tasks/domain/usecases/get_tasks_use_case.dart';
+import 'package:init/features/tasks/domain/usecases/toggle_task_use_case.dart';
+import 'package:init/features/tasks/domain/usecases/update_task_use_case.dart';
 
 class MockTaskRepository extends Mock implements TaskRepository {}
 

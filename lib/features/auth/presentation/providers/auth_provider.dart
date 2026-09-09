@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_init/features/auth/domain/entities/user_entity.dart';
-import 'package:flutter_init/features/auth/providers/auth_providers.dart';
+import 'package:init/features/auth/domain/entities/user_entity.dart';
+import 'package:init/features/auth/providers/auth_providers.dart';
 
 // Auth 状态
 class AuthState {

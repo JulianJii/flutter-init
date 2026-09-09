@@ -1,9 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_init/core/error/exceptions.dart';
-import 'package:flutter_init/core/network/api_client.dart';
-import 'package:flutter_init/core/providers/network_providers.dart';
-import 'package:flutter_init/core/utils/app_utils.dart';
-import 'package:flutter_init/features/auth/data/models/user_model.dart';
+import 'package:init/core/error/exceptions.dart';
+import 'package:init/core/network/api_client.dart';
+import 'package:init/core/providers/network_providers.dart';
+import 'package:init/core/utils/app_utils.dart';
+import 'package:init/features/auth/data/models/user_model.dart';
 
 abstract class AuthRemoteDataSource {
   /// 使用邮箱和密码登录用户

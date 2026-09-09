@@ -1,8 +1,8 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_init/core/providers/localization_providers.dart';
-import 'package:flutter_init/l10n/app_localizations_delegate.dart';
-import 'package:flutter_init/l10n/l10n.dart';
+import 'package:init/core/providers/localization_providers.dart';
+import 'package:init/l10n/app_localizations_delegate.dart';
+import 'package:init/l10n/l10n.dart';
 
 /// 允许用户从受支持的语言环境中选择语言的 widget
 class LanguageSelectorWidget extends ConsumerWidget {

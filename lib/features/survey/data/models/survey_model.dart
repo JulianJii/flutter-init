@@ -1,4 +1,4 @@
-import 'package:flutter_init/features/survey/domain/entities/survey_entity.dart';
+import 'package:init/features/survey/domain/entities/survey_entity.dart';
 
 class SurveyModel extends SurveyEntity {
   const SurveyModel({

@@ -1,4 +1,4 @@
-import 'package:flutter_init/features/chat/domain/repositories/chat_repository.dart';
+import 'package:init/features/chat/domain/repositories/chat_repository.dart';
 
 class SendMessageUseCase {
   final ChatRepository _repository;

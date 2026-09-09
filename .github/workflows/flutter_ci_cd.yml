@@ -126,7 +126,7 @@ jobs:
 #           --aab artifacts/app-release.aab \
 #           --track production \
 #           --json_key ${{ secrets.PLAY_STORE_JSON_KEY }} \
-#           --package_name com.example.flutter_init
+#           --package_name com.example.init
 
 #   deploy_ios:
 #     name: Deploy iOS to TestFlight
@@ -158,4 +158,4 @@ jobs:
 #           --username $APPLE_ID \
 #           --password $APP_SPECIFIC_PASSWORD \
 #           --team_id $TEAM_ID \
-#           --app_identifier com.example.flutter_init
+#           --app_identifier com.example.init

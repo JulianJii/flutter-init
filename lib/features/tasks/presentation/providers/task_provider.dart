@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_init/features/tasks/domain/entities/task_entity.dart';
-import 'package:flutter_init/features/tasks/providers/task_providers.dart';
+import 'package:init/features/tasks/domain/entities/task_entity.dart';
+import 'package:init/features/tasks/providers/task_providers.dart';
 
 /// 表现层状态管理
 /// 本文件仅包含与 UI 相关的状态提供者

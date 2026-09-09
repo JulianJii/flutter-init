@@ -1,8 +1,8 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_init/core/auth/biometric_providers.dart';
-import 'package:flutter_init/core/auth/biometric_service.dart';
-import 'package:flutter_init/core/analytics/analytics_providers.dart';
+import 'package:init/core/auth/biometric_providers.dart';
+import 'package:init/core/auth/biometric_service.dart';
+import 'package:init/core/analytics/analytics_providers.dart';
 
 /// 演示生物识别认证能力的 widget
 class BiometricsDemo extends ConsumerWidget {

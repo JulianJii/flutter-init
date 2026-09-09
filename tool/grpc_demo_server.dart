@@ -16,7 +16,7 @@
 import 'dart:async';
 
 import 'package:grpc/grpc.dart';
-import 'package:flutter_init/core/network/integrations/grpc/greeter.pbgrpc.dart';
+import 'package:init/core/network/integrations/grpc/greeter.pbgrpc.dart';
 
 class GreeterService extends GreeterServiceBase {
   @override

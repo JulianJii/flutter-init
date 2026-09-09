@@ -1,6 +1,6 @@
 import 'package:fpdart/fpdart.dart';
-import 'package:flutter_init/core/error/failures.dart';
-import 'package:flutter_init/features/notifications/domain/entities/notification_item_entity.dart';
+import 'package:init/core/error/failures.dart';
+import 'package:init/features/notifications/domain/entities/notification_item_entity.dart';
 
 /// 读取和修改应用内通知列表的契约接口。
 abstract class NotificationRepository {

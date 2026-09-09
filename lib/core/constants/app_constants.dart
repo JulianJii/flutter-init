@@ -11,7 +11,7 @@ class AppConstants {
   static const String appName = 'Flutter Riverpod Clean Architecture';
   static const String appVersion = '1.0.0';
   static const String packageName =
-      'com.example.flutter_init';
+      'com.example.init';
   static const String iOSAppId = '123456789';
   static const String appcastUrl = 'https://your-appcast-url.com/appcast.xml';
 

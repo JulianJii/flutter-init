@@ -1,6 +1,6 @@
 import 'package:fpdart/fpdart.dart';
-import 'package:flutter_init/core/error/failures.dart';
-import 'package:flutter_init/features/tasks/domain/entities/task_entity.dart';
+import 'package:init/core/error/failures.dart';
+import 'package:init/features/tasks/domain/entities/task_entity.dart';
 
 /// 读取和修改 [TaskEntity] 的契约接口。
 abstract class TaskRepository {

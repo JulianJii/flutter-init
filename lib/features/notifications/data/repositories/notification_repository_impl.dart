@@ -1,10 +1,10 @@
 import 'package:fpdart/fpdart.dart';
-import 'package:flutter_init/core/error/exceptions.dart';
-import 'package:flutter_init/core/error/failures.dart';
-import 'package:flutter_init/features/notifications/data/datasources/notification_local_data_source.dart';
-import 'package:flutter_init/features/notifications/data/models/notification_item_model.dart';
-import 'package:flutter_init/features/notifications/domain/entities/notification_item_entity.dart';
-import 'package:flutter_init/features/notifications/domain/repositories/notification_repository.dart';
+import 'package:init/core/error/exceptions.dart';
+import 'package:init/core/error/failures.dart';
+import 'package:init/features/notifications/data/datasources/notification_local_data_source.dart';
+import 'package:init/features/notifications/data/models/notification_item_model.dart';
+import 'package:init/features/notifications/domain/entities/notification_item_entity.dart';
+import 'package:init/features/notifications/domain/repositories/notification_repository.dart';
 
 class NotificationRepositoryImpl implements NotificationRepository {
   final NotificationLocalDataSource _localDataSource;

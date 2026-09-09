@@ -1,5 +1,5 @@
 import 'package:material_ui/material_ui.dart';
-import 'package:flutter_init/features/chat/domain/entities/message_entity.dart';
+import 'package:init/features/chat/domain/entities/message_entity.dart';
 import 'package:intl/intl.dart';
 
 class ChatBubble extends StatelessWidget {

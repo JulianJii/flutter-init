@@ -1,6 +1,6 @@
 import 'package:fpdart/fpdart.dart';
-import 'package:flutter_init/core/error/failures.dart';
-import 'package:flutter_init/features/tasks/domain/repositories/task_repository.dart';
+import 'package:init/core/error/failures.dart';
+import 'package:init/features/tasks/domain/repositories/task_repository.dart';
 
 class DeleteTaskUseCase {
   final TaskRepository _repository;

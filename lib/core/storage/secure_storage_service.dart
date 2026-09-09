@@ -1,5 +1,5 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:flutter_init/core/error/exceptions.dart';
+import 'package:init/core/error/exceptions.dart';
 
 class SecureStorageService {
   final FlutterSecureStorage _secureStorage;

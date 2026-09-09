@@ -1,11 +1,11 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_init/features/notifications/data/datasources/notification_local_data_source.dart';
-import 'package:flutter_init/features/notifications/data/repositories/notification_repository_impl.dart';
-import 'package:flutter_init/features/notifications/domain/repositories/notification_repository.dart';
-import 'package:flutter_init/features/notifications/domain/usecases/clear_notifications_use_case.dart';
-import 'package:flutter_init/features/notifications/domain/usecases/get_notifications_use_case.dart';
-import 'package:flutter_init/features/notifications/domain/usecases/mark_notification_read_use_case.dart';
-import 'package:flutter_init/features/notifications/domain/usecases/upsert_notification_use_case.dart';
+import 'package:init/features/notifications/data/datasources/notification_local_data_source.dart';
+import 'package:init/features/notifications/data/repositories/notification_repository_impl.dart';
+import 'package:init/features/notifications/domain/repositories/notification_repository.dart';
+import 'package:init/features/notifications/domain/usecases/clear_notifications_use_case.dart';
+import 'package:init/features/notifications/domain/usecases/get_notifications_use_case.dart';
+import 'package:init/features/notifications/domain/usecases/mark_notification_read_use_case.dart';
+import 'package:init/features/notifications/domain/usecases/upsert_notification_use_case.dart';
 
 /// 数据层依赖注入提供者
 /// 这些提供者负责创建和管理数据层实例

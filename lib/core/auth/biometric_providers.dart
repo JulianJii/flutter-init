@@ -1,10 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_init/core/analytics/analytics_providers.dart';
-import 'package:flutter_init/core/auth/biometric_service.dart';
-import 'package:flutter_init/core/auth/debug_biometric_service.dart';
-import 'package:flutter_init/core/auth/local_biometric_service.dart';
-import 'package:flutter_init/core/feature_flags/feature_flag_providers.dart';
+import 'package:init/core/analytics/analytics_providers.dart';
+import 'package:init/core/auth/biometric_service.dart';
+import 'package:init/core/auth/debug_biometric_service.dart';
+import 'package:init/core/auth/local_biometric_service.dart';
+import 'package:init/core/feature_flags/feature_flag_providers.dart';
 
 /// 生物识别认证服务的 provider
 final biometricServiceProvider = Provider<BiometricService>((ref) {

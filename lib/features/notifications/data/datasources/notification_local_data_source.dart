@@ -1,9 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_init/core/constants/app_constants.dart';
-import 'package:flutter_init/core/error/exceptions.dart';
-import 'package:flutter_init/core/providers/storage_providers.dart';
-import 'package:flutter_init/core/storage/local_storage_service.dart';
-import 'package:flutter_init/features/notifications/data/models/notification_item_model.dart';
+import 'package:init/core/constants/app_constants.dart';
+import 'package:init/core/error/exceptions.dart';
+import 'package:init/core/providers/storage_providers.dart';
+import 'package:init/core/storage/local_storage_service.dart';
+import 'package:init/features/notifications/data/models/notification_item_model.dart';
 
 /// 通过 [LocalStorageService] 将应用内通知列表以 JSON 编码格式持久化存储。
 abstract class NotificationLocalDataSource {

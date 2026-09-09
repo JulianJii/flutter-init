@@ -1,7 +1,7 @@
 import 'package:fpdart/fpdart.dart';
-import 'package:flutter_init/core/error/failures.dart';
-import 'package:flutter_init/features/auth/domain/entities/user_entity.dart';
-import 'package:flutter_init/features/auth/domain/repositories/auth_repository.dart';
+import 'package:init/core/error/failures.dart';
+import 'package:init/features/auth/domain/entities/user_entity.dart';
+import 'package:init/features/auth/domain/repositories/auth_repository.dart';
 
 class RegisterUseCase {
   final AuthRepository _repository;

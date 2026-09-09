@@ -1,4 +1,4 @@
-import 'package:flutter_init/features/notifications/domain/entities/notification_item_entity.dart';
+import 'package:init/features/notifications/domain/entities/notification_item_entity.dart';
 
 class NotificationItemModel extends NotificationItemEntity {
   const NotificationItemModel({

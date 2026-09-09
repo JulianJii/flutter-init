@@ -1,7 +1,7 @@
 import 'dart:async';
-import 'package:flutter_init/features/chat/data/datasources/chat_remote_data_source.dart';
-import 'package:flutter_init/features/chat/domain/entities/message_entity.dart';
-import 'package:flutter_init/features/chat/domain/repositories/chat_repository.dart';
+import 'package:init/features/chat/data/datasources/chat_remote_data_source.dart';
+import 'package:init/features/chat/domain/entities/message_entity.dart';
+import 'package:init/features/chat/domain/repositories/chat_repository.dart';
 
 class ChatRepositoryImpl implements ChatRepository {
   final ChatRemoteDataSource _remoteDataSource;

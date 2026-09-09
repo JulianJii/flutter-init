@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:web_socket_channel/web_socket_channel.dart';
-import 'package:flutter_init/features/chat/data/models/message_model.dart';
-import 'package:flutter_init/core/utils/logger.dart';
+import 'package:init/features/chat/data/models/message_model.dart';
+import 'package:init/core/utils/logger.dart';
 
 abstract class ChatRemoteDataSource {
   Stream<MessageModel> get messages;

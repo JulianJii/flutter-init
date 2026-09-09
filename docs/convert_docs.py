@@ -99,7 +99,7 @@ def convert_markdown_to_html(markdown_file, output_file):
     output_filename = os.path.basename(output_file)
     
     # Get the link to the current file in the sidebar
-    current_link = f'/flutter_init/{output_filename}'
+    current_link = f'/init/{output_filename}'
     
     # Replace that link's class to include 'active'
     soup = BeautifulSoup(page_content, 'html.parser')
@@ -194,7 +194,7 @@ def process_index_html():
     
     # Process sidebar active link
     soup = BeautifulSoup(page_content, 'html.parser')
-    for anchor in soup.select('a[href="/flutter_init/index.html"]'):
+    for anchor in soup.select('a[href="/init/index.html"]'):
         anchor['class'] = anchor.get('class', []) + ['active']
     
     # Update page content with the modified soup

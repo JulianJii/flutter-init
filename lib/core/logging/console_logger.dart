@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
-import 'package:flutter_init/core/logging/logger.dart';
+import 'package:init/core/logging/logger.dart';
 
 /// 输出到调试控制台的日志记录器实现
 class ConsoleLogger implements Logger {

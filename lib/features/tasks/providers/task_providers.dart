@@ -1,12 +1,12 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_init/features/tasks/data/datasources/task_local_data_source.dart';
-import 'package:flutter_init/features/tasks/data/repositories/task_repository_impl.dart';
-import 'package:flutter_init/features/tasks/domain/repositories/task_repository.dart';
-import 'package:flutter_init/features/tasks/domain/usecases/add_task_use_case.dart';
-import 'package:flutter_init/features/tasks/domain/usecases/delete_task_use_case.dart';
-import 'package:flutter_init/features/tasks/domain/usecases/get_tasks_use_case.dart';
-import 'package:flutter_init/features/tasks/domain/usecases/toggle_task_use_case.dart';
-import 'package:flutter_init/features/tasks/domain/usecases/update_task_use_case.dart';
+import 'package:init/features/tasks/data/datasources/task_local_data_source.dart';
+import 'package:init/features/tasks/data/repositories/task_repository_impl.dart';
+import 'package:init/features/tasks/domain/repositories/task_repository.dart';
+import 'package:init/features/tasks/domain/usecases/add_task_use_case.dart';
+import 'package:init/features/tasks/domain/usecases/delete_task_use_case.dart';
+import 'package:init/features/tasks/domain/usecases/get_tasks_use_case.dart';
+import 'package:init/features/tasks/domain/usecases/toggle_task_use_case.dart';
+import 'package:init/features/tasks/domain/usecases/update_task_use_case.dart';
 
 /// 数据层依赖注入提供者
 /// 这些提供者负责创建和管理数据层实例

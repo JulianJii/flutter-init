@@ -1,9 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_init/features/auth/data/repositories/auth_repository_impl.dart';
-import 'package:flutter_init/features/auth/domain/usecases/login_use_case.dart';
-import 'package:flutter_init/features/auth/domain/usecases/logout_use_case.dart';
-import 'package:flutter_init/features/auth/domain/usecases/register_use_case.dart';
-import 'package:flutter_init/features/auth/domain/usecases/update_profile_use_case.dart';
+import 'package:init/features/auth/data/repositories/auth_repository_impl.dart';
+import 'package:init/features/auth/domain/usecases/login_use_case.dart';
+import 'package:init/features/auth/domain/usecases/logout_use_case.dart';
+import 'package:init/features/auth/domain/usecases/register_use_case.dart';
+import 'package:init/features/auth/domain/usecases/update_profile_use_case.dart';
 
 /// 数据层依赖注入 providers
 /// 这些 providers 负责创建和管理数据层实例

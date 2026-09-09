@@ -1,20 +1,20 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_init/core/analytics/analytics_providers.dart';
+import 'package:init/core/analytics/analytics_providers.dart';
 // 直接导入生物识别演示
-import 'package:flutter_init/examples/biometrics_demo.dart';
-import 'package:flutter_init/core/feature_flags/feature_flag_providers.dart';
-import 'package:flutter_init/core/images/advanced_image.dart';
-import 'package:flutter_init/core/images/image_transformer.dart';
-import 'package:flutter_init/core/images/shimmer_placeholder.dart';
-import 'package:flutter_init/core/images/svg_renderer.dart';
-import 'package:flutter_init/core/logging/logger_provider.dart';
-import 'package:flutter_init/core/network/offline_sync_providers.dart';
-import 'package:flutter_init/core/network/offline_sync_service.dart';
-import 'package:flutter_init/core/notifications/notification_providers.dart';
+import 'package:init/examples/biometrics_demo.dart';
+import 'package:init/core/feature_flags/feature_flag_providers.dart';
+import 'package:init/core/images/advanced_image.dart';
+import 'package:init/core/images/image_transformer.dart';
+import 'package:init/core/images/shimmer_placeholder.dart';
+import 'package:init/core/images/svg_renderer.dart';
+import 'package:init/core/logging/logger_provider.dart';
+import 'package:init/core/network/offline_sync_providers.dart';
+import 'package:init/core/network/offline_sync_service.dart';
+import 'package:init/core/notifications/notification_providers.dart';
 // 主题处理通过 feature flag 来管理
-import 'package:flutter_init/core/updates/update_providers.dart';
-import 'package:flutter_init/core/updates/update_service.dart';
+import 'package:init/core/updates/update_providers.dart';
+import 'package:init/core/updates/update_service.dart';
 
 import '../core/feature_flags/local_feature_flag_service.dart';
 

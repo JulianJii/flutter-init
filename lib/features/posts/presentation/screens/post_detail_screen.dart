@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_init/features/posts/domain/entities/post_entity.dart';
+import 'package:init/features/posts/domain/entities/post_entity.dart';
 import 'package:intl/intl.dart';
 
 class PostDetailScreen extends StatelessWidget {
