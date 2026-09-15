@@ -58,8 +58,6 @@ dependencies:
   freezed_annotation: ^3.1.0
   #JSON 序列化注解
   json_annotation: ^4.12.0
-  #splash生成
-  flutter_native_splash: ^2.4.8
   #动态权限
   permission_handler: ^13.0.2
   #env
@@ -132,8 +130,10 @@ dev_dependencies:
   # riverpod_lint 3.1+ 基于 analysis_server_plugin 独立运行，不再需要 custom_lint
   riverpod_lint: ^3.1.9
   mocktail: ^1.0.5
+  #图标生成
   flutter_launcher_icons: ^0.14.4
-
+  #splash生成
+  flutter_native_splash: ^2.4.8
 # 关于本文件 Dart 通用部分的说明，请参阅
 # 以下页面：https://dart.dev/tools/pub/pubspec
 
