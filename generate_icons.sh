@@ -1,62 +1,62 @@
 #!/bin/bash
 
-# App Icon Generator
-# This script generates app icons for all platforms using flutter_launcher_icons
+# 应用图标生成器
+# 本脚本使用 flutter_launcher_icons 为所有平台生成应用图标
 # -----------------------------------------------------------------------------
 
-# Set text colors
+# 设置文字颜色
 GREEN='\033[0;32m'
 BLUE='\033[0;34m'
 RED='\033[0;31m'
 YELLOW='\033[1;33m'
-NC='\033[0m' # No Color
+NC='\033[0m' # 无颜色
 
 echo -e "${BLUE}=======================================${NC}"
 echo -e "${BLUE}    Flutter App Icon Generator        ${NC}"
 echo -e "${BLUE}=======================================${NC}"
 echo
 
-# Check if flutter_launcher_icons.yaml exists
+# 检查 flutter_launcher_icons.yaml 是否存在
 if [ ! -f "flutter_launcher_icons.yaml" ]; then
-    echo -e "${RED}Error: flutter_launcher_icons.yaml not found!${NC}"
-    echo -e "${YELLOW}Please make sure you have the configuration file in the root directory.${NC}"
+    echo -e "${RED}Error: 未找到 flutter_launcher_icons.yaml！${NC}"
+    echo -e "${YELLOW}请确认根目录下存在该配置文件。${NC}"
     exit 1
 fi
 
-# Check if the source icon exists
-# Extract image_path from yaml (simple grep, might fail on complex yaml but good enough for standard config)
+# 检查源图标是否存在
+# 从 yaml 中提取 image_path（简单 grep，复杂 yaml 可能失效，但标准配置足够）
 ICON_PATH=$(grep "image_path:" flutter_launcher_icons.yaml | head -n 1 | awk -F': ' '{print $2}' | tr -d '"' | tr -d "'")
 
 if [ ! -f "$ICON_PATH" ]; then
-    echo -e "${YELLOW}Warning: Source icon ($ICON_PATH) not found.${NC}"
-    echo -e "Please ensure you have an icon at ${GREEN}$ICON_PATH${NC} before running this script."
-    echo -e "Recommended size: 1024x1024 png"
+    echo -e "${YELLOW}Warning: 未找到源图标（$ICON_PATH）。${NC}"
+    echo -e "运行本脚本前，请确认 ${GREEN}$ICON_PATH${NC} 处存在图标。"
+    echo -e "推荐尺寸：1024x1024 png"
     echo
-    read -p "Do you want to continue anyway? (y/N): " -n 1 -r
+    read -p "是否仍要继续？(y/N): " -n 1 -r
     echo
     if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-        echo -e "${YELLOW}Operation canceled.${NC}"
+        echo -e "${YELLOW}操作已取消。${NC}"
         exit 0
     fi
 else
-    echo -e "${GREEN}Found source icon at: $ICON_PATH${NC}"
+    echo -e "${GREEN}已找到源图标：$ICON_PATH${NC}"
 fi
 
-echo -e "${BLUE}Generating icons for all platforms...${NC}"
+echo -e "${BLUE}正在为所有平台生成图标...${NC}"
 echo
 
-# Run the generator
+# 运行生成器
 dart run flutter_launcher_icons
 
 if [ $? -eq 0 ]; then
     echo
-    echo -e "${GREEN}✅ Icons generated successfully!${NC}"
-    echo -e "   - Android: mipmap resources updated"
-    echo -e "   - iOS: Assets.xcassets updated"
-    echo -e "   - Web: icons and manifest updated"
-    echo -e "   - Windows/macOS: icon files updated"
+    echo -e "${GREEN}✅ 图标生成成功！${NC}"
+    echo -e "   - Android: mipmap 资源已更新"
+    echo -e "   - iOS: Assets.xcassets 已更新"
+    echo -e "   - Web: 图标与 manifest 已更新"
+    echo -e "   - Windows/macOS: 图标文件已更新"
 else
     echo
-    echo -e "${RED}❌ Error generating icons.${NC}"
+    echo -e "${RED}❌ 生成图标时出错。${NC}"
     exit 1
 fi

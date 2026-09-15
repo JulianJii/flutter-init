@@ -1,14 +1,14 @@
 #!/bin/bash
 
-# Flutter Localization Helper Script
-# This script helps manage language files for the Flutter app
+# Flutter 本地化辅助脚本
+# 本脚本用于管理 Flutter 应用的本地化语言文件
 
-# Colors for pretty output
+# 颜色定义（美化输出）
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 RED='\033[0;31m'
 BLUE='\033[0;34m'
-NC='\033[0m' # No Color
+NC='\033[0m' # 无颜色
 
 echo -e "${BLUE}=======================================${NC}"
 echo -e "${BLUE}   Flutter Localization Helper Tool    ${NC}"
@@ -17,34 +17,34 @@ echo -e "${BLUE}=======================================${NC}"
 BASE_ARB_DIR="lib/l10n/arb"
 BASE_ARB_FILE="${BASE_ARB_DIR}/intl_en.arb"
 
-# Check if flutter is installed
+# 检查 flutter 是否已安装
 if ! command -v flutter &> /dev/null; then
-    echo -e "${RED}Error: Flutter command not found.${NC}"
+    echo -e "${RED}Error: 未找到 Flutter 命令。${NC}"
     exit 1
 fi
 
-# Function to generate localization files
+# 生成本地化文件的函数
 generate_localization() {
-    echo -e "${YELLOW}Generating localization files...${NC}"
+    echo -e "${YELLOW}正在生成本地化文件...${NC}"
     flutter gen-l10n
     
     if [ $? -eq 0 ]; then
-        echo -e "${GREEN}Localization files generated successfully!${NC}"
+        echo -e "${GREEN}本地化文件生成成功！${NC}"
     else
-        echo -e "${RED}Failed to generate localization files!${NC}"
+        echo -e "${RED}生成本地化文件失败！${NC}"
         exit 1
     fi
 }
 
-# Function to list all supported languages
+# 列出所有支持语言的函数
 list_languages() {
-    echo -e "${YELLOW}Currently supported languages:${NC}"
+    echo -e "${YELLOW}当前支持的语言:${NC}"
     
-    # Find all ARB files and extract language codes
+    # 查找所有 ARB 文件并提取语言码
     for file in ${BASE_ARB_DIR}/intl_*.arb; do
         lang_code=$(basename "$file" | sed 's/intl_\(.*\)\.arb/\1/')
         
-        # Get language name from the ARB file if possible
+        # 尽可能从 ARB 文件中获取语言名称
         if [ -f "$file" ]; then
             lang_name=$(grep -o '"@@locale": "[^"]*"' "$file" | cut -d'"' -f4)
             if [ -z "$lang_name" ]; then
@@ -55,10 +55,10 @@ list_languages() {
     done
 }
 
-# Function to create a new language file
+# 创建新语言文件的函数
 create_language() {
     if [ -z "$1" ]; then
-        echo -e "${RED}Error: No language code provided.${NC}"
+        echo -e "${RED}Error: 未提供语言码。${NC}"
         echo -e "Usage: $0 add-language <language_code>"
         exit 1
     fi
@@ -67,38 +67,38 @@ create_language() {
     new_arb_file="${BASE_ARB_DIR}/intl_${lang_code}.arb"
     
     if [ -f "$new_arb_file" ]; then
-        echo -e "${RED}Error: Language file for '${lang_code}' already exists.${NC}"
+        echo -e "${RED}Error: 语言 '${lang_code}' 的文件已存在。${NC}"
         exit 1
     fi
     
     if [ ! -f "$BASE_ARB_FILE" ]; then
-        echo -e "${RED}Error: Base language file (${BASE_ARB_FILE}) not found.${NC}"
+        echo -e "${RED}Error: 未找到基础语言文件（${BASE_ARB_FILE}）。${NC}"
         exit 1
     fi
     
-    # Copy the base language file and update the locale
+    # 复制基础语言文件并更新 locale
     cp "$BASE_ARB_FILE" "$new_arb_file"
     
-    # Update the locale in the new file
+    # 更新新文件中的 locale
     sed -i '' "s/\"@@locale\": \"en\"/\"@@locale\": \"${lang_code}\"/" "$new_arb_file"
     
-    echo -e "${GREEN}Created new language file: ${new_arb_file}${NC}"
-    echo -e "${YELLOW}Please translate the strings in the new file.${NC}"
+    echo -e "${GREEN}已创建新语言文件: ${new_arb_file}${NC}"
+    echo -e "${YELLOW}请在新文件中翻译各字符串。${NC}"
 }
 
-# Function to check for missing translations
+# 检查缺失翻译的函数
 check_missing() {
-    echo -e "${YELLOW}Checking for missing translations...${NC}"
+    echo -e "${YELLOW}正在检查缺失的翻译...${NC}"
     
     if [ ! -f "$BASE_ARB_FILE" ]; then
-        echo -e "${RED}Error: Base language file (${BASE_ARB_FILE}) not found.${NC}"
+        echo -e "${RED}Error: 未找到基础语言文件（${BASE_ARB_FILE}）。${NC}"
         exit 1
     fi
     
-    # Get all keys from base file
+    # 从基础文件获取所有 key
     base_keys=$(grep -o '"[^"]*": "[^"]*"' "$BASE_ARB_FILE" | grep -v "@@" | cut -d'"' -f2)
     
-    # Check each language file
+    # 逐个检查各语言文件
     for file in ${BASE_ARB_DIR}/intl_*.arb; do
         if [ "$file" != "$BASE_ARB_FILE" ]; then
             lang_code=$(basename "$file" | sed 's/intl_\(.*\)\.arb/\1/')
@@ -113,26 +113,26 @@ check_missing() {
             done
             
             if [ $missing -eq 0 ]; then
-                echo -e " ${GREEN}✓ All translations present${NC}"
+                echo -e " ${GREEN}✓ 翻译完整${NC}"
             else
-                echo -e " ${RED}$missing translation(s) missing${NC}"
+                echo -e " ${RED}缺失 $missing 条翻译${NC}"
             fi
         fi
     done
 }
 
-# Function to get usage information
+# 获取用法说明的函数
 usage() {
     echo -e "Usage: $0 <command>"
     echo -e "\nCommands:"
-    echo -e "  ${GREEN}generate${NC}     - Generate localization files"
-    echo -e "  ${GREEN}list${NC}         - List supported languages"
-    echo -e "  ${GREEN}add${NC} <code>   - Add a new language (e.g., 'add fr' for French)"
-    echo -e "  ${GREEN}check${NC}        - Check for missing translations"
-    echo -e "  ${GREEN}help${NC}         - Show this help message"
+    echo -e "  ${GREEN}generate${NC}     - 生成本地化文件"
+    echo -e "  ${GREEN}list${NC}         - 列出支持的语言"
+    echo -e "  ${GREEN}add${NC} <code>   - 新增语言（例如 'add fr' 表示法语）"
+    echo -e "  ${GREEN}check${NC}        - 检查缺失的翻译"
+    echo -e "  ${GREEN}help${NC}         - 显示本帮助信息"
 }
 
-# Main command parsing
+# 主命令解析
 case "$1" in
     generate)
         generate_localization

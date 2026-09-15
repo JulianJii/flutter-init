@@ -1,35 +1,35 @@
 #!/bin/bash
 
-# Flutter Riverpod Clean Architecture - Feature Generator
-# Generates a feature with modern Riverpod and Clean Architecture best practices.
+# Flutter Riverpod 整洁架构 - Feature 生成器
+# 使用现代 Riverpod 与整洁架构最佳实践生成一个 feature。
 
-# Color definitions
+# 颜色定义
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 RED='\033[0;31m'
 BLUE='\033[0;34m'
 CYAN='\033[0;36m'
-NC='\033[0m' # No Color
+NC='\033[0m' # 无颜色
 
 usage() {
   echo -e "${YELLOW}Usage: $0 [options] --name <feature_name>${NC}"
   echo -e "\nOptions:"
-  echo -e "  --name <feature_name>    Name of the feature (required, use snake_case)"
-  echo -e "  --no-ui                  Generate without UI/presentation layer"
-  echo -e "  --no-repo                Generate without repository pattern (simplified structure)"
-  echo -e "  --help                   Display this help message"
+  echo -e "  --name <feature_name>    Feature 名称（必填，使用 snake_case）"
+  echo -e "  --no-ui                  不生成 UI/presentation 层"
+  echo -e "  --no-repo                不生成 repository 模式（简化结构）"
+  echo -e "  --help                   显示本帮助信息"
   echo -e "\nExamples:"
   echo -e "  $0 --name user_profile"
   echo -e "  $0 --name auth --no-ui"
   exit 1
 }
 
-# Defaults
+# 默认值
 FEATURE_NAME=""
 WITH_UI="yes"
 WITH_REPO="yes"
 
-# Parse arguments
+# 解析参数
 while [[ $# -gt 0 ]]; do
   case $1 in
     --name)
@@ -41,27 +41,27 @@ while [[ $# -gt 0 ]]; do
     --help)
       usage;;
     *)
-      echo -e "${RED}Unknown option: $1${NC}"; usage;;
+      echo -e "${RED}未知选项: $1${NC}"; usage;;
   esac
 done
 
 if [[ -z "$FEATURE_NAME" ]]; then
-  echo -e "${RED}Error: --name is required${NC}"; usage
+  echo -e "${RED}Error: --name 为必填项${NC}"; usage
 fi
 
-# Convert snake_case to PascalCase and camelCase
+# 将 snake_case 转换为 PascalCase 与 camelCase
 PASCAL_CASE=$(echo "$FEATURE_NAME" | awk -F_ '{for(i=1;i<=NF;i++) $i=toupper(substr($i,1,1)) substr($i,2)}1' OFS='')
 CAMEL_CASE="$(tr '[:upper:]' '[:lower:]' <<< ${PASCAL_CASE:0:1})${PASCAL_CASE:1}"
 
 BASE_DIR="lib/features/$FEATURE_NAME"
 
 if [[ -d "$BASE_DIR" ]]; then
-  echo -e "${RED}Error: Feature $FEATURE_NAME already exists at $BASE_DIR${NC}"; exit 1
+  echo -e "${RED}Error: Feature $FEATURE_NAME 已存在于 $BASE_DIR${NC}"; exit 1
 fi
 
-echo -e "${BLUE}Generating feature: $FEATURE_NAME ($PASCAL_CASE)${NC}"
+echo -e "${BLUE}正在生成 feature: $FEATURE_NAME ($PASCAL_CASE)${NC}"
 
-# Create directories
+# 创建目录
 if [[ "$WITH_REPO" == "yes" ]]; then
   mkdir -p "$BASE_DIR/data/datasources"
   mkdir -p "$BASE_DIR/data/models"
@@ -80,11 +80,11 @@ if [[ "$WITH_UI" == "yes" ]]; then
 fi
 
 # ==========================================
-# Domain Layer
+# Domain 层
 # ==========================================
 
 if [[ "$WITH_REPO" == "yes" ]]; then
-  # Entity
+  # 实体（Entity）
   cat > "$BASE_DIR/domain/entities/${FEATURE_NAME}_entity.dart" << EOF
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -99,7 +99,7 @@ abstract class ${PASCAL_CASE}Entity with _\$${PASCAL_CASE}Entity {
 }
 EOF
 
-  # Repository Interface
+  # 仓库接口（Repository Interface）
   cat > "$BASE_DIR/domain/repositories/${FEATURE_NAME}_repository.dart" << EOF
 import '../entities/${FEATURE_NAME}_entity.dart';
 
@@ -126,10 +126,10 @@ EOF
 fi
 
 # ==========================================
-# Data Layer
+# Data 层
 # ==========================================
 
-# Model
+# 模型（Model）
 cat > "$BASE_DIR/data/models/${FEATURE_NAME}_model.dart" << EOF
 import 'package:freezed_annotation/freezed_annotation.dart';
 EOF
@@ -176,7 +176,7 @@ EOF
 fi
 
 if [[ "$WITH_REPO" == "yes" ]]; then
-  # DataSource
+  # 数据源（DataSource）
   cat > "$BASE_DIR/data/datasources/${FEATURE_NAME}_remote_data_source.dart" << EOF
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:dio/dio.dart';
@@ -203,8 +203,8 @@ class ${PASCAL_CASE}RemoteDataSourceImpl implements ${PASCAL_CASE}RemoteDataSour
 
   @override
   Future<List<${PASCAL_CASE}Model>> fetch${PASCAL_CASE}s() async {
-    // final response = await _dio.get('/${FEATURE_NAME}s');
-    // return (response.data as List).map((e) => ${PASCAL_CASE}Model.fromJson(e)).toList();
+    // 示例：final response = await _dio.get('/${FEATURE_NAME}s');
+    // 示例：return (response.data as List).map((e) => ${PASCAL_CASE}Model.fromJson(e)).toList();
     await Future.delayed(const Duration(seconds: 1));
     return [
       const ${PASCAL_CASE}Model(id: '1', name: 'Item 1'),
@@ -220,7 +220,7 @@ class ${PASCAL_CASE}RemoteDataSourceImpl implements ${PASCAL_CASE}RemoteDataSour
 }
 EOF
 
-  # Repository Impl
+  # 仓库实现（Repository Impl）
   cat > "$BASE_DIR/data/repositories/${FEATURE_NAME}_repository_impl.dart" << EOF
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../domain/entities/${FEATURE_NAME}_entity.dart';
@@ -256,11 +256,11 @@ EOF
 fi
 
 # ==========================================
-# Presentation Layer
+# Presentation 层
 # ==========================================
 
 if [[ "$WITH_UI" == "yes" ]]; then
-  # Controller
+  # 控制器（Controller）
   cat > "$BASE_DIR/presentation/controllers/${FEATURE_NAME}_controller.dart" << EOF
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 EOF
@@ -286,7 +286,7 @@ class ${PASCAL_CASE}Controller extends _\$${PASCAL_CASE}Controller {
 }
 EOF
   else
-    # Simple controller using Model directly
+    # 直接使用 Model 的简单控制器
     cat >> "$BASE_DIR/presentation/controllers/${FEATURE_NAME}_controller.dart" << EOF
 import '../../data/models/${FEATURE_NAME}_model.dart';
 
@@ -296,7 +296,7 @@ part '${FEATURE_NAME}_controller.g.dart';
 class ${PASCAL_CASE}Controller extends _\$${PASCAL_CASE}Controller {
   @override
   FutureOr<List<${PASCAL_CASE}Model>> build() async {
-    // Simulate API call
+    // 模拟 API 调用
     await Future.delayed(const Duration(seconds: 1));
     return [
        const ${PASCAL_CASE}Model(id: '1', name: 'Simple Item 1'),
@@ -307,7 +307,7 @@ class ${PASCAL_CASE}Controller extends _\$${PASCAL_CASE}Controller {
 EOF
   fi
 
-  # Screen
+  # 页面（Screen）
   cat > "$BASE_DIR/presentation/screens/${FEATURE_NAME}_screen.dart" << EOF
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -340,7 +340,7 @@ class ${PASCAL_CASE}Screen extends ConsumerWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          ref.read(${CAMEL_CASE}ControllerProvider.notifier).refresh(); // Or specialized method
+          ref.read(${CAMEL_CASE}ControllerProvider.notifier).refresh(); // 或其他专用方法
         },
         child: const Icon(Icons.refresh),
       ),
@@ -350,5 +350,5 @@ class ${PASCAL_CASE}Screen extends ConsumerWidget {
 EOF
 fi
 
-echo -e "${GREEN}Feature $FEATURE_NAME generated successfully!${NC}"
-echo -e "${YELLOW}Don't forget to run:${NC} ${BLUE}dart run build_runner build -d${NC}"
+echo -e "${GREEN}Feature $FEATURE_NAME 生成成功！${NC}"
+echo -e "${YELLOW}别忘了运行:${NC} ${BLUE}dart run build_runner build -d${NC}"
