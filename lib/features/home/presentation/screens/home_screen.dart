@@ -1,9 +1,9 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:init/core/router/app_routes.dart';
 import 'package:init/core/utils/app_utils.dart';
 import 'package:init/features/auth/presentation/providers/auth_provider.dart';
 import 'package:go_router/go_router.dart';
-import 'package:init/core/constants/app_constants.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -52,7 +52,11 @@ class HomeScreen extends ConsumerWidget {
                       backgroundColor: Theme.of(context).colorScheme.error,
                     );
                   }
+                  return;
                 }
+
+                // 登出成功：router 不再 watch authProvider，跳转必须由调用点负责
+                if (context.mounted) context.go(AppRoutes.login);
               }
             },
           ),
@@ -163,7 +167,7 @@ class HomeScreen extends ConsumerWidget {
                         title: 'Survey',
                         color: Colors.orange,
                         onTap: () {
-                          context.push(AppConstants.surveyRoute);
+                          context.push(AppRoutes.survey);
                         },
                       ),
                       _buildFeatureTile(
@@ -172,7 +176,7 @@ class HomeScreen extends ConsumerWidget {
                         title: 'Live Chat',
                         color: Colors.purple,
                         onTap: () {
-                          context.push(AppConstants.chatRoute);
+                          context.push(AppRoutes.chat);
                         },
                       ),
                     ],

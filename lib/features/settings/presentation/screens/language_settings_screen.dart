@@ -1,7 +1,7 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:init/core/localization/language_selector_widget.dart';
-import 'package:init/l10n/l10n.dart';
+import 'package:init/gen/l10n/app_localizations.dart';
 
 /// 语言选择设置页面
 class LanguageSettingsScreen extends ConsumerWidget {
@@ -9,8 +9,10 @@ class LanguageSettingsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
+
     return Scaffold(
-      appBar: AppBar(title: Text(context.tr('language_settings'))),
+      appBar: AppBar(title: Text(l10n.language_settings)),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -20,7 +22,7 @@ class LanguageSettingsScreen extends ConsumerWidget {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 16.0),
               child: Text(
-                context.tr('select_your_language'),
+                l10n.select_your_language,
                 style: Theme.of(context).textTheme.titleMedium,
               ),
             ),
@@ -32,7 +34,7 @@ class LanguageSettingsScreen extends ConsumerWidget {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 16.0),
               child: Text(
-                context.tr('language_explanation'),
+                l10n.language_explanation,
                 style: Theme.of(context).textTheme.bodySmall,
               ),
             ),

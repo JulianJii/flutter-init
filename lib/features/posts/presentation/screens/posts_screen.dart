@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:init/core/constants/app_constants.dart';
+import 'package:init/core/router/app_routes.dart';
 import 'package:init/core/utils/app_utils.dart';
 import 'package:init/features/posts/presentation/providers/posts_provider.dart';
 import 'package:go_router/go_router.dart';
@@ -107,8 +107,7 @@ class _PostsScreenState extends ConsumerState<PostsScreen> {
                 ),
               ),
               trailing: const Icon(Icons.chevron_right),
-              onTap: () =>
-                  context.push(AppConstants.postDetailRoute, extra: post),
+              onTap: () => context.push(AppRoutes.postDetail, extra: post),
             ),
           );
         },

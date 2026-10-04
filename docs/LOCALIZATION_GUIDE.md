@@ -59,38 +59,43 @@ use-deferred-loading: false
 
 ### 基本翻译
 
-在 BuildContext 上使用 `tr` 扩展方法：
+取文案走 gen-l10n 生成的强类型 getter（唯一的翻译入口，没有字符串 key API）：
 
 ```dart
+final l10n = AppLocalizations.of(context);
+
 // In a widget build method
-Text(context.tr('welcome_message'));
+Text(l10n.welcome_message);
 
 // For static text keys
-final buttonLabel = context.tr('login');
+final buttonLabel = l10n.login;
 ```
 
 ### 带参数的翻译
 
-使用 `trParams` 扩展方法处理带参数的消息：
+ARB 里声明了 placeholder 的 key，gen-l10n 会生成方法而不是 getter：
 
 ```dart
-// With named parameters
-Text(context.trParams('greeting', {'name': user.displayName}));
+Text(l10n.greeting(user.displayName));
 
-// Example message in ARB file: "greeting": "Hello, {name}!"
+// ARB: "greeting": "Hello, {name}!"
 ```
 
 ### 复数形式
 
-处理根据数量值变化的消息：
+复数同样由 gen-l10n 生成方法，直接传数量，不要自己 replaceAll：
 
 ```dart
-// With pluralization logic
-final itemText = context.tr('itemCount').replaceAll('{count}', items.length.toString());
+final itemText = l10n.item_count(items.length);
 
-// ARB definition: 
-// "itemCount": "{count, plural, =0{No items} =1{1 item} other{% raw %}{{count}}{% endraw %} items}"
+// ARB definition:
+// "item_count": "{count, plural, =0{No items} =1{1 item} other{{count} items}}"
 ```
+
+### 语言名称
+
+`localeDisplayName(locale)`（`core/localization/localization_service.dart`）
+返回语言在其母语中的名字（如 `中文` / `English`）。gen-l10n 不生成它，新增语言时需在此补一个 case。
 
 ### 日期和货币格式
 
@@ -121,7 +126,7 @@ final customTime = context.formatTime(DateTime.now(), pattern: 'HH:mm:ss');
 ```dart
 // In a Consumer widget or when you have access to a WidgetRef
 final service = ref.read(localizationServiceProvider);
-final translatedText = service.translate('welcome_message');
+final currentLocale = service.currentLocale;
 final formattedDate = service.formatDate(DateTime.now());
 
 // Change the app locale
@@ -153,8 +158,8 @@ final currentLocale = context.currentLocale;
    ```
 
    该脚本将：
-   - 基于英语模板创建新的 ARB 文件
-   - 自动将语言添加到 LocalizationUtils
+   - 基于模板创建新的 ARB 文件
+   - 同步所有 ARB 的 key 集合
    - 正确格式化文件
 
 2. 或者在 `lib/l10n/arb` 目录中手动创建名为 `intl_<language_code>.arb` 的新 ARB 文件
@@ -162,25 +167,22 @@ final currentLocale = context.currentLocale;
 
 3. 为模板 ARB 文件 (`intl_en.arb`) 中定义的所有键添加翻译
 
-4. 确保新区域设置在 `lib/l10n/l10n.dart` 的支持区域设置列表中：
+4. 把语言码加进 `l10n.yaml` 的 `preferred-supported-locales`，然后跑
+   `flutter gen-l10n` —— `AppLocalizations.supportedLocales` 由它生成：
 
-   ```dart
-   static const List<Locale> supportedLocales = [
-     Locale('zh'),
-     Locale('en'),
-   ];
+   ```yaml
+   preferred-supported-locales: ["zh", "en"]
    ```
 
-5. 在 `lib/l10n/app_localizations_delegate.dart` 的 `LocalizationUtils.getLocaleName()` 中添加语言名称：
+5. 在 `core/localization/localization_service.dart` 的 `localeDisplayName()`
+   里加该语言的母语名：
 
    ```dart
-   static String getLocaleName(Locale locale) {
-     switch (locale.languageCode) {
-       case 'zh': return '中文';
-       case 'en': return 'English';
-       default: return locale.languageCode;
-     }
-   }
+   String localeDisplayName(Locale locale) => switch (locale.languageCode) {
+     'zh' => '中文',
+     'en' => 'English',
+     _ => locale.languageCode,
+   };
    ```
 
 ## 更新翻译
@@ -286,9 +288,6 @@ final currentLocale = ref.watch(localeProvider);
 
 // Change the active locale
 ref.read(localeProvider.notifier).setLocale(const Locale('es'));
-
-// Access translations based on the current locale
-final translations = ref.watch(translationsProvider);
 ```
 
 ## 最佳实践
@@ -296,7 +295,7 @@ final translations = ref.watch(translationsProvider);
 1. **使用扁平键** - 翻译键使用扁平命名（例如 `login_title`、`welcome_message`），不使用点分隔
 2. **添加描述** - 在 ARB 文件中为所有键包含描述
 3. **处理缺失翻译** - 如果翻译缺失，系统将回退到英语
-4. **使用 context 扩展** - 优先使用 `context.tr()` 而不是直接访问翻译对象
+4. **使用强类型 getter** - 优先使用 `AppLocalizations.of(context).xxx`，不要用字符串 key 取文案
 5. **保持 ARB 文件一致性** - 确保所有语言具有相同的键集
 6. **使用参数** - 避免字符串拼接，使用参数代替
 7. **测试所有语言** - 在所有支持的语言中验证 UI 布局（某些语言可能更长/更短）

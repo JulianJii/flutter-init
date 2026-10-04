@@ -102,13 +102,13 @@ abstract class AppLocalizations {
   ///
   /// In zh, this message translates to:
   /// **'Flutter Riverpod 整洁架构'**
-  String get appTitle;
+  String get app_title;
 
   /// The welcome message displayed on the home screen
   ///
   /// In zh, this message translates to:
   /// **'欢迎使用 Flutter Riverpod 整洁架构'**
-  String get welcomeMessage;
+  String get welcome_message;
 
   /// Label for the home tab or button
   ///
@@ -132,19 +132,19 @@ abstract class AppLocalizations {
   ///
   /// In zh, this message translates to:
   /// **'深色模式'**
-  String get darkMode;
+  String get dark_mode;
 
   /// Label for the light mode option
   ///
   /// In zh, this message translates to:
   /// **'浅色模式'**
-  String get lightMode;
+  String get light_mode;
 
   /// Label for the system theme mode option
   ///
   /// In zh, this message translates to:
   /// **'跟随系统'**
-  String get systemMode;
+  String get system_mode;
 
   /// Label for the language setting
   ///
@@ -336,7 +336,7 @@ abstract class AppLocalizations {
   ///
   /// In zh, this message translates to:
   /// **'登录'**
-  String get signIn;
+  String get sign_in;
 
   /// Label for the register button
   ///
@@ -348,19 +348,19 @@ abstract class AppLocalizations {
   ///
   /// In zh, this message translates to:
   /// **'忘记密码？'**
-  String get forgotPassword;
+  String get forgot_password;
 
   /// Generic error message
   ///
   /// In zh, this message translates to:
   /// **'发生错误'**
-  String get errorOccurred;
+  String get error_occurred;
 
   /// Label for the try again button
   ///
   /// In zh, this message translates to:
   /// **'重试'**
-  String get tryAgain;
+  String get try_again;
 
   /// A greeting message with the person's name
   ///
@@ -372,13 +372,31 @@ abstract class AppLocalizations {
   ///
   /// In zh, this message translates to:
   /// **'{count, plural, =0{没有项目} =1{1 个项目} other{{count} 个项目}}'**
-  String itemCount(num count);
+  String item_count(num count);
 
   /// When something was last updated
   ///
   /// In zh, this message translates to:
   /// **'最后更新：{date}'**
-  String lastUpdated(DateTime date);
+  String last_updated(DateTime date);
+
+  /// Label for the cancel button
+  ///
+  /// In zh, this message translates to:
+  /// **'取消'**
+  String get cancel;
+
+  /// Placeholder shown when a list has no items
+  ///
+  /// In zh, this message translates to:
+  /// **'暂无数据'**
+  String get no_data;
+
+  /// Placeholder shown while data is loading
+  ///
+  /// In zh, this message translates to:
+  /// **'加载中...'**
+  String get loading;
 }
 
 class _AppLocalizationsDelegate

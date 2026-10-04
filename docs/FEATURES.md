@@ -112,7 +112,7 @@ if (service.isFeatureEnabled('premium_features')) {
 
 ```dart
 // Access translated text
-Text(context.tr('welcome_message'));
+Text(AppLocalizations.of(context).welcome_message);
 ```
 
 详情请参见[本地化指南](https://jessejii.github.io/init/localization.html)。

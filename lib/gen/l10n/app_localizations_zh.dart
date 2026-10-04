@@ -9,10 +9,10 @@ class AppLocalizationsZh extends AppLocalizations {
   AppLocalizationsZh([String locale = 'zh']) : super(locale);
 
   @override
-  String get appTitle => 'Flutter Riverpod 整洁架构';
+  String get app_title => 'Flutter Riverpod 整洁架构';
 
   @override
-  String get welcomeMessage => '欢迎使用 Flutter Riverpod 整洁架构';
+  String get welcome_message => '欢迎使用 Flutter Riverpod 整洁架构';
 
   @override
   String get home => '首页';
@@ -24,13 +24,13 @@ class AppLocalizationsZh extends AppLocalizations {
   String get profile => '个人中心';
 
   @override
-  String get darkMode => '深色模式';
+  String get dark_mode => '深色模式';
 
   @override
-  String get lightMode => '浅色模式';
+  String get light_mode => '浅色模式';
 
   @override
-  String get systemMode => '跟随系统';
+  String get system_mode => '跟随系统';
 
   @override
   String get language => '语言';
@@ -127,19 +127,19 @@ class AppLocalizationsZh extends AppLocalizations {
   String get password => '密码';
 
   @override
-  String get signIn => '登录';
+  String get sign_in => '登录';
 
   @override
   String get register => '注册';
 
   @override
-  String get forgotPassword => '忘记密码？';
+  String get forgot_password => '忘记密码？';
 
   @override
-  String get errorOccurred => '发生错误';
+  String get error_occurred => '发生错误';
 
   @override
-  String get tryAgain => '重试';
+  String get try_again => '重试';
 
   @override
   String greeting(String name) {
@@ -147,7 +147,7 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String itemCount(num count) {
+  String item_count(num count) {
     final intl.NumberFormat countNumberFormat = intl.NumberFormat.compact(
       locale: localeName,
     );
@@ -164,10 +164,19 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String lastUpdated(DateTime date) {
+  String last_updated(DateTime date) {
     final intl.DateFormat dateDateFormat = intl.DateFormat.yMMMd(localeName);
     final String dateString = dateDateFormat.format(date);
 
     return '最后更新：$dateString';
   }
+
+  @override
+  String get cancel => '取消';
+
+  @override
+  String get no_data => '暂无数据';
+
+  @override
+  String get loading => '加载中...';
 }

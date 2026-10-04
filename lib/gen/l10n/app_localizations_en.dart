@@ -9,10 +9,11 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
-  String get appTitle => 'Flutter Riverpod Clean Architecture';
+  String get app_title => 'Flutter Riverpod Clean Architecture';
 
   @override
-  String get welcomeMessage => 'Welcome to Flutter Riverpod Clean Architecture';
+  String get welcome_message =>
+      'Welcome to Flutter Riverpod Clean Architecture';
 
   @override
   String get home => 'Home';
@@ -24,13 +25,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profile => 'Profile';
 
   @override
-  String get darkMode => 'Dark Mode';
+  String get dark_mode => 'Dark Mode';
 
   @override
-  String get lightMode => 'Light Mode';
+  String get light_mode => 'Light Mode';
 
   @override
-  String get systemMode => 'System Mode';
+  String get system_mode => 'System Mode';
 
   @override
   String get language => 'Language';
@@ -131,19 +132,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get password => 'Password';
 
   @override
-  String get signIn => 'Sign In';
+  String get sign_in => 'Sign In';
 
   @override
   String get register => 'Register';
 
   @override
-  String get forgotPassword => 'Forgot Password?';
+  String get forgot_password => 'Forgot Password?';
 
   @override
-  String get errorOccurred => 'An error occurred';
+  String get error_occurred => 'An error occurred';
 
   @override
-  String get tryAgain => 'Try Again';
+  String get try_again => 'Try Again';
 
   @override
   String greeting(String name) {
@@ -151,7 +152,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String itemCount(num count) {
+  String item_count(num count) {
     final intl.NumberFormat countNumberFormat = intl.NumberFormat.compact(
       locale: localeName,
     );
@@ -168,10 +169,19 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String lastUpdated(DateTime date) {
+  String last_updated(DateTime date) {
     final intl.DateFormat dateDateFormat = intl.DateFormat.yMMMd(localeName);
     final String dateString = dateDateFormat.format(date);
 
     return 'Last updated: $dateString';
   }
+
+  @override
+  String get cancel => 'Cancel';
+
+  @override
+  String get no_data => 'No data available';
+
+  @override
+  String get loading => 'Loading...';
 }

@@ -1,8 +1,6 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:init/core/constants/app_constants.dart';
-import 'package:init/core/providers/localization_providers.dart';
-import 'package:init/core/router/locale_aware_router.dart';
+import 'package:init/core/router/app_routes.dart';
 import 'package:init/examples/localization_assets_demo.dart';
 import 'package:init/features/auth/presentation/screens/login_screen.dart';
 import 'package:init/features/auth/presentation/screens/register_screen.dart';
@@ -15,36 +13,31 @@ import 'package:init/features/chat/presentation/screens/chat_screen.dart';
 import 'package:init/features/survey/presentation/screens/survey_screen.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
-  final authState = ref.watch(authProvider);
-
-  // 监听语言环境变化 - 语言环境改变时重建路由器
-  ref.watch(persistentLocaleProvider);
-
-  // 创建带语言环境感知的路由器
+  // ⚠️ 这里一律用 read，不要 watch。
+  // watch 会让依赖变化重建 GoRouter —— 新实例等于导航栈清空回到 initialLocation。
+  // 语言由 main.dart 的 MaterialApp.locale 负责；登录/登出由调用点显式 context.go()。
+  // redirect 在每次导航时都会跑，此处 read 拿到的始终是当前状态。
   return GoRouter(
-    initialLocation: AppConstants.initialRoute,
+    initialLocation: AppRoutes.initial,
     debugLogDiagnostics: true,
-    // 添加语言环境感知的观察者
-    observers: [ref.read(localizationRouterObserverProvider)],
     redirect: (context, state) {
       // 获取认证状态
-      final isLoggedIn = authState.isAuthenticated;
+      final isLoggedIn = ref.read(authProvider).isAuthenticated;
 
       // 检查用户是否正前往登录页面
-      final isGoingToLogin = state.matchedLocation == AppConstants.loginRoute;
+      final isGoingToLogin = state.matchedLocation == AppRoutes.login;
 
       // 检查用户是否正前往注册页面
-      final isGoingToRegister =
-          state.matchedLocation == AppConstants.registerRoute;
+      final isGoingToRegister = state.matchedLocation == AppRoutes.register;
 
       // 若未登录且不是前往登录或注册页面，则重定向到登录
       if (!isLoggedIn && !isGoingToLogin && !isGoingToRegister) {
-        return AppConstants.loginRoute;
+        return AppRoutes.login;
       }
 
       // 若已登录且正前往登录或注册页面，则重定向到首页
       if (isLoggedIn && (isGoingToLogin || isGoingToRegister)) {
-        return AppConstants.homeRoute;
+        return AppRoutes.home;
       }
 
       // 无需重定向
@@ -53,67 +46,67 @@ final routerProvider = Provider<GoRouter>((ref) {
     routes: [
       // 首页路由
       GoRoute(
-        path: AppConstants.homeRoute,
+        path: AppRoutes.home,
         name: 'home',
         builder: (context, state) => const HomeScreen(),
       ),
 
       // 登录路由
       GoRoute(
-        path: AppConstants.loginRoute,
+        path: AppRoutes.login,
         name: 'login',
         builder: (context, state) => const LoginScreen(),
       ),
 
       // 注册路由
       GoRoute(
-        path: AppConstants.registerRoute,
+        path: AppRoutes.register,
         name: 'register',
         builder: (context, state) => const RegisterScreen(),
       ),
 
       // 设置路由
       GoRoute(
-        path: AppConstants.settingsRoute,
+        path: AppRoutes.settings,
         name: 'settings',
         builder: (context, state) => const SettingsScreen(),
       ),
 
       // 语言设置路由
       GoRoute(
-        path: AppConstants.languageSettingsRoute,
+        path: AppRoutes.languageSettings,
         name: 'language_settings',
         builder: (context, state) => const LanguageSettingsScreen(),
       ),
 
       // 本地化资源演示路由
       GoRoute(
-        path: AppConstants.localizationAssetsDemoRoute,
+        path: AppRoutes.localizationAssetsDemo,
         name: 'localization_assets_demo',
         builder: (context, state) => const LocalizationAssetsDemo(),
       ),
 
       // 聊天路由
       GoRoute(
-        path: AppConstants.chatRoute,
+        path: AppRoutes.chat,
         name: 'chat',
         builder: (context, state) => const ChatScreen(),
       ),
 
       // 调查路由
       GoRoute(
-        path: AppConstants.surveyRoute,
+        path: AppRoutes.survey,
         name: 'survey',
         builder: (context, state) => const SurveyScreen(),
       ),
 
       // 初始路由 - 根据认证状态重定向
       GoRoute(
-        path: AppConstants.initialRoute,
+        path: AppRoutes.initial,
         name: 'initial',
-        redirect: (context, state) => authState.isAuthenticated
-            ? AppConstants.homeRoute
-            : AppConstants.loginRoute,
+        redirect: (context, state) => ref.read(authProvider).isAuthenticated
+            ? AppRoutes.home
+            : AppRoutes.login,
       ),
     ],
     errorBuilder: (context, state) => Scaffold(
@@ -130,7 +123,7 @@ final routerProvider = Provider<GoRouter>((ref) {
             Text('Page ${state.uri.path} not found'),
             const SizedBox(height: 16),
             ElevatedButton(
-              onPressed: () => context.go(AppConstants.homeRoute),
+              onPressed: () => context.go(AppRoutes.home),
               child: const Text('Go Home'),
             ),
           ],

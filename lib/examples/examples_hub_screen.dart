@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../core/constants/app_constants.dart';
+import '../core/router/app_routes.dart';
 
 /// 一个单一、可发现的目录，包含此模板演示的所有模式——集成（WebSocket、webhook、GraphQL、gRPC、REST）、
 /// 平台能力（后台任务、生物识别、文件传输）以及应用的其他功能/展示页面。
@@ -27,35 +27,34 @@ class ExamplesHubScreen extends StatelessWidget {
                 title: 'REST (Dio)',
                 subtitle:
                     'ApiClient + repository pattern - see the Posts feature',
-                onTap: (context) => context.push(AppConstants.postsRoute),
+                onTap: (context) => context.push(AppRoutes.posts),
               ),
               _Entry(
                 icon: Icons.sync_alt,
                 title: 'WebSocket',
                 subtitle:
                     'Reusable client: connect, send, receive, auto-reconnect',
-                onTap: (context) =>
-                    context.push(AppConstants.webSocketDemoRoute),
+                onTap: (context) => context.push(AppRoutes.webSocketDemo),
               ),
               _Entry(
                 icon: Icons.webhook,
                 title: 'Webhook (send + receive)',
                 subtitle:
                     'HMAC-signed outbound webhook and a local dev receiver',
-                onTap: (context) => context.push(AppConstants.webhookDemoRoute),
+                onTap: (context) => context.push(AppRoutes.webhookDemo),
               ),
               _Entry(
                 icon: Icons.hub,
                 title: 'GraphQL',
                 subtitle: 'Thin Dio-based client - a query and a mutation',
-                onTap: (context) => context.push(AppConstants.graphqlDemoRoute),
+                onTap: (context) => context.push(AppRoutes.graphqlDemo),
               ),
               _Entry(
                 icon: Icons.grain,
                 title: 'gRPC',
                 subtitle:
                     'Unary + server-streaming calls, generated client stubs',
-                onTap: (context) => context.push(AppConstants.grpcDemoRoute),
+                onTap: (context) => context.push(AppRoutes.grpcDemo),
               ),
             ],
           ),
@@ -66,23 +65,20 @@ class ExamplesHubScreen extends StatelessWidget {
                 icon: Icons.schedule,
                 title: 'Background tasks',
                 subtitle: 'WorkManager: one-off and periodic scheduled work',
-                onTap: (context) =>
-                    context.push(AppConstants.backgroundTasksDemoRoute),
+                onTap: (context) => context.push(AppRoutes.backgroundTasksDemo),
               ),
               _Entry(
                 icon: Icons.fingerprint,
                 title: 'Biometric authentication',
                 subtitle:
                     'Fingerprint / Face ID gating app access & transactions',
-                onTap: (context) =>
-                    context.push(AppConstants.biometricDemoRoute),
+                onTap: (context) => context.push(AppRoutes.biometricDemo),
               ),
               _Entry(
                 icon: Icons.file_present,
                 title: 'File upload / download',
                 subtitle: 'Multipart upload and download, both with progress',
-                onTap: (context) =>
-                    context.push(AppConstants.fileTransferDemoRoute),
+                onTap: (context) => context.push(AppRoutes.fileTransferDemo),
               ),
             ],
           ),
@@ -95,22 +91,21 @@ class ExamplesHubScreen extends StatelessWidget {
                 subtitle:
                     'Feature flags, analytics, notifications, images, '
                     'logging, accessibility, updates, offline sync, reviews',
-                onTap: (context) =>
-                    context.push(AppConstants.advancedFeaturesRoute),
+                onTap: (context) => context.push(AppRoutes.advancedFeatures),
               ),
               _Entry(
                 icon: Icons.language,
                 title: 'Localization',
                 subtitle: 'Locale-aware dates, numbers and currency formatting',
                 onTap: (context) =>
-                    context.push(AppConstants.localizationDemoScreenRoute),
+                    context.push(AppRoutes.localizationDemoScreen),
               ),
               _Entry(
                 icon: Icons.translate,
                 title: 'Language selector',
                 subtitle: 'Switching the active locale at runtime',
                 onTap: (context) =>
-                    context.push(AppConstants.languageSelectorDemoRoute),
+                    context.push(AppRoutes.languageSelectorDemo),
               ),
             ],
           ),

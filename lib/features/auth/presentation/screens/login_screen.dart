@@ -1,7 +1,7 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:init/core/constants/app_constants.dart';
+import 'package:init/core/router/app_routes.dart';
 import 'package:init/core/utils/app_utils.dart';
 import 'package:init/features/auth/presentation/providers/auth_provider.dart';
 
@@ -51,7 +51,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           message: authState.errorMessage!,
           backgroundColor: Theme.of(context).colorScheme.error,
         );
+        return;
       }
+
+      // 登录成功：router 不再 watch authProvider，跳转必须由调用点负责
+      if (!mounted) return;
+      context.go(AppRoutes.home);
     }
   }
 
@@ -181,7 +186,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       Flexible(
                         child: TextButton(
                           onPressed: () {
-                            context.go(AppConstants.registerRoute);
+                            context.go(AppRoutes.register);
                           },
                           child: const Text('Register'),
                         ),

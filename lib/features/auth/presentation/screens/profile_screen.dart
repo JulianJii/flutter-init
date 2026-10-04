@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:init/core/router/app_routes.dart';
 import 'package:init/core/utils/app_utils.dart';
 import 'package:init/features/auth/domain/entities/user_entity.dart';
 import 'package:init/features/auth/presentation/providers/auth_provider.dart';
@@ -211,6 +213,10 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
 
     if (shouldLogout == true) {
       await ref.read(authProvider.notifier).logout();
+
+      // 登出成功：router 不再 watch authProvider，跳转必须由调用点负责
+      if (!context.mounted) return;
+      context.go(AppRoutes.login);
     }
   }
 }

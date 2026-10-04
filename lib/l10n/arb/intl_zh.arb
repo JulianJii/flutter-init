@@ -1,11 +1,11 @@
 {
   "@@locale": "zh",
-  "appTitle": "Flutter Riverpod 整洁架构",
-  "@appTitle": {
+  "app_title": "Flutter Riverpod 整洁架构",
+  "@app_title": {
     "description": "The title of the application"
   },
-  "welcomeMessage": "欢迎使用 Flutter Riverpod 整洁架构",
-  "@welcomeMessage": {
+  "welcome_message": "欢迎使用 Flutter Riverpod 整洁架构",
+  "@welcome_message": {
     "description": "The welcome message displayed on the home screen"
   },
   "home": "首页",
@@ -20,16 +20,16 @@
   "@profile": {
     "description": "Label for the profile tab or button"
   },
-  "darkMode": "深色模式",
-  "@darkMode": {
+  "dark_mode": "深色模式",
+  "@dark_mode": {
     "description": "Label for the dark mode option"
   },
-  "lightMode": "浅色模式",
-  "@lightMode": {
+  "light_mode": "浅色模式",
+  "@light_mode": {
     "description": "Label for the light mode option"
   },
-  "systemMode": "跟随系统",
-  "@systemMode": {
+  "system_mode": "跟随系统",
+  "@system_mode": {
     "description": "Label for the system theme mode option"
   },
   "language": "语言",
@@ -156,24 +156,24 @@
   "@password": {
     "description": "Label for the password field"
   },
-  "signIn": "登录",
-  "@signIn": {
+  "sign_in": "登录",
+  "@sign_in": {
     "description": "Label for the sign in button"
   },
   "register": "注册",
   "@register": {
     "description": "Label for the register button"
   },
-  "forgotPassword": "忘记密码？",
-  "@forgotPassword": {
+  "forgot_password": "忘记密码？",
+  "@forgot_password": {
     "description": "Label for the forgot password button"
   },
-  "errorOccurred": "发生错误",
-  "@errorOccurred": {
+  "error_occurred": "发生错误",
+  "@error_occurred": {
     "description": "Generic error message"
   },
-  "tryAgain": "重试",
-  "@tryAgain": {
+  "try_again": "重试",
+  "@try_again": {
     "description": "Label for the try again button"
   },
   "greeting": "你好，{name}！",
@@ -186,8 +186,8 @@
       }
     }
   },
-  "itemCount": "{count, plural, =0{没有项目} =1{1 个项目} other{{count} 个项目}}",
-  "@itemCount": {
+  "item_count": "{count, plural, =0{没有项目} =1{1 个项目} other{{count} 个项目}}",
+  "@item_count": {
     "description": "A plural message based on an item count",
     "placeholders": {
       "count": {
@@ -196,8 +196,8 @@
       }
     }
   },
-  "lastUpdated": "最后更新：{date}",
-  "@lastUpdated": {
+  "last_updated": "最后更新：{date}",
+  "@last_updated": {
     "description": "When something was last updated",
     "placeholders": {
       "date": {
@@ -205,5 +205,17 @@
         "format": "yMMMd"
       }
     }
+  },
+  "cancel": "取消",
+  "@cancel": {
+    "description": "Label for the cancel button"
+  },
+  "no_data": "暂无数据",
+  "@no_data": {
+    "description": "Placeholder shown when a list has no items"
+  },
+  "loading": "加载中...",
+  "@loading": {
+    "description": "Placeholder shown while data is loading"
   }
 }

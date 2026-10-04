@@ -271,7 +271,7 @@ class _ProtectedContentScreenState extends ConsumerState<ProtectedContentScreen>
 ```dart
 // Custom authentication dialog settings
 final result = await biometricService.authenticate(
-  localizedReason: context.tr('auth.biometric_prompt'),
+  localizedReason: AppLocalizations.of(context).biometric_prompt,
   reason: AuthReason.appAccess,
   useErrorDialogs: true,
   stickyAuth: true,  // Keep authentication session active when app goes to background

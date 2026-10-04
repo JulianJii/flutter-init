@@ -55,7 +55,7 @@ class MyWidget extends StatelessWidget {
     final bodyTextStyle = context.textTheme.bodyMedium;
     
     // Localization
-    final welcomeMessage = context.tr('welcome_message');
+    final welcomeMessage = AppLocalizations.of(context).welcome_message;
     final formattedDate = context.formatDate(DateTime.now(), 'short');
     final formattedCurrency = context.formatCurrency(19.99);
     
