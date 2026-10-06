@@ -48,6 +48,42 @@
   "@change_theme": {
     "description": "Label for changing the application theme"
   },
+  "theme_settings": "主题设置",
+  "@theme_settings": {
+    "description": "Title for the theme settings screen"
+  },
+  "theme_mode": "主题模式",
+  "@theme_mode": {
+    "description": "Label for the theme mode section"
+  },
+  "theme_color": "配色方案",
+  "@theme_color": {
+    "description": "Label for the color scheme section"
+  },
+  "theme_color_blue": "蓝色",
+  "@theme_color_blue": {
+    "description": "Label for the blue color scheme option"
+  },
+  "theme_color_purple": "紫色",
+  "@theme_color_purple": {
+    "description": "Label for the purple color scheme option"
+  },
+  "theme_color_green": "绿色",
+  "@theme_color_green": {
+    "description": "Label for the green color scheme option"
+  },
+  "theme_color_red": "红色",
+  "@theme_color_red": {
+    "description": "Label for the red color scheme option"
+  },
+  "theme_preview": "效果预览",
+  "@theme_preview": {
+    "description": "Label for the live theme preview section"
+  },
+  "theme_explanation": "所选主题会立即生效，并保存在本机",
+  "@theme_explanation": {
+    "description": "Explanation of the theme selection effects"
+  },
   "notifications": "通知",
   "@notifications": {
     "description": "Label for notifications settings"

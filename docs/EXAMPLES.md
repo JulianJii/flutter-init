@@ -1,5 +1,9 @@
 # 代码示例
 
+> **⚠️ 状态警告（先读）**：本文档的示例早于当前代码，**部分片段引用了不存在的 API**——例如 `context.tr('a.b')`、`authNotifierProvider`、`signIn(...)`、`NoParams`、`context.pushNamed('/details', params: ...)`，以及 `core/utils/extensions/*`（该目录目前是空占位）。
+> 复制本文任何片段前，请先对照源码；**权威示例是 `lib/features/*` 与 `test/` 中的现有代码**，仓库约定见根目录 `AGENTS.md`。
+> 另外示例中的 `print(...)` 在本仓库被 `avoid_print` 禁止，请改用 `core/logging` 的 `Logger`。
+
 本文档提供实用的代码示例，展示如何使用 Flutter Riverpod Clean Architecture 模板的核心功能。
 
 ## 使用扩展方法
@@ -54,17 +58,20 @@ class MyWidget extends StatelessWidget {
     final primaryColor = context.colorScheme.primary;
     final bodyTextStyle = context.textTheme.bodyMedium;
     
-    // Localization
+    // Localization（formatDate 的 pattern 是命名参数；这些扩展真实存在）
     final welcomeMessage = AppLocalizations.of(context).welcome_message;
-    final formattedDate = context.formatDate(DateTime.now(), 'short');
+    final formattedDate = context.formatDate(DateTime.now());
     final formattedCurrency = context.formatCurrency(19.99);
-    
-    // Navigation
-    context.pop();
-    context.pushNamed('/details', params: {'id': '123'});
-    
-    // UI helpers
-    context.showSnackBar('Operation successful');
+
+    // Navigation（go_router 提供的扩展；命名路由用 pathParameters，
+    // 且目标路由必须已在 app_router.dart 中注册，否则进 404）
+    context.go(AppRoutes.home);
+    context.pushNamed('home');
+
+    // UI helpers（不存在 context.showSnackBar，请用 ScaffoldMessenger）
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Operation successful')),
+    );
     
     return Container();
   }
@@ -105,8 +112,16 @@ class UserEntity {
 ```dart
 // lib/features/auth/domain/repositories/auth_repository.dart
 abstract class AuthRepository {
-  Future<Either<Failure, UserEntity>> signIn(String email, String password);
-  Future<Either<Failure, void>> signOut();
+  Future<Either<Failure, UserEntity>> login({
+    required String email,
+    required String password,
+  });
+  Future<Either<Failure, UserEntity>> register({
+    required String name,
+    required String email,
+    required String password,
+  });
+  Future<Either<Failure, void>> logout();
   Future<Either<Failure, UserEntity>> getCurrentUser();
 }
 ```
@@ -114,22 +129,24 @@ abstract class AuthRepository {
 #### 领域层（用例）
 
 ```dart
-// lib/features/auth/domain/usecases/sign_in_usecase.dart
-class SignInUseCase {
-  final AuthRepository repository;
-  
-  SignInUseCase(this.repository);
-  
-  Future<Either<Failure, UserEntity>> call(SignInParams params) {
-    return repository.signIn(params.email, params.password);
-  }
-}
+// lib/features/auth/domain/usecases/login_use_case.dart
+// 本仓库用例是普通类 + execute(...)（不是 call()/Params 风格，也没有 NoParams）
+class LoginUseCase {
+  final AuthRepository _repository;
 
-class SignInParams {
-  final String email;
-  final String password;
-  
-  SignInParams({required this.email, required this.password});
+  LoginUseCase(this._repository);
+
+  Future<Either<Failure, UserEntity>> execute({
+    required String email,
+    required String password,
+  }) {
+    if (email.isEmpty || password.isEmpty) {
+      return Future.value(
+        const Left(InputFailure(message: 'Email and password cannot be empty')),
+      );
+    }
+    return _repository.login(email: email, password: password);
+  }
 }
 ```
 
@@ -186,42 +203,35 @@ class UserModel {
 
 #### 数据层（数据源）
 
+> **现状**：feature 的数据源当前是**模拟实现**（延时后返回假数据，真实 API 调用被注释；`ApiClient` 尚未被业务使用）。
+
 ```dart
-// lib/features/auth/data/datasources/auth_remote_datasource.dart
+// lib/features/auth/data/datasources/auth_remote_data_source.dart
 abstract class AuthRemoteDataSource {
-  Future<UserModel> signIn(String email, String password);
-  Future<void> signOut();
-  Future<UserModel?> getCurrentUser();
+  Future<UserModel> login({required String email, required String password});
+  Future<void> logout();
+  Future<UserModel> getCurrentUser();
 }
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
-  final ApiClient apiClient;
-  
-  AuthRemoteDataSourceImpl(this.apiClient);
-  
+  final ApiClient _apiClient;
+
+  AuthRemoteDataSourceImpl(this._apiClient);
+
   @override
-  Future<UserModel> signIn(String email, String password) async {
-    final response = await apiClient.post('/auth/login', {
-      'email': email,
-      'password': password,
-    });
-    
-    return UserModel.fromJson(response.data['user']);
-  }
-  
-  @override
-  Future<void> signOut() async {
-    await apiClient.post('/auth/logout', {});
-  }
-  
-  @override
-  Future<UserModel?> getCurrentUser() async {
-    try {
-      final response = await apiClient.get('/auth/user');
-      return UserModel.fromJson(response.data['user']);
-    } catch (e) {
-      return null;
+  Future<UserModel> login({
+    required String email,
+    required String password,
+  }) async {
+    // 数据源内抛 AppException，仓库层负责转 Failure
+    final hasNetwork = await AppUtils.hasNetworkConnection();
+    if (!hasNetwork) {
+      throw NetworkException();
     }
+
+    // 真实实现应调用：await _apiClient.post('/auth/login', data: {...});
+    await Future.delayed(const Duration(seconds: 1));
+    return UserModel(id: 'user-123', name: 'John Doe', email: email);
   }
 }
 ```
@@ -231,52 +241,53 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 ```dart
 // lib/features/auth/data/repositories/auth_repository_impl.dart
 class AuthRepositoryImpl implements AuthRepository {
-  final AuthRemoteDataSource remoteDataSource;
-  final AuthLocalDataSource localDataSource;
-  
-  AuthRepositoryImpl(this.remoteDataSource, this.localDataSource);
-  
+  final AuthRemoteDataSource _remoteDataSource;
+  final SecureStorageService _secureStorageService;
+
+  AuthRepositoryImpl(this._remoteDataSource, this._secureStorageService);
+
   @override
-  Future<Either<Failure, UserEntity>> signIn(String email, String password) async {
+  Future<Either<Failure, UserEntity>> login({
+    required String email,
+    required String password,
+  }) async {
     try {
-      final userModel = await remoteDataSource.signIn(email, password);
-      await localDataSource.saveUser(userModel);
-      return Right(userModel.toEntity());
-    } catch (e) {
-      return Left(ServerFailure(message: 'Failed to sign in: ${e.toString()}'));
+      final model = await _remoteDataSource.login(
+        email: email,
+        password: password,
+      );
+      return Right(model.toEntity());
+    } on ServerException catch (e) {
+      return Left(ServerFailure(message: e.message));
+    } on NetworkException {
+      return const Left(NetworkFailure());
+    } on UnauthorizedException catch (e) {
+      return Left(AuthFailure(message: e.message));
+    } on Exception {
+      return const Left(ServerFailure());
+    }
+  }
     }
   }
   
   @override
-  Future<Either<Failure, void>> signOut() async {
+  Future<Either<Failure, void>> logout() async {
     try {
-      await remoteDataSource.signOut();
-      await localDataSource.clearUser();
+      await _remoteDataSource.logout();
+      await _secureStorageService.delete(key: AppConstants.tokenKey);
       return const Right(null);
-    } catch (e) {
-      return Left(ServerFailure(message: 'Failed to sign out: ${e.toString()}'));
+    } on Exception {
+      return const Left(ServerFailure());
     }
   }
-  
+
   @override
   Future<Either<Failure, UserEntity>> getCurrentUser() async {
     try {
-      // Try to get user from local storage first
-      final localUser = await localDataSource.getUser();
-      if (localUser != null) {
-        return Right(localUser.toEntity());
-      }
-      
-      // If not available locally, try to get from remote
-      final remoteUser = await remoteDataSource.getCurrentUser();
-      if (remoteUser != null) {
-        await localDataSource.saveUser(remoteUser);
-        return Right(remoteUser.toEntity());
-      }
-      
-      return Left(AuthFailure(message: 'User not authenticated'));
-    } catch (e) {
-      return Left(ServerFailure(message: 'Failed to get current user: ${e.toString()}'));
+      final model = await _remoteDataSource.getCurrentUser();
+      return Right(model.toEntity());
+    } on Exception {
+      return const Left(ServerFailure());
     }
   }
 }
@@ -286,15 +297,9 @@ class AuthRepositoryImpl implements AuthRepository {
 
 ```dart
 // lib/features/auth/providers/auth_providers.dart
-final authRepositoryProvider = Provider<AuthRepository>((ref) {
-  final remoteDataSource = ref.watch(authRemoteDataSourceProvider);
-  final localDataSource = ref.watch(authLocalDataSourceProvider);
-  return AuthRepositoryImpl(remoteDataSource, localDataSource);
-});
-
-final signInUseCaseProvider = Provider<SignInUseCase>((ref) {
-  final repository = ref.watch(authRepositoryProvider);
-  return SignInUseCase(repository);
+// 注意：authRepositoryProvider 实际定义在 auth_repository_impl.dart 底部
+final loginUseCaseProvider = Provider<LoginUseCase>((ref) {
+  return LoginUseCase(ref.watch(authRepositoryProvider));
 });
 ```
 
@@ -302,48 +307,48 @@ final signInUseCaseProvider = Provider<SignInUseCase>((ref) {
 
 ```dart
 // lib/features/auth/presentation/providers/auth_provider.dart
-final authNotifierProvider = NotifierProvider<AuthNotifier, AuthState>((ref) {
-  return AuthNotifier();
-});
+// provider 名为 authProvider（类式 @riverpod 生成时 XNotifier → xProvider，同一命名规则）
+final authProvider = NotifierProvider<AuthNotifier, AuthState>(
+  AuthNotifier.new,
+);
 
 class AuthNotifier extends Notifier<AuthState> {
   @override
   AuthState build() => const AuthState();
-  
-  Future<void> checkCurrentUser() async {
-    state = state.copyWith(isLoading: true);
-    
-    final getCurrentUserUseCase = ref.read(getCurrentUserUseCaseProvider);
-    final result = await getCurrentUserUseCase(NoParams());
-    
-    state = result.fold(
-      (failure) => state.copyWith(isLoading: false, isAuthenticated: false),
-      (user) => state.copyWith(isLoading: false, isAuthenticated: true, user: user),
+
+  Future<void> login({required String email, required String password}) async {
+    state = state.copyWith(isLoading: true, errorMessage: null);
+
+    final useCase = ref.read(loginUseCaseProvider);
+    final result = await useCase.execute(email: email, password: password);
+
+    result.fold(
+      (failure) => state = state.copyWith(
+        isLoading: false,
+        isAuthenticated: false,
+        errorMessage: failure.message,
+      ),
+      (user) => state = state.copyWith(
+        isLoading: false,
+        isAuthenticated: true,
+        user: user,
+        errorMessage: null,
+      ),
     );
   }
-  
-  Future<void> signIn(String email, String password) async {
-    state = state.copyWith(isLoading: true);
-    
-    final signInUseCase = ref.read(signInUseCaseProvider);
-    final params = SignInParams(email: email, password: password);
-    final result = await signInUseCase(params);
-    
-    state = result.fold(
-      (failure) => state.copyWith(isLoading: false, errorMessage: failure.message),
-      (user) => state.copyWith(isLoading: false, isAuthenticated: true, user: user),
-    );
-  }
-  
-  Future<void> signOut() async {
-    state = state.copyWith(isLoading: true);
-    
-    final signOutUseCase = ref.read(signOutUseCaseProvider);
-    final result = await signOutUseCase(NoParams());
-    
-    state = result.fold(
-      (failure) => state.copyWith(isLoading: false, errorMessage: failure.message),
-      (_) => const AuthState(),
+
+  Future<void> logout() async {
+    state = state.copyWith(isLoading: true, errorMessage: null);
+
+    final useCase = ref.read(logoutUseCaseProvider);
+    final result = await useCase.execute(); // 用例方法统一叫 execute，不存在 NoParams
+
+    result.fold(
+      (failure) => state = state.copyWith(
+        isLoading: false,
+        errorMessage: failure.message,
+      ),
+      (_) => state = const AuthState(),
     );
   }
 }
@@ -407,21 +412,21 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   
   void _handleLogin() {
     if (_formKey.currentState?.validate() ?? false) {
-      ref.read(authNotifierProvider.notifier).signIn(
-        _emailController.text,
-        _passwordController.text,
+      // 真实签名：login({required String email, required String password})
+      ref.read(authProvider.notifier).login(
+        email: _emailController.text,
+        password: _passwordController.text,
       );
     }
   }
-  
+
   @override
   Widget build(BuildContext context) {
-    final authState = ref.watch(authNotifierProvider);
-    
+    final authState = ref.watch(authProvider); // 不是 authNotifierProvider
+    final l10n = AppLocalizations.of(context); // 没有 context.tr()
+
     return Scaffold(
-      appBar: AppBar(
-        title: Text(context.tr('login.title')),
-      ),
+      appBar: AppBar(title: Text(l10n.login)),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
@@ -431,15 +436,15 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             children: [
               TextFormField(
                 controller: _emailController,
-                decoration: InputDecoration(
-                  labelText: context.tr('login.email_label'),
-                ),
+                decoration: InputDecoration(labelText: l10n.email),
                 validator: (value) {
-                  if (value?.isEmpty ?? true) {
-                    return context.tr('login.email_required');
+                  final v = value ?? '';
+                  if (v.isEmpty) {
+                    // 现有 ARB 没有 email_required；需先在 zh/en 两个 ARB 中新增该 key
+                    return l10n.email_required;
                   }
-                  if (!value!.contains('@')) {
-                    return context.tr('login.email_invalid');
+                  if (!v.contains('@')) {
+                    return l10n.email_invalid; // 同上，需先新增 key
                   }
                   return null;
                 },
@@ -447,16 +452,15 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               const SizedBox(height: 16),
               TextFormField(
                 controller: _passwordController,
-                decoration: InputDecoration(
-                  labelText: context.tr('login.password_label'),
-                ),
+                decoration: InputDecoration(labelText: l10n.password),
                 obscureText: true,
                 validator: (value) {
-                  if (value?.isEmpty ?? true) {
-                    return context.tr('login.password_required');
+                  final v = value ?? '';
+                  if (v.isEmpty) {
+                    return l10n.password_required; // 同上，需先新增 key
                   }
-                  if ((value?.length ?? 0) < 6) {
-                    return context.tr('login.password_too_short');
+                  if (v.length < 6) {
+                    return l10n.password_too_short; // 同上，需先新增 key
                   }
                   return null;
                 },
@@ -468,11 +472,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 if (authState.errorMessage != null)
                   Padding(
                     padding: const EdgeInsets.only(bottom: 16),
-                    child: Text(authState.errorMessage!, style: const TextStyle(color: Colors.red)),
+                    child: Text(
+                      authState.errorMessage!,
+                      style: const TextStyle(color: Colors.red),
+                    ),
                   ),
                 ElevatedButton(
                   onPressed: _handleLogin,
-                  child: Text(context.tr('login.button')),
+                  child: Text(l10n.login),
                 ),
               ],
             ],

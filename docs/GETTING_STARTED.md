@@ -4,8 +4,8 @@
 
 ## 环境要求
 
-- Flutter SDK（3.10.0 或更高版本）
-- Dart SDK（>=3.10.0 <4.0.0）
+- Flutter SDK（`pubspec.yaml` 中固定为 3.47.5）
+- Dart SDK（`>=3.11.0 <4.0.0`）
 - 支持 Flutter 的 IDE（VS Code、Android Studio 或 IntelliJ）
 
 ## 安装方式

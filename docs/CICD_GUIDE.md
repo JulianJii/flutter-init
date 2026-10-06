@@ -25,64 +25,15 @@
 
 该模板包含位于 `.github/workflows/` 目录下的 GitHub Actions 工作流文件：
 
-- `flutter_ci_cd.yml`：主 CI/CD 工作流
-- `flutter_ci.yml`：CI 工作流
-- `docs.yml`：文档部署工作流
+| 工作流 | 触发条件 | 实际执行的步骤 |
+|---|---|---|
+| `flutter_ci.yml` | push / PR 到 `main` | `flutter pub get` → `flutter analyze` → `flutter test`（真实有效） |
+| `docs.yml` | push 到 `main` 且改动 `docs/**`，或手动触发 | 用 Python 执行 `docs/build_site.py`，上传 artifact 并部署 GitHub Pages |
+| `flutter_ci_cd.yml` | push / PR 到 `main`、`develop` | **仅有 `flutter pub get`**：analyze / test / build / deploy 步骤目前全部被注释，待后续启用 |
 
-### Push/PR 自动触发
+### 静态分析 / 测试 / 构建 / 部署
 
-工作流在以下情况下自动触发：
-- Push 到 `main` 和 `develop` 分支
-- Pull request 到 `main` 和 `develop` 分支
-
-### 静态分析
-
-```yaml
-analyze:
-  name: Static Analysis
-  # Configuration for running Flutter analyze and format check
-```
-
-### 测试
-
-```yaml
-test:
-  name: Run Tests
-  # Configuration for running unit and widget tests
-  # Includes code coverage report generation
-```
-
-### Android 构建
-
-```yaml
-build_android:
-  name: Build Android App
-  # Configuration for building Android APK and App Bundle
-  # Only runs on push to main
-```
-
-### iOS 构建
-
-```yaml
-build_ios:
-  name: Build iOS App
-  # Configuration for building iOS IPA
-  # Only runs on push to main
-```
-
-### 部署
-
-```yaml
-deploy_android:
-  name: Deploy Android to Play Store
-  # Configuration for deploying to Play Store
-  # Only runs on push to main
-
-deploy_ios:
-  name: Deploy iOS to TestFlight
-  # Configuration for deploying to TestFlight
-  # Only runs on push to main
-```
+`flutter_ci_cd.yml` 中预留了 `analyze`、`test`、`build_android`、`build_ios`、`deploy_android`、`deploy_ios` 等作业定义，但**均为注释状态，当前不会运行**。真正生效的检查是 `flutter_ci.yml` 中的 analyze + test。
 
 ## Fastlane 集成
 
@@ -137,13 +88,9 @@ fastlane ios deploy env:production
 
 ### 环境文件
 
-项目使用 `flutter_dotenv` 管理环境变量。在项目根目录中创建 `.env` 文件：
+> **现状说明**：`flutter_dotenv` 虽在 `pubspec.yaml` 中声明，但 **Dart 代码中没有任何读取 `.env` 的位置，`.env` 也未加入 assets**；仓库根的 `.env.example` 是空占位。
 
-```
-APP_VERSION_NAME=1.0.0
-APP_VERSION_CODE=1
-API_URL=https://api.example.com
-```
+环境文件目前仅被 **Fastlane** 使用：`fastlane/Fastfile` 通过 Ruby `dotenv` 按环境读取 `.env.development` / `.env.staging` / `.env.production`，并用其中的版本号改写 `android/app/build.gradle.kts`。这些 `.env*` 实际文件已被 `.gitignore` 忽略，**不要提交**。
 
 ## 手动部署
 
@@ -178,7 +125,7 @@ fastlane ios deploy env:production
 
 ### Flutter 环境配置
 
-> **注意**：当前项目不使用 flavor 系统。环境配置通过 `flutter_dotenv` 和 `.env` 文件管理。所有环境共享单个 `lib/main.dart` 入口。
+> **注意**：当前项目**不使用 flavor 系统**，所有环境共享单个 `lib/main.dart` 入口（Android/iOS 工程与 CI 中均无 `productFlavors` / `--flavor`）。多环境目前仅体现在 Fastlane 读取 `.env.<env>` 的流程上，Dart 侧尚未接入。
 
 ## 最佳实践
 

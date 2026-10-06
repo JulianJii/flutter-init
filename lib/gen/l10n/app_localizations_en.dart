@@ -46,6 +46,34 @@ class AppLocalizationsEn extends AppLocalizations {
   String get change_theme => 'Change application theme';
 
   @override
+  String get theme_settings => 'Theme Settings';
+
+  @override
+  String get theme_mode => 'Theme Mode';
+
+  @override
+  String get theme_color => 'Color Scheme';
+
+  @override
+  String get theme_color_blue => 'Blue';
+
+  @override
+  String get theme_color_purple => 'Purple';
+
+  @override
+  String get theme_color_green => 'Green';
+
+  @override
+  String get theme_color_red => 'Red';
+
+  @override
+  String get theme_preview => 'Live Preview';
+
+  @override
+  String get theme_explanation =>
+      'The selected theme applies immediately and is saved on this device';
+
+  @override
   String get notifications => 'Notifications';
 
   @override

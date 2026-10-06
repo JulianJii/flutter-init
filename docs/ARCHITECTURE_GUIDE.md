@@ -43,8 +43,11 @@ class LoginUseCase {
 
   LoginUseCase(this._repository);
 
-  Future<Either<Failure, UserEntity>> execute(String email, String password) {
-    return _repository.login(email, password);
+  Future<Either<Failure, UserEntity>> execute({
+    required String email,
+    required String password,
+  }) {
+    return _repository.login(email: email, password: password);
   }
 }
 ```
@@ -65,12 +68,21 @@ class AuthRepositoryImpl implements AuthRepository {
 
   // Error handling happens here!
   @override
-  Future<Either<Failure, UserEntity>> login(String email, String password) async {
+  Future<Either<Failure, UserEntity>> login({
+    required String email,
+    required String password,
+  }) async {
     try {
-      final model = await _remoteDataSource.login(email, password);
+      final model = await _remoteDataSource.login(email: email, password: password);
       return Right(model.toEntity());
+    } on ServerException catch (e) {
+      return Left(ServerFailure(message: e.message));
     } on NetworkException {
-      return Left(NetworkFailure());
+      return const Left(NetworkFailure());
+    } on UnauthorizedException catch (e) {
+      return Left(AuthFailure(message: e.message));
+    } on Exception {
+      return const Left(ServerFailure());
     }
   }
 }
@@ -91,12 +103,12 @@ class AuthNotifier extends Notifier<AuthState> {
   @override
   AuthState build() => const AuthState();
 
-  Future<void> login(String email, String password) async {
+  Future<void> login({required String email, required String password}) async {
     state = state.copyWith(isLoading: true);
     
     // Use Case injected via Riverpod
     final loginUseCase = ref.read(loginUseCaseProvider);
-    final result = await loginUseCase.execute(email, password);
+    final result = await loginUseCase.execute(email: email, password: password);
 
     state = result.fold(
       (failure) => state.copyWith(isLoading: false, errorMessage: failure.message),
@@ -109,13 +121,15 @@ class AuthNotifier extends Notifier<AuthState> {
 ### 🟣 DI 层（粘合剂）
 **路径：** `lib/features/[feature]/providers/`
 
-使用 Riverpod 连接各层。
-- **依赖**：Data、Domain、Presentation。
+使用 Riverpod 连接各层。实际仓库中 provider **就近声明、位置不统一**：
+- DataSource provider 放在 `data/datasources/*.dart` 文件底部（如 `taskLocalDataSourceProvider`、`authRemoteDataSourceProvider`）。
+- Repository / UseCase provider 放在 `features/[feature]/providers/`（例外：`authRepositoryProvider`、`secureStorageServiceProvider` 在 `data/repositories/auth_repository_impl.dart` 底部）。
+- **新建前先全局搜索是否已有同名 provider。**
 
 ```dart
 // connect domain interface to data implementation
 final authRepositoryProvider = Provider<AuthRepository>((ref) {
-  return AuthRepositoryImpl(ref.watch(remoteDataSourceProvider));
+  return AuthRepositoryImpl(ref.watch(authRemoteDataSourceProvider));
 });
 ```
 
@@ -138,13 +152,13 @@ final authRepositoryProvider = Provider<AuthRepository>((ref) {
 
 ### 框架无关性
 为保持 Data 层的可测试性，我们避免 `flutter` 导入。
-- **日志**：使用 `core/utils/logger.dart` 中的 `Logger`，而非 `debugPrint`。
+- **日志**：使用 `core/logging/` 中的 `Logger`（provider：`loggerProvider`），而非 `debugPrint`。
 - **Context**：永远不要将 `BuildContext` 传递给用例或仓库。
 
 ### Provider 组织方式
 我们将数据 DI 与 UI 状态分离：
-- **`[feature]_providers.dart`**：提供仓库、用例、数据源。
-- **`[feature]_provider.dart`**：提供用于 UI 状态的 `NotifierProvider`。
+- **`features/[feature]/providers/[feature]_providers.dart`**：提供仓库、用例、数据源（`@riverpod` 注解或手写 `Provider<T>`）。
+- **`features/[feature]/presentation/providers/[feature]_provider.dart`**：提供 UI 状态的 `NotifierProvider`（`@riverpod` 类式 Notifier）。
 
 ---
 
@@ -155,11 +169,11 @@ final authRepositoryProvider = Provider<AuthRepository>((ref) {
 ```dart
 test('should return User when login is successful', () async {
   // Arrange
-  when(() => mockRepo.login(any(), any()))
+  when(() => mockRepo.login(email: any(named: 'email'), password: any(named: 'password')))
     .thenAnswer((_) async => Right(tUser));
   
   // Act
-  final result = await useCase.execute('test@test.com', 'pass');
+  final result = await useCase.execute(email: 'test@test.com', password: 'pass');
   
   // Assert
   expect(result, Right(tUser));
@@ -167,10 +181,16 @@ test('should return User when login is successful', () async {
 ```
 
 ### Golden 测试（Presentation）
-逐像素验证 UI 渲染。
+逐像素验证 UI 渲染。本仓库使用 `zoloto`（不是 alchemist / golden_toolkit）：
 ```dart
-testGoldens('LoginScreen renders correctly', (tester) async {
-  await tester.pumpWidgetBuilder(LoginScreen());
-  await screenMatchesGolden(tester, 'login_screen');
-});
+void main() {
+  testGoldenWidgets('LoginScreen golden test', (tester) async {
+    await expectMatchTestEnvironments(
+      'login_screen',
+      tester: tester,
+      widget: const ProviderScope(child: LoginScreen()),
+    );
+  });
+}
 ```
+全局外壳与 1.5% 容差配置在 `test/flutter_test_config.dart`；图片输出到同目录 `goldens/*.png`；刷新：`flutter test --update-goldens`。

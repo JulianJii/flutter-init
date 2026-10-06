@@ -142,23 +142,19 @@ ImagePlaceholderGrid(
 
 ## 缓存系统
 
-图像在两个层级进行缓存：
-
-1. **内存缓存**：用于快速访问最近使用的图像
-2. **磁盘缓存**：用于跨应用启动持久化存储图像
+> **现状**：只有**内存** LRU 缓存（`imageMemoryCacheProvider`，`CacheManager<ui.Image>`，maxItems 100）；**没有磁盘缓存**（`lib/core/storage/cache/` 下是空占位）。并且 `AdvancedImage` 目前并不消费该缓存，实际加载走的是 `NetworkImage` + 模拟延迟。
 
 缓存配置可以自定义：
 
 ```dart
-// Configure the image memory cache
+// 自定义内存缓存（参考 imageMemoryCacheProvider 的写法）
 final customImageCacheProvider = Provider<CacheManager<ui.Image>>((ref) {
   return CacheManager<ui.Image>(maxItems: 200);
 });
 
-// Use the custom cache
-ref.read(advancedImageConfigProvider.notifier).update((state) => 
-  state.copyWith(memoryCacheProvider: customImageCacheProvider)
-);
+// 注意：advancedImageConfigProvider 是只读 Provider，没有 .notifier，
+// 也没有 memoryCacheProvider 字段——不要写 config.copyWith(...) 去改它。
+final config = ref.watch(advancedImageConfigProvider);
 ```
 
 ## 最佳实践
@@ -243,58 +239,48 @@ Stack(
 );
 ```
 
+> **注意**：`SvgImage` / `SvgRenderer` 目前是占位渲染器（画彩色方块，不解析 SVG——项目未引入 `flutter_svg`），仅用于演示 API 形态。
+
 ## 高级用例
 
 ### 自定义 Image Processor
 
-你可以创建自己的 `ImageProcessor` 接口实现：
+你可以实现 `ImageProcessor` 接口并覆盖 `imageProcessorProvider`。仓库内唯一实现是 no-op 的 `DebugImageProcessor`；项目**没有** firebase_ml_kit 之类依赖，下面只是接口示例：
 
 ```dart
-class FirebaseImageProcessor implements ImageProcessor {
-  // Implementation using Firebase ML Kit or other libraries
+class MyImageProcessor implements ImageProcessor {
+  // 你的缩放 / 压缩实现
   // ...
 }
 
 final customImageProcessorProvider = Provider<ImageProcessor>((ref) {
-  return FirebaseImageProcessor();
+  return MyImageProcessor();
 });
 ```
 
 ### 自定义效果
 
-通过扩展 `ImageEffectType` 枚举并更新 `ImageTransformer` widget 来创建自定义图像效果：
+Dart 枚举不能通过扩展新增 case，需要两步：
+
+1. 在 `lib/core/images/image_transformer.dart` 的 `ImageEffectType` 枚举中新增值（现有：`none / grayscale / sepia / invert / blur` 等）；
+2. 在同文件的 `switch` 中为该值添加颜色矩阵 / 滤镜分支。
 
 ```dart
-extension CustomImageEffects on ImageEffectType {
-  static const duotone = ImageEffectType.duotone;
-}
-
-// Then in your ImageTransformer implementation:
-case CustomImageEffects.duotone:
-  return ColorFiltered(
-    colorFilter: ColorFilter.matrix(_getDuotoneMatrix(
-      effect.intensity,
-      effect.overlayColor ?? Colors.blue,
-    )),
-    child: child,
-  );
+enum ImageEffectType { none, grayscale, sepia, invert, blur /* 在此新增 */ }
 ```
 
 ### 预加载图像
 
-通过在需要之前预加载图像来改善用户体验：
+通过在需要之前预加载图像来改善用户体验（`ref` 需由调用方传入，例如 provider 或 `ConsumerState` 中）：
 
 ```dart
-Future<void> prefetchImagesForGallery(List<String> imageUrls) async {
-  final processor = ref.read(imageProcessorProvider);
+Future<void> prefetchImagesForGallery(Ref ref, List<String> imageUrls) async {
   final cache = ref.read(imageMemoryCacheProvider);
-  
+
   for (final url in imageUrls) {
-    // Check if already cached
     final key = ref.read(imageKeyProvider(url));
     if (!cache.containsKey(key)) {
-      // Fetch and cache in background
-      unawaited(_fetchAndCacheImage(url, processor, cache, key));
+      // 拉取并解码后：cache.setItem(key, decodedImage);
     }
   }
 }
@@ -310,26 +296,22 @@ Future<void> prefetchImagesForGallery(List<String> imageUrls) async {
 
 ### 测试图像加载
 
-在各种网络条件下测试图像加载：
+用 `testWidgets` + ProviderScope override 注入替身（注意 widget 测试里 `NetworkImage` 默认会失败，真实项目需配合 mock HTTP）：
 
 ```dart
-// Simulate slow network
-Future<void> testSlowImageLoading() async {
-  final tester = await WidgetTester.create();
+testWidgets('shows shimmer while loading', (tester) async {
   await tester.pumpWidget(
     ProviderScope(
       overrides: [
-        imageProcessorProvider.overrideWithValue(
-          SlowNetworkImageProcessor(),
-        ),
+        imageProcessorProvider.overrideWithValue(MyFakeImageProcessor()),
       ],
-      child: MyApp(),
+      child: const MaterialApp(
+        home: AdvancedImage(imageUrl: 'https://example.com/a.png'),
+      ),
     ),
   );
-  
-  // Verify loading behavior
+
   expect(find.byType(ShimmerPlaceholder), findsWidgets);
-  await tester.pump(Duration(seconds: 5));
-  expect(find.byType(ShimmerPlaceholder), findsNothing);
-}
+  await tester.pump(const Duration(seconds: 1));
+});
 ```

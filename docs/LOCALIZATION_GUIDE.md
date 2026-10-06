@@ -152,23 +152,20 @@ final currentLocale = context.currentLocale;
 1. 使用提供的生成脚本（推荐）：
 
    ```bash
-   ./generate_language.sh <language_code> "<Language Name>"
-   # Example:
-   ./generate_language.sh it "Italian"
+   ./generate_language.sh add it      # 以 intl_en.arb 为蓝本创建 intl_it.arb 并改写 @@locale
+   ./generate_language.sh generate    # 等价于 flutter gen-l10n
    ```
 
-   该脚本将：
-   - 基于模板创建新的 ARB 文件
-   - 同步所有 ARB 的 key 集合
-   - 正确格式化文件
+   脚本子命令只有 `generate | list | add <code> | check | help`；`add` **只复制 ARB 文件**，不会自动同步 key 集合（用 `check` 排查差异）。
 
 2. 或者在 `lib/l10n/arb` 目录中手动创建名为 `intl_<language_code>.arb` 的新 ARB 文件
    （例如，法语为 `intl_fr.arb`）
 
-3. 为模板 ARB 文件 (`intl_en.arb`) 中定义的所有键添加翻译
+3. 对照模板 ARB（`l10n.yaml` 指定的是 `intl_zh.arb`）补齐所有键的翻译
 
-4. 把语言码加进 `l10n.yaml` 的 `preferred-supported-locales`，然后跑
-   `flutter gen-l10n` —— `AppLocalizations.supportedLocales` 由它生成：
+4. 跑 `flutter gen-l10n` 重新生成 Dart 代码 —— `AppLocalizations.supportedLocales`
+   由 ARB 文件列表自动生成，无需手改；如需调整顺序，可把语言码加进
+   `l10n.yaml` 的 `preferred-supported-locales`：
 
    ```yaml
    preferred-supported-locales: ["zh", "en"]
@@ -189,9 +186,9 @@ final currentLocale = context.currentLocale;
 
 要更新或添加新的翻译键：
 
-1. 在模板 ARB 文件 (`intl_en.arb`) 中添加新键
+1. 在模板 ARB 文件 (`intl_zh.arb`) 中添加新键
 2. 在所有其他 ARB 文件中添加该键的翻译
-3. 重新构建应用以生成更新的本地化文件
+3. 跑 `flutter gen-l10n`（或重新构建应用）生成更新的本地化文件
 
 ## UI 组件
 
@@ -283,11 +280,14 @@ String commonPath = LocalizedAssetService.getCommonImagePath('logo.png');
 系统使用 Riverpod providers 来管理活动区域设置：
 
 ```dart
-// Watch the current locale
-final currentLocale = ref.watch(localeProvider);
+// Watch the current locale（持久化语言，主入口是 persistentLocaleProvider）
+final currentLocale = ref.watch(persistentLocaleProvider);
 
-// Change the active locale
-ref.read(localeProvider.notifier).setLocale(const Locale('es'));
+// Change the active locale（写入 SharedPreferences）
+ref.read(persistentLocaleProvider.notifier).setLocale(const Locale('es'));
+
+// Reset to system locale
+ref.read(persistentLocaleProvider.notifier).resetToSystemLocale();
 ```
 
 ## 最佳实践

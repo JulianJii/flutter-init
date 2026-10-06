@@ -48,6 +48,42 @@
   "@change_theme": {
     "description": "Label for changing the application theme"
   },
+  "theme_settings": "Theme Settings",
+  "@theme_settings": {
+    "description": "Title for the theme settings screen"
+  },
+  "theme_mode": "Theme Mode",
+  "@theme_mode": {
+    "description": "Label for the theme mode section"
+  },
+  "theme_color": "Color Scheme",
+  "@theme_color": {
+    "description": "Label for the color scheme section"
+  },
+  "theme_color_blue": "Blue",
+  "@theme_color_blue": {
+    "description": "Label for the blue color scheme option"
+  },
+  "theme_color_purple": "Purple",
+  "@theme_color_purple": {
+    "description": "Label for the purple color scheme option"
+  },
+  "theme_color_green": "Green",
+  "@theme_color_green": {
+    "description": "Label for the green color scheme option"
+  },
+  "theme_color_red": "Red",
+  "@theme_color_red": {
+    "description": "Label for the red color scheme option"
+  },
+  "theme_preview": "Live Preview",
+  "@theme_preview": {
+    "description": "Label for the live theme preview section"
+  },
+  "theme_explanation": "The selected theme applies immediately and is saved on this device",
+  "@theme_explanation": {
+    "description": "Explanation of the theme selection effects"
+  },
   "notifications": "Notifications",
   "@notifications": {
     "description": "Label for notifications settings"

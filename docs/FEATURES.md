@@ -49,7 +49,7 @@ analytics.logUserAction(
 
 ## 推送通知
 
-完整的通知处理，支持深度链接和后台处理：
+> **现状**：接口定义完整（权限申请、本地通知、深链、主题订阅），但当前唯一实现是 `DebugNotificationService`（全部 `debugPrint` 模拟），**未接入 FCM / flutter_local_notifications**，不要当作可用的推送能力。
 
 ```dart
 // Access notification service
@@ -92,17 +92,25 @@ if (isAvailable) {
 用于 A/B 测试和分阶段发布的运行时功能开关：
 
 ```dart
-// Check if a feature is enabled
-if (service.isFeatureEnabled('premium_features')) {
-  // Show premium features
-}
+// 声明式读取（推荐）
+final enabled = ref.watch(
+  featureFlagProvider('premium_features', defaultValue: false),
+);
+
+// 或用 FeatureFlag widget 包裹（注意参数名是 featureKey）
+FeatureFlag(
+  featureKey: 'premium_features',
+  child: const PremiumSection(),
+)
 ```
 
 详情请参见[功能开关指南](https://jessejii.github.io/init/feature_flags.html)。
 
 ## 高级图片处理
 
-支持缓存、SVG、特效和精美占位图的优化图片加载方案。
+提供特效（灰度/褐色/模糊等，`ImageTransformer`）、Shimmer 占位图（`ShimmerPlaceholder`）与按语言选择资源的 `LocalizedImage`。
+
+> **现状**：`AdvancedImage` 未消费内存缓存、加载是模拟延迟；`SvgImage`/`SvgRenderer` 是占位渲染器（无 `flutter_svg` 依赖）；`imageProcessorProvider` 是 no-op 的 Debug 实现。仅特效与占位图可直接使用。
 
 详情请参见[图片处理指南](https://jessejii.github.io/init/image_handling.html)。
 
@@ -117,43 +125,58 @@ Text(AppLocalizations.of(context).welcome_message);
 
 详情请参见[本地化指南](https://jessejii.github.io/init/localization.html)。
 
-## 高级缓存系统
+## 内存缓存
 
-项目实现了健壮的两级缓存系统，支持内存和磁盘两种存储方式。
+`lib/core/storage/cache_manager.dart` 提供带 LRU 淘汰的**纯内存**缓存 `CacheManager<T>`（无磁盘层；`lib/core/storage/cache/` 下的"多级缓存"文件均为 0 字节占位）。
 
 ```dart
-// Using the cache
-final cacheManager = ref.watch(userDiskCacheProvider);
-await cacheManager.setItem('user_1', userEntity);
+// 按需声明 provider（参考既有的 imageMemoryCacheProvider / svgCacheProvider）
+final userCacheProvider = Provider<CacheManager<UserEntity>>(
+  (ref) => CacheManager<UserEntity>(maxItems: 100),
+);
+
+final cache = ref.watch(userCacheProvider);
+cache.setItem('user_1', userEntity);        // 同步方法，返回 void
+final cached = cache.getItem('user_1');      // 未命中返回 null
 ```
+
+> 注意：不存在 `userDiskCacheProvider`。
 
 ## 动态主题
 
-主题系统允许完全自定义应用外观。
+色板由 `flex_color_scheme` 生成，支持 4 套配色（`AppThemeColor.blue / purple / green / red`），主题模式与配色都持久化在 SharedPreferences：
 
 ```dart
-// Use in MaterialApp
-return MaterialApp(
-  theme: AppTheme.lightTheme,
-  darkTheme: AppTheme.darkTheme,
+// core/providers/theme_providers.dart：themeModeProvider / themeColorProvider / appThemesProvider
+final themeMode = ref.watch(themeModeProvider);
+final themes = ref.watch(appThemesProvider); // = AppTheme.build(themeColorProvider 的当前值)
+
+MaterialApp.router(
+  theme: themes.light,
+  darkTheme: themes.dark,
   themeMode: themeMode,
+  ...
 );
 ```
+
+切换配色：`ref.read(themeColorProvider.notifier).set(AppThemeColor.green)`（UI 入口：`features/settings/.../theme_settings_screen.dart`）。
+
+> 注意：`AppTheme.lightTheme` / `darkTheme` 已不存在，改用 `AppTheme.build(color)` 返回 `(light:, dark:)` 记录。
 
 ## 无障碍支持
 
 > **注意**：`core/accessibility/` 模块当前为占位目录，待后续实现。
 
-## 离线优先架构
+## 离线优先架构（部分实现）
 
-让你的应用在有无网络连接的情况下都能无缝运行。
+`offlineSyncServiceProvider`、`pendingChangesProvider` 与三种冲突策略（ClientWins / ServerWins / SmartMerge）已就位，但**同步流程是模拟的**：`_processChange` 只延时后返回成功、冲突策略未接线、`pendingChangesProvider` 依赖的流是坏的 mock，也未与 WorkManager 联动。仅作设计参考。
 
 详情请参见[离线架构指南](https://jessejii.github.io/init/offline_architecture.html)。
 
 ## 应用更新流程
 
-管理应用更新，支持自定义流程。
+`updateServiceProvider` + `UpdateChecker` 可用，**强制更新 UI 链路真实**（不可关闭的弹窗），但版本检查数据是伪造的（总是"当前版本 +1"），接入真实接口前仅供演示。
 
 ## 应用评价系统
 
-从用户那里获取反馈和评分。
+> **未实现**：仓库中没有 `in_app_review` 依赖，也没有相关代码。

@@ -2,8 +2,7 @@
 title: 编码规范
 ---
 
-# 编码规范
- & 最佳实践
+# 编码规范 & 最佳实践
 
 为保持代码库的高质量，必须严格遵守以下规范。
 
@@ -30,12 +29,13 @@ Domain 层必须是纯 Dart。
 
 ## 2. Riverpod 模式
 
-### ✅ 使用 `Notifier` / `AsyncNotifier`
+### ✅ 使用 `@riverpod` 代码生成 `Notifier` / `AsyncNotifier`
+新 provider 用 `@riverpod` 注解 + `part 'xxx.g.dart';`，生成后以 `<name>Provider` 引用（类 `XNotifier` → `xProvider`，函数 `foo` → `fooProvider`）；改动注解后跑 `dart run build_runner build --delete-conflicting-outputs`。
 避免对复杂状态使用 `StateProvider` 或 `ChangeNotifier`。
 - **原因**：更好的可测试性和生命周期管理。
 
 ### ✅ 分离数据层 DI 与 UI 状态
-- **数据 Provider**：放置在 `features/[feature]/providers/` 中，定义 Repository/UseCase/DataSource。
+- **数据 Provider**：`@riverpod` 注解或手写 `Provider<T>`。DataSource provider 在 `data/datasources/*.dart` 底部；Repository/UseCase provider 在 `features/[feature]/providers/`（`authRepositoryProvider` 例外，在仓库实现文件底部）。
 - **UI Provider**：放置在 `features/[feature]/presentation/providers/` 中，为页面定义 `Notifier`。
 
 ### ✅ 在 build() 中使用 `ref.watch`，在回调中使用 `ref.read`
@@ -68,7 +68,7 @@ import '../domain/entities/user.dart'; // Good
 ```
 跨 feature 边界或 core 时使用 package 导入。
 ```dart
-import 'package:app/core/utils/logger.dart'; // Good
+import 'package:init/core/logging/logger.dart'; // Good
 ```
 
 ---

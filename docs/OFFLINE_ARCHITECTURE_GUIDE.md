@@ -232,30 +232,25 @@ class TaskRepository {
 
 ### 后台同步
 
-使用 WorkManager 设置后台同步：
+> **现状**：`lib/core/background/background_task_service.dart` 对 workmanager 做了真实封装，但**没有与离线同步接线**：回调只把"最后运行时间"写进 SharedPreferences，`main.dart` 也未调用 `initialize()`（目前仅 `examples/integrations/background_tasks_example_screen.dart` 在用）。要做真正的后台同步需自行补回调逻辑。
+
+真实 API 形态（供参考）：
 
 ```dart
-import 'package:workmanager/workmanager.dart';
-
-// Initialize in main.dart
-Workmanager().initialize(callbackDispatcher);
-Workmanager().registerPeriodicTask(
-  'sync',
-  'periodicSync',
-  frequency: Duration(hours: 1),
-  constraints: Constraints(
-    networkType: NetworkType.connected,
-  ),
+// 从 provider 取得服务（使用前需先 await initialize()）
+final service = ref.read(backgroundTaskServiceProvider);
+await service.initialize();
+await service.registerPeriodicTask(
+  uniqueName: 'sync',
+  taskName: 'periodicSync',
+  frequency: const Duration(minutes: 15), // Android 强制最低 15 分钟
 );
 
-// Define the callback
-void callbackDispatcher() {
-  Workmanager().executeTask((task, inputData) async {
-    if (task == 'periodicSync') {
-      final container = ProviderContainer();
-      final syncService = container.read(offlineSyncServiceProvider);
-      await syncService.syncChanges();
-    }
+// 任务体写在顶层入口点里（后台隔离区无法访问 provider 容器，只能读持久化数据）
+@pragma('vm:entry-point')
+void backgroundTaskCallbackDispatcher() {
+  Workmanager().executeTask((taskName, inputData) async {
+    // 目前这里只持久化"运行过"的标记；真正的同步逻辑需要在此实现
     return true;
   });
 }

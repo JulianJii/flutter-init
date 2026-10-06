@@ -170,6 +170,60 @@ abstract class AppLocalizations {
   /// **'更改应用主题'**
   String get change_theme;
 
+  /// Title for the theme settings screen
+  ///
+  /// In zh, this message translates to:
+  /// **'主题设置'**
+  String get theme_settings;
+
+  /// Label for the theme mode section
+  ///
+  /// In zh, this message translates to:
+  /// **'主题模式'**
+  String get theme_mode;
+
+  /// Label for the color scheme section
+  ///
+  /// In zh, this message translates to:
+  /// **'配色方案'**
+  String get theme_color;
+
+  /// Label for the blue color scheme option
+  ///
+  /// In zh, this message translates to:
+  /// **'蓝色'**
+  String get theme_color_blue;
+
+  /// Label for the purple color scheme option
+  ///
+  /// In zh, this message translates to:
+  /// **'紫色'**
+  String get theme_color_purple;
+
+  /// Label for the green color scheme option
+  ///
+  /// In zh, this message translates to:
+  /// **'绿色'**
+  String get theme_color_green;
+
+  /// Label for the red color scheme option
+  ///
+  /// In zh, this message translates to:
+  /// **'红色'**
+  String get theme_color_red;
+
+  /// Label for the live theme preview section
+  ///
+  /// In zh, this message translates to:
+  /// **'效果预览'**
+  String get theme_preview;
+
+  /// Explanation of the theme selection effects
+  ///
+  /// In zh, this message translates to:
+  /// **'所选主题会立即生效，并保存在本机'**
+  String get theme_explanation;
+
   /// Label for notifications settings
   ///
   /// In zh, this message translates to:

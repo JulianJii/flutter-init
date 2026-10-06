@@ -17,20 +17,23 @@ Future<void> testExecutable(FutureOr<void> Function() testMain) async {
       // 使用应用真实主题作为 golden 外壳
       // （应用主题来自 material_ui，与 zoloto 的 flutter/material 版本不兼容，
       // 因此这里自行构造 material_ui 的 MaterialApp 外壳）
-      appWrapperFactory: () =>
-          (child) => MaterialApp(
-            theme: AppTheme.lightTheme,
-            darkTheme: AppTheme.darkTheme,
-            // golden 里的 widget 会读 AppLocalizations，外壳必须挂上同一套 delegates
-            localizationsDelegates: [
-              ...AppLocalizations.localizationsDelegates,
-              ...GlobalMaterialLocalizations.delegates,
-            ],
-            supportedLocales: AppLocalizations.supportedLocales,
-            locale: const Locale('zh'),
-            debugShowCheckedModeBanner: false,
-            home: Material(color: Colors.transparent, child: child),
-          ),
+      appWrapperFactory: () {
+        final themes = AppTheme.build(AppThemeColor.defaultColor);
+
+        return (child) => MaterialApp(
+          theme: themes.light,
+          darkTheme: themes.dark,
+          // golden 里的 widget 会读 AppLocalizations，外壳必须挂上同一套 delegates
+          localizationsDelegates: [
+            ...AppLocalizations.localizationsDelegates,
+            ...GlobalMaterialLocalizations.delegates,
+          ],
+          supportedLocales: AppLocalizations.supportedLocales,
+          locale: const Locale('zh'),
+          debugShowCheckedModeBanner: false,
+          home: Material(color: Colors.transparent, child: child),
+        );
+      },
     ),
   );
 }

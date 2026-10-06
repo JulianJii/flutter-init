@@ -45,6 +45,33 @@ class AppLocalizationsZh extends AppLocalizations {
   String get change_theme => '更改应用主题';
 
   @override
+  String get theme_settings => '主题设置';
+
+  @override
+  String get theme_mode => '主题模式';
+
+  @override
+  String get theme_color => '配色方案';
+
+  @override
+  String get theme_color_blue => '蓝色';
+
+  @override
+  String get theme_color_purple => '紫色';
+
+  @override
+  String get theme_color_green => '绿色';
+
+  @override
+  String get theme_color_red => '红色';
+
+  @override
+  String get theme_preview => '效果预览';
+
+  @override
+  String get theme_explanation => '所选主题会立即生效，并保存在本机';
+
+  @override
   String get notifications => '通知';
 
   @override

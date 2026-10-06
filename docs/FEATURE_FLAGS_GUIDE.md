@@ -97,16 +97,16 @@ const Map<String, dynamic> kDefaultFeatureFlags = {
 ### 开发环境与生产环境
 
 - 在 debug 构建中，使用 `LocalFeatureFlagService` 以支持快速迭代
-- 在 release 构建中，使用 `RemoteFeatureFlagService` 从 Firebase Remote Config 获取值
+- 在 release 构建中，使用 `RemoteFeatureFlagService`——但它是**内存 stub**（不发网络请求、返回硬编码值），接入真实远程配置前不要依赖它
 - 两种实现共享相同的接口，确保使用方式一致
 
 ### 远程配置设置
 
-> **注意**：Firebase Remote Config 集成当前为 stub 实现。要启用远程配置：
+> **注意**：远程配置当前为 stub 实现（`remote_feature_flag_service.dart` 的 `fetchAndActivate` 不发请求、返回硬编码假值；项目也没有任何 `firebase_*` 依赖）。要启用远程配置：
 > 1. 按照 [FlutterFire 文档](https://firebase.flutter.dev/docs/overview/) 将 Firebase 添加到项目中
 > 2. 在 Firebase 控制台中设置 Remote Config
 > 3. 定义与代码中使用的键匹配的参数
-4. 为 A/B 测试或分阶段发布设置条件
+> 4. 为 A/B 测试或分阶段发布设置条件
 
 ## 高级用法
 
@@ -117,8 +117,8 @@ const Map<String, dynamic> kDefaultFeatureFlags = {
 ```dart
 final service = ref.watch(featureFlagServiceProvider);
 service.addListener(() {
-  // Handle flag changes
-  print('Feature flags updated');
+  // Handle flag changes（仓库禁用 print/debugPrint，改用 core/logging 的 Logger）
+  logger.i('Feature flags updated'); // final logger = ref.read(loggerProvider);
 });
 ```
 

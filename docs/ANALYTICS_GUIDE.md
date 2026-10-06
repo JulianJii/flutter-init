@@ -83,8 +83,9 @@ final startTime = DateTime.now();
 final duration = DateTime.now().difference(startTime);
 
 analytics.logPerformance(
-  metricName: 'api_request_time',
+  name: 'api_request_time', // 参数名是 name（不是 metricName）
   value: duration.inMilliseconds,
+  unit: 'ms',
 );
 ```
 

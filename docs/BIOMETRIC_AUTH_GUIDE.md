@@ -83,11 +83,17 @@ abstract class BiometricService {
 ```dart
 /// Provider for the biometric service
 final biometricServiceProvider = Provider<BiometricService>((ref) {
-  final isDebug = kDebugMode;
-  if (isDebug) {
-    return DebugBiometricService();
-  }
-  return LocalBiometricService();
+  // 仅当 debug 构建且 feature flag 'use_debug_biometrics' 为 true 时才用模拟实现，
+  // 否则使用真实的 LocalBiometricService；返回值还会包一层分析代理。
+  final useDebugService =
+      kDebugMode &&
+      ref.watch(
+        featureFlagProvider('use_debug_biometrics', defaultValue: false),
+      );
+  final service = useDebugService
+      ? DebugBiometricService()
+      : LocalBiometricService();
+  return _AnalyticsBiometricServiceProxy(service, ref.watch(analyticsProvider));
 });
 
 /// Provider for biometric availability
@@ -97,7 +103,8 @@ final biometricsAvailableProvider = FutureProvider<bool>((ref) async {
 });
 
 /// Provider for biometric types
-final biometricTypesProvider = FutureProvider<List<BiometricType>>((ref) async {
+/// 注意：真实名字是 availableBiometricsProvider（不是 biometricTypesProvider）
+final availableBiometricsProvider = FutureProvider<List<BiometricType>>((ref) async {
   final service = ref.watch(biometricServiceProvider);
   return await service.getAvailableBiometrics();
 });
@@ -269,21 +276,20 @@ class _ProtectedContentScreenState extends ConsumerState<ProtectedContentScreen>
 该模块提供以下自定义选项：
 
 ```dart
-// Custom authentication dialog settings
+// Custom authentication dialog settings（参数以 BiometricService 接口为准）
 final result = await biometricService.authenticate(
   localizedReason: AppLocalizations.of(context).biometric_prompt,
-  reason: AuthReason.appAccess,
-  useErrorDialogs: true,
-  stickyAuth: true,  // Keep authentication session active when app goes to background
+  reason: AuthReason.appAccess, // appAccess / transaction / sensitiveData
+  sensitiveTransaction: true,   // 标记敏感操作
+  dialogTitle: '身份验证',
+  cancelButtonText: '取消',
 );
 
-// Manage secure credentials with expiration
-final tokenService = ref.read(secureTokenServiceProvider);
-await tokenService.storeWithExpiration(
-  key: 'auth_token',
-  value: response.token,
-  expiresInHours: 24,
-);
+// 安全存储凭证（flutter_secure_storage 封装；注意没有 storeWithExpiration API）
+// secureStorageServiceProvider 定义在 features/auth/data/repositories/auth_repository_impl.dart 底部
+final tokenService = ref.read(secureStorageServiceProvider);
+await tokenService.write(key: 'auth_token', value: response.token);
+final token = await tokenService.read(key: 'auth_token');
 ```
 
 ## 最佳实践

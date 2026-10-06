@@ -31,9 +31,7 @@ class SettingsScreen extends ConsumerWidget {
             leading: const Icon(Icons.brightness_6),
             title: Text(l10n.theme),
             subtitle: Text(l10n.change_theme),
-            onTap: () {
-              // 主题设置（待实现）
-            },
+            onTap: () => context.go(AppRoutes.themeSettings),
           ),
 
           const Divider(),

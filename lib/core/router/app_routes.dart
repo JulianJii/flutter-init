@@ -14,6 +14,7 @@ abstract final class AppRoutes {
   static const String profile = '/profile';
   static const String settings = '/settings';
   static const String languageSettings = '/settings/language';
+  static const String themeSettings = '/settings/theme';
   static const String localizationDemo = '/demo/localization';
   static const String localizationAssetsDemo = '/demo/localization/assets';
   static const String tasks = '/tasks';

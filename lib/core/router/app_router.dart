@@ -8,6 +8,7 @@ import 'package:init/features/home/presentation/screens/home_screen.dart';
 import 'package:init/features/auth/presentation/providers/auth_provider.dart';
 import 'package:init/features/settings/presentation/screens/settings_screen.dart';
 import 'package:init/features/settings/presentation/screens/language_settings_screen.dart';
+import 'package:init/features/settings/presentation/screens/theme_settings_screen.dart';
 import 'package:go_router/go_router.dart';
 import 'package:init/features/chat/presentation/screens/chat_screen.dart';
 import 'package:init/features/survey/presentation/screens/survey_screen.dart';
@@ -77,6 +78,13 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: AppRoutes.languageSettings,
         name: 'language_settings',
         builder: (context, state) => const LanguageSettingsScreen(),
+      ),
+
+      // 主题设置路由
+      GoRoute(
+        path: AppRoutes.themeSettings,
+        name: 'theme_settings',
+        builder: (context, state) => const ThemeSettingsScreen(),
       ),
 
       // 本地化资源演示路由
