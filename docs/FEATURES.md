@@ -45,7 +45,7 @@ analytics.logUserAction(
 );
 ```
 
-详情请参见[分析指南](https://jessejii.github.io/init/analytics.html)。
+详情请参见[分析指南]
 
 ## 推送通知
 
@@ -85,7 +85,7 @@ if (isAvailable) {
 }
 ```
 
-详情请参见[生物识别认证指南](https://jessejii.github.io/init/biometric_auth.html)。
+详情请参见[生物识别认证指南]。
 
 ## 功能开关
 
@@ -104,7 +104,7 @@ FeatureFlag(
 )
 ```
 
-详情请参见[功能开关指南](https://jessejii.github.io/init/feature_flags.html)。
+详情请参见[功能开关指南]
 
 ## 高级图片处理
 
@@ -112,7 +112,7 @@ FeatureFlag(
 
 > **现状**：`AdvancedImage` 未消费内存缓存、加载是模拟延迟；`SvgImage`/`SvgRenderer` 是占位渲染器（无 `flutter_svg` 依赖）；`imageProcessorProvider` 是 no-op 的 Debug 实现。仅特效与占位图可直接使用。
 
-详情请参见[图片处理指南](https://jessejii.github.io/init/image_handling.html)。
+详情请参见[图片处理指南]
 
 ## 多语言支持
 
@@ -123,7 +123,7 @@ FeatureFlag(
 Text(AppLocalizations.of(context).welcome_message);
 ```
 
-详情请参见[本地化指南](https://jessejii.github.io/init/localization.html)。
+详情请参见[本地化指南]。
 
 ## 内存缓存
 
@@ -171,7 +171,7 @@ MaterialApp.router(
 
 `offlineSyncServiceProvider`、`pendingChangesProvider` 与三种冲突策略（ClientWins / ServerWins / SmartMerge）已就位，但**同步流程是模拟的**：`_processChange` 只延时后返回成功、冲突策略未接线、`pendingChangesProvider` 依赖的流是坏的 mock，也未与 WorkManager 联动。仅作设计参考。
 
-详情请参见[离线架构指南](https://jessejii.github.io/init/offline_architecture.html)。
+详情请参见[离线架构指南]。
 
 ## 应用更新流程
 

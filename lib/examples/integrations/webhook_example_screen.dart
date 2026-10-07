@@ -70,7 +70,7 @@ class _WebhookExampleScreenState extends ConsumerState<WebhookExampleScreen> {
       if (!mounted) return;
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(SnackBar(content: Text(e.message ?? 'Unsupported')));
+      ).showSnackBar(SnackBar(content: Text(e.message ?? '不支持')));
     }
   }
 
@@ -79,7 +79,7 @@ class _WebhookExampleScreenState extends ConsumerState<WebhookExampleScreen> {
     if (url.isEmpty) {
       setState(() {
         _lastResultWasError = true;
-        _lastResultMessage = 'Enter a URL to send to first.';
+        _lastResultMessage = '请先填写要发送到的 URL。';
       });
       return;
     }
@@ -90,7 +90,7 @@ class _WebhookExampleScreenState extends ConsumerState<WebhookExampleScreen> {
     } catch (_) {
       setState(() {
         _lastResultWasError = true;
-        _lastResultMessage = 'Payload must be valid JSON.';
+        _lastResultMessage = '载荷必须是合法的 JSON。';
       });
       return;
     }
@@ -110,7 +110,7 @@ class _WebhookExampleScreenState extends ConsumerState<WebhookExampleScreen> {
         (delivery) {
           _lastResultWasError = false;
           _lastResultMessage =
-              'Delivered (${delivery.statusCode}). Signature: '
+              '已投递（${delivery.statusCode}）。签名：'
               '${delivery.signature}';
         },
       );
@@ -120,18 +120,18 @@ class _WebhookExampleScreenState extends ConsumerState<WebhookExampleScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Webhook example')),
+      appBar: AppBar(title: const Text('Webhook 示例')),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          Text('1. Local receiver (dev only)', style: _sectionStyle(context)),
+          Text('1. 本地接收端（仅供开发）', style: _sectionStyle(context)),
           const SizedBox(height: 4),
           Text(
             kIsWeb
-                ? 'Not available on web - dart:io HttpServer is needed. Run '
-                      'this demo on desktop or mobile.'
-                : 'Starts a loopback HTTP server to receive and verify '
-                      'webhooks, for local testing only.',
+                ? 'Web 平台不可用 —— 需要 dart:io 的 HttpServer。'
+                      '请在桌面端或移动端运行此示例。'
+                : '启动一个回环 HTTP 服务来接收并校验 webhook，'
+                      '仅用于本地测试。',
             style: Theme.of(context).textTheme.bodySmall,
           ),
           const SizedBox(height: 12),
@@ -146,13 +146,13 @@ class _WebhookExampleScreenState extends ConsumerState<WebhookExampleScreen> {
                       Expanded(
                         child: Text(
                           _receiverUrl == null
-                              ? 'Not running'
-                              : 'Listening on $_receiverUrl',
+                              ? '未运行'
+                              : '正在监听 $_receiverUrl',
                         ),
                       ),
                       FilledButton.tonal(
                         onPressed: kIsWeb ? null : _toggleReceiver,
-                        child: Text(_receiver == null ? 'Start' : 'Stop'),
+                        child: Text(_receiver == null ? '启动' : '停止'),
                       ),
                     ],
                   ),
@@ -165,12 +165,12 @@ class _WebhookExampleScreenState extends ConsumerState<WebhookExampleScreen> {
             ),
           ),
           const SizedBox(height: 24),
-          Text('2. Send a signed webhook', style: _sectionStyle(context)),
+          Text('2. 发送一个带签名的 webhook', style: _sectionStyle(context)),
           const SizedBox(height: 12),
           TextField(
             controller: _urlController,
             decoration: const InputDecoration(
-              labelText: 'Destination URL',
+              labelText: '目标 URL',
               border: OutlineInputBorder(),
               isDense: true,
             ),
@@ -179,7 +179,7 @@ class _WebhookExampleScreenState extends ConsumerState<WebhookExampleScreen> {
           TextField(
             controller: _secretController,
             decoration: const InputDecoration(
-              labelText: 'Shared secret',
+              labelText: '共享密钥',
               border: OutlineInputBorder(),
               isDense: true,
             ),
@@ -190,7 +190,7 @@ class _WebhookExampleScreenState extends ConsumerState<WebhookExampleScreen> {
             maxLines: 5,
             style: const TextStyle(fontFamily: 'monospace'),
             decoration: const InputDecoration(
-              labelText: 'JSON payload',
+              labelText: 'JSON 载荷',
               border: OutlineInputBorder(),
               alignLabelWithHint: true,
             ),
@@ -205,7 +205,7 @@ class _WebhookExampleScreenState extends ConsumerState<WebhookExampleScreen> {
                     child: CircularProgressIndicator(strokeWidth: 2),
                   )
                 : const Icon(Icons.send),
-            label: const Text('Send webhook'),
+            label: const Text('发送 webhook'),
           ),
           if (_lastResultMessage != null) ...[
             const SizedBox(height: 12),

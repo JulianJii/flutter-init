@@ -259,10 +259,10 @@ class BasicUpdateService implements UpdateService {
     }
 
     return parts.take(3).map((part) {
-      // 移除任何非数字后缀
-      final match = RegExp(r'^\d+').firstMatch(part);
-      final digitPart = match != null ? match.group(0) : '0';
-      return int.tryParse(digitPart ?? '0') ?? 0;
+      // 取第一段数字，兼容 "v1" / "2-beta" 这类带前后缀的 tag
+      final match = RegExp(r'\d+').firstMatch(part);
+      final digitPart = match?.group(0) ?? '0';
+      return int.tryParse(digitPart) ?? 0;
     }).toList();
   }
 
