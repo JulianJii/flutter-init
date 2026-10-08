@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:init/core/router/app_routes.dart';
-import 'package:init/core/utils/app_utils.dart';
-import 'package:init/features/posts/presentation/providers/posts_provider.dart';
 import 'package:go_router/go_router.dart';
+import 'package:init/core/utils/app_utils.dart';
 import 'package:intl/intl.dart';
+import '../providers/posts_provider.dart';
 
 class PostsScreen extends ConsumerStatefulWidget {
   const PostsScreen({super.key});

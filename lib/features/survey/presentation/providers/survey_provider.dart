@@ -1,6 +1,8 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:init/features/survey/domain/entities/survey_entity.dart';
-import 'package:init/features/survey/providers/survey_providers.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+import '../../domain/entities/survey_entity.dart';
+import '../../providers/survey_providers.dart';
+
+part 'survey_provider.g.dart';
 
 /// 表现层状态管理
 /// 本文件只包含与 UI 相关的 state providers
@@ -22,7 +24,8 @@ class SurveyState {
   }
 }
 
-class SurveyNotifier extends Notifier<SurveyState> {
+@Riverpod(keepAlive: true)
+class SurveyNotifier extends _$SurveyNotifier {
   @override
   SurveyState build() {
     return const SurveyState();
@@ -69,6 +72,3 @@ class SurveyNotifier extends Notifier<SurveyState> {
   }
 }
 
-final surveyProvider = NotifierProvider<SurveyNotifier, SurveyState>(
-  SurveyNotifier.new,
-);

@@ -6,6 +6,8 @@ title: Architecture Guide
 
 本项目遵循严格的 **Clean Architecture** 原则，并使用 **Riverpod 3**（基于代码生成）适配 Flutter。核心目标是关注点分离和可测试性。
 
+> **怎么读这篇**：必须/禁止类的规则以 `docs/CODING_STANDARDS.md` 为准，本文只讲分层与接线；示例按**规范写法**给出，**与源码不一致时以源码为准**。
+
 ---
 
 ## 1. 依赖规则
@@ -16,12 +18,13 @@ title: Architecture Guide
 graph TD
     Presentation[Presentation Layer (Flutter)] --> Domain[Domain Layer (Pure Dart)]
     Data[Data Layer (Impl)] --> Domain
-    Presentation --> Data -- DI only --> Domain
+    DI[providers/ (Riverpod DI)] -.创建.-> Data
 ```
 
 - **Domain 层**：对 Flutter、Data 和 Presentation 一无所知。
 - **Data 层**：了解 Domain。实现 Domain 中定义的接口。
-- **Presentation 层**：了解 Domain。仅通过依赖注入使用 Data 层。
+- **Presentation 层**：只了解 Domain。**不 import data**，数据靠 `ref.read(xxxUseCaseProvider)` 拿（provider 定义在 `providers/`）。
+- **箭头只指向 Domain**。Presentation 与 data 之间没有 import 关系，全靠 DI 在运行时接线。
 
 ---
 
@@ -35,22 +38,30 @@ graph TD
 - **实体**：继承 `Equatable` 的简单数据类。
 - **仓库（接口）**：数据操作可能性的抽象定义。
 - **用例**：封装单个业务操作（例如 `LoginUseCase`、`SendMessageUseCase`）。
+  `core/usecases/usecase.dart` 的 `UseCase` 基类**无人使用**，新用例不要实现它（`call()` 只是普通方法名，不是接口实现）。
 
-**用例示例：**
+**用例示例**（`lib/features/tasks/domain/usecases/add_task_use_case.dart`）：
 ```dart
-class LoginUseCase {
-  final AuthRepository _repository; // Depends on interface, not implementation
+class AddTaskUseCase {
+  final TaskRepository _repository; // 依赖接口，不是实现
 
-  LoginUseCase(this._repository);
+  AddTaskUseCase(this._repository);
 
-  Future<Either<Failure, UserEntity>> execute({
-    required String email,
-    required String password,
-  }) {
-    return _repository.login(email: email, password: password);
+  Future<Either<Failure, TaskEntity>> call(TaskEntity task) {
+    // 业务规则（"标题不能为空"）属于 domain，不属于 UI
+    if (task.title.trim().isEmpty) {
+      return Future.value(
+        const Left(InputFailure(message: 'Task title cannot be empty')),
+      );
+    }
+    return _repository.addTask(task);
   }
 }
 ```
+
+> ⚠️ **入口方法名不统一**：多数用例用 `call()`（tasks / notifications / posts / survey），
+> 但 auth 的 4 个用例用 `execute()`（`LoginUseCase.execute({email, password})` 等）。
+> 两种都能跑，`grep` 目标 feature 现有写法跟着用即可——不要顺手"统一"。
 
 ### 🔵 Data 层（基础设施）
 **路径：** `lib/features/[feature]/data/`
@@ -88,6 +99,10 @@ class AuthRepositoryImpl implements AuthRepository {
 }
 ```
 
+> ⚠️ **业务数据源目前全是模拟**：`features/*/data/datasources/` 都是延时后返回假数据，真实 API
+> 调用被注释掉，`core/network/api_client.dart` 尚未被任何业务使用。分层结构是真的，数据是假的——
+> 照抄示例时别以为 `AuthRemoteDataSource` 已经连上了服务器。
+
 ### 🟢 Presentation 层（UI）
 **路径：** `lib/features/[feature]/presentation/`
 
@@ -99,7 +114,10 @@ class AuthRepositoryImpl implements AuthRepository {
 
 **Notifier 示例：**
 ```dart
-class AuthNotifier extends Notifier<AuthState> {
+part 'auth_provider.g.dart';
+
+@riverpod
+class AuthNotifier extends _$AuthNotifier {
   @override
   AuthState build() => const AuthState();
 
@@ -110,9 +128,9 @@ class AuthNotifier extends Notifier<AuthState> {
     final loginUseCase = ref.read(loginUseCaseProvider);
     final result = await loginUseCase.execute(email: email, password: password);
 
-    state = result.fold(
-      (failure) => state.copyWith(isLoading: false, errorMessage: failure.message),
-      (user) => state.copyWith(isLoading: false, isAuthenticated: true, user: user),
+    result.fold(
+      (failure) => state = state.copyWith(isLoading: false, errorMessage: failure.message),
+      (user) => state = state.copyWith(isLoading: false, isAuthenticated: true, user: user),
     );
   }
 }
@@ -128,9 +146,9 @@ class AuthNotifier extends Notifier<AuthState> {
 
 ```dart
 // connect domain interface to data implementation
-final authRepositoryProvider = Provider<AuthRepository>((ref) {
-  return AuthRepositoryImpl(ref.watch(authRemoteDataSourceProvider));
-});
+@riverpod
+AuthRepository authRepository(Ref ref) =>
+    AuthRepositoryImpl(ref.watch(authRemoteDataSourceProvider));
 ```
 
 ---
@@ -151,13 +169,20 @@ final authRepositoryProvider = Provider<AuthRepository>((ref) {
   ```
 
 ### 框架无关性
-为保持 Data 层的可测试性，我们避免 `flutter` 导入。
-- **日志**：使用 `core/logging/` 中的 `Logger`（provider：`loggerProvider`），而非 `debugPrint`。
+为保持 Domain/Data 的可测试性，分层的**真实**边界是：
+
+- **Domain 层**：禁止任何 `flutter` 导入（含 `flutter_riverpod`）。可依赖 `fpdart`、`equatable`、`intl`。
+- **Data 层**：禁止 `package:flutter/material.dart` / `package:material_ui/material_ui.dart`；
+  但**允许** `riverpod_annotation`——因为 data 层文件底部会就近声明自己的 provider
+  （`task_local_data_source.dart:43`、`auth_repository_impl.dart` 底部），这是 DI，不是 UI 依赖。
+- **日志**：使用 `core/logging/` 的 `Logger`（实例来自 `loggerProvider` / `taggedLoggerProvider`，
+  或用 `LoggerMixin`），而非 `print` / `debugPrint`。注意 API 是短名：`logger.e(...)`、`logger.d(...)`、
+  `logger.i(...)`、`logger.w(...)`、`logger.v(...)`、`logger.c(...)`、`logger.p(...)`，**没有** `Logger.error(...)`。
 - **Context**：永远不要将 `BuildContext` 传递给用例或仓库。
 
 ### Provider 组织方式
 我们将数据 DI 与 UI 状态分离：
-- **`features/[feature]/providers/[feature]_providers.dart`**：提供仓库、用例、数据源（`@riverpod` 注解或手写 `Provider<T>`）。
+- **`features/[feature]/providers/[feature]_providers.dart`**：提供仓库、用例、数据源（`@riverpod` 注解）。
 - **`features/[feature]/presentation/providers/[feature]_provider.dart`**：提供 UI 状态的 `NotifierProvider`（`@riverpod` 类式 Notifier）。
 
 ---

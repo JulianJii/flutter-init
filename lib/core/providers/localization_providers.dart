@@ -1,13 +1,16 @@
 import 'package:material_ui/material_ui.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:init/core/providers/storage_providers.dart';
 import 'package:init/gen/l10n/app_localizations.dart';
+
+part 'localization_providers.g.dart';
 
 /// 用于在 SharedPreferences 中存储所选语言代码的键
 const _languageCodeKey = 'selected_language_code';
 
 /// 首次启动时使用的语言环境；main.dart 用 persistentLocaleProvider 覆盖它
-final defaultLocaleProvider = Provider<Locale>((ref) => const Locale('zh'));
+@Riverpod(keepAlive: true)
+Locale defaultLocale(Ref ref) => const Locale('zh');
 
 /// gen-l10n 不生成 isSupported，本地补一个
 bool isSupportedLocale(Locale locale) => AppLocalizations.supportedLocales.any(
@@ -15,7 +18,8 @@ bool isSupportedLocale(Locale locale) => AppLocalizations.supportedLocales.any(
 );
 
 /// 用于持久化和获取用户语言偏好设置的 Provider
-final savedLocaleProvider = Provider<Locale>((ref) {
+@Riverpod(keepAlive: true)
+Locale savedLocale(Ref ref) {
   final prefs = ref.watch(sharedPreferencesProvider);
   final savedLanguageCode = prefs.getString(_languageCodeKey);
 
@@ -31,17 +35,11 @@ final savedLocaleProvider = Provider<Locale>((ref) {
   }
 
   return const Locale('zh');
-});
-
-/// 用于初始化和持久化语言环境 notifier 的 Provider
-/// 用于初始化和持久化语言环境 notifier 的 Provider
-final persistentLocaleProvider =
-    NotifierProvider<PersistentLocaleNotifier, Locale>(
-      PersistentLocaleNotifier.new,
-    );
+}
 
 /// 用于管理带持久化的语言环境状态的 Notifier
-class PersistentLocaleNotifier extends Notifier<Locale> {
+@Riverpod(keepAlive: true)
+class PersistentLocaleNotifier extends _$PersistentLocaleNotifier {
   static const _languageCodeKey = 'selected_language_code';
 
   @override

@@ -1,5 +1,7 @@
 import 'package:dio/dio.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+part 'graphql_client.g.dart';
 
 /// 当 GraphQL 端点返回 `errors` 数组时抛出（成功的 HTTP 200 仍可能携带
 /// GraphQL 级别的错误），或者当传输本身失败时抛出。
@@ -75,7 +77,6 @@ class GraphQLClient {
 
 /// 每个 [endpoint] 一个客户端，这样屏幕可以与多个 GraphQL API 通信
 /// 而不会共享 header/拦截器。
-final graphQLClientProvider = Provider.autoDispose
-    .family<GraphQLClient, String>(
-      (ref, endpoint) => GraphQLClient(Dio(), endpoint: endpoint),
-    );
+@riverpod
+GraphQLClient graphQLClient(Ref ref, String endpoint) =>
+    GraphQLClient(Dio(), endpoint: endpoint);

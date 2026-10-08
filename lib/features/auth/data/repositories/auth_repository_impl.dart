@@ -1,15 +1,17 @@
 import 'package:fpdart/fpdart.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:init/core/constants/app_constants.dart';
 import 'package:init/core/error/exceptions.dart';
 import 'package:init/core/error/failures.dart';
 import 'package:init/core/providers/storage_providers.dart';
 import 'package:init/core/storage/local_storage_service.dart';
 import 'package:init/core/storage/secure_storage_service.dart';
-import 'package:init/features/auth/data/datasources/auth_remote_data_source.dart';
-import 'package:init/features/auth/data/models/user_model.dart';
-import 'package:init/features/auth/domain/entities/user_entity.dart';
-import 'package:init/features/auth/domain/repositories/auth_repository.dart';
+import '../datasources/auth_remote_data_source.dart';
+import '../models/user_model.dart';
+import '../../domain/entities/user_entity.dart';
+import '../../domain/repositories/auth_repository.dart';
+
+part 'auth_repository_impl.g.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
   final AuthRemoteDataSource _remoteDataSource;
@@ -168,15 +170,17 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 }
 
-final secureStorageServiceProvider = Provider<SecureStorageService>((ref) {
+@Riverpod(keepAlive: true)
+SecureStorageService secureStorageService(Ref ref) {
   return SecureStorageService.create();
-});
+}
 
 // Repository provider 定义
-final authRepositoryProvider = Provider<AuthRepository>((ref) {
+@Riverpod(keepAlive: true)
+AuthRepository authRepository(Ref ref) {
   return AuthRepositoryImpl(
     remoteDataSource: ref.watch(authRemoteDataSourceProvider),
     localStorageService: ref.watch(localStorageServiceProvider),
     secureStorageService: ref.watch(secureStorageServiceProvider),
   );
-});
+}

@@ -1,29 +1,33 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:init/core/network/offline_sync_service.dart';
 import 'package:init/core/providers/storage_providers.dart';
 
+part 'offline_sync_providers.g.dart';
+
 /// 连通性服务的 Provider
-final connectivityProvider = Provider<Connectivity>((ref) {
+@Riverpod(keepAlive: true)
+Connectivity connectivity(Ref ref) {
   return Connectivity();
-});
+}
 
 /// 冲突解决策略的 Provider
-final conflictResolutionStrategyProvider = Provider<ConflictResolutionStrategy>(
-  (ref) {
-    // 使用带字段优先级的智能合并策略
-    return SmartMergeStrategy({
-      'id': false, // 服务器胜出
-      'createdAt': false, // 服务器在创建时间戳上胜出
-      'updatedAt': true, // 客户端在更新时间戳上胜出
-      // 根据需要添加更多字段优先级
-    });
-  },
-);
+@Riverpod(keepAlive: true)
+ConflictResolutionStrategy conflictResolutionStrategy(Ref ref) {
+  // 使用带字段优先级的智能合并策略
+  return SmartMergeStrategy({
+    'id': false, // 服务器胜出
+    'createdAt': false, // 服务器在创建时间戳上胜出
+    'updatedAt': true, // 客户端在更新时间戳上胜出
+    // 根据需要添加更多字段优先级
+  });
+}
 
 /// 离线同步服务的 Provider
-final offlineSyncServiceProvider = Provider<OfflineSyncService>((ref) {
+@Riverpod(keepAlive: true)
+OfflineSyncService offlineSyncService(Ref ref) {
   final prefs = ref.watch(sharedPreferencesProvider);
   final connectivity = ref.watch(connectivityProvider);
   final conflictStrategy = ref.watch(conflictResolutionStrategyProvider);
@@ -38,20 +42,22 @@ final offlineSyncServiceProvider = Provider<OfflineSyncService>((ref) {
   service.init();
 
   return service;
-});
+}
 
 /// 待处理更改的 Provider
-final pendingChangesProvider = StreamProvider<List<OfflineChange>>((ref) {
+@Riverpod(keepAlive: true)
+Stream<List<OfflineChange>> pendingChanges(Ref ref) {
   final offlineSyncService = ref.watch(offlineSyncServiceProvider);
   return offlineSyncService.syncStatusStream;
-});
+}
 
 /// 在线状态的 Provider
-final isOnlineProvider = FutureProvider.autoDispose<bool>((ref) async {
+@riverpod
+Future<bool> isOnline(Ref ref) async {
   final connectivity = ref.watch(connectivityProvider);
   final connectivityResult = await connectivity.checkConnectivity();
   return !connectivityResult.contains(ConnectivityResult.none);
-});
+}
 
 /// 显示离线状态和同步状态的 widget
 class OfflineStatusIndicator extends ConsumerWidget {

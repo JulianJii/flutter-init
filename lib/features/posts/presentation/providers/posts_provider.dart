@@ -1,6 +1,8 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:init/features/posts/domain/entities/post_entity.dart';
-import 'package:init/features/posts/providers/post_providers.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+import '../../domain/entities/post_entity.dart';
+import '../../providers/post_providers.dart';
+
+part 'posts_provider.g.dart';
 
 /// 表现层状态管理
 /// 本文件仅包含与 UI 相关的状态提供者
@@ -31,7 +33,8 @@ class PostsState {
   }
 }
 
-class PostsNotifier extends Notifier<PostsState> {
+@Riverpod(keepAlive: true)
+class PostsNotifier extends _$PostsNotifier {
   @override
   PostsState build() {
     return const PostsState();
@@ -55,6 +58,3 @@ class PostsNotifier extends Notifier<PostsState> {
   }
 }
 
-final postsProvider = NotifierProvider<PostsNotifier, PostsState>(
-  PostsNotifier.new,
-);

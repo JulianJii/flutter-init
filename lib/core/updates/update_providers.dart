@@ -1,34 +1,38 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:init/core/constants/app_constants.dart';
 import 'package:init/core/updates/update_service.dart';
 
+part 'update_providers.g.dart';
+
 /// 更新服务的 Provider
-final updateServiceProvider = Provider<UpdateService>((ref) {
+@Riverpod(keepAlive: true)
+UpdateService updateService(Ref ref) {
   return BasicUpdateService(
     androidPackageName: AppConstants.packageName,
     iOSAppId: AppConstants.iOSAppId,
   );
-});
+}
 
 /// 用于检查是否有可用更新的 Provider
-final updateCheckProvider = FutureProvider.autoDispose<UpdateCheckResult>((
-  ref,
-) async {
+@riverpod
+Future<UpdateCheckResult> updateCheck(Ref ref) async {
   final updateService = ref.watch(updateServiceProvider);
   await updateService.init();
   return await updateService.checkForUpdates();
-});
+}
 
 /// 更新信息的 Provider
-final updateInfoProvider = FutureProvider.autoDispose<UpdateInfo?>((ref) async {
+@riverpod
+Future<UpdateInfo?> updateInfo(Ref ref) async {
   final updateService = ref.watch(updateServiceProvider);
   return await updateService.getUpdateInfo();
-});
+}
 
 /// 更新流程的控制器
-/// 更新流程的控制器
-class UpdateController extends AsyncNotifier<UpdateCheckResult> {
+@Riverpod(keepAlive: true)
+class UpdateController extends _$UpdateController {
   @override
   Future<UpdateCheckResult> build() async {
     final updateService = ref.watch(updateServiceProvider);
@@ -67,12 +71,6 @@ class UpdateController extends AsyncNotifier<UpdateCheckResult> {
     return await updateService.getUpdateInfo();
   }
 }
-
-/// 更新控制器的 Provider
-final updateControllerProvider =
-    AsyncNotifierProvider<UpdateController, UpdateCheckResult>(
-      UpdateController.new,
-    );
 
 /// 当有可用更新时显示更新对话框的 Widget
 class UpdateChecker extends ConsumerWidget {

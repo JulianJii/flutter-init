@@ -1,9 +1,11 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:init/core/constants/app_constants.dart';
 import 'package:init/core/error/exceptions.dart';
 import 'package:init/core/providers/storage_providers.dart';
 import 'package:init/core/storage/local_storage_service.dart';
-import 'package:init/features/tasks/data/models/task_model.dart';
+import '../models/task_model.dart';
+
+part 'task_local_data_source.g.dart';
 
 /// 通过 [LocalStorageService] 将任务以 JSON 编码格式持久化存储在设备上。
 abstract class TaskLocalDataSource {
@@ -40,6 +42,7 @@ class TaskLocalDataSourceImpl implements TaskLocalDataSource {
   }
 }
 
-final taskLocalDataSourceProvider = Provider<TaskLocalDataSource>((ref) {
+@Riverpod(keepAlive: true)
+TaskLocalDataSource taskLocalDataSource(Ref ref) {
   return TaskLocalDataSourceImpl(ref.watch(localStorageServiceProvider));
-});
+}

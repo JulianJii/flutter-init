@@ -4,14 +4,18 @@ import 'dart:ui' as ui;
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:init/core/images/debug_image_processor.dart';
 import 'package:init/core/images/image_processor.dart';
 import 'package:init/core/storage/cache_manager.dart';
 
+part 'advanced_image.g.dart';
+
 /// 图像处理器 Provider
-final imageProcessorProvider = Provider<ImageProcessor>((ref) {
+@Riverpod(keepAlive: true)
+ImageProcessor imageProcessor(Ref ref) {
   return DebugImageProcessor();
-});
+}
 
 /// 高级图像处理配置
 class AdvancedImageConfig {
@@ -52,17 +56,20 @@ class AdvancedImageConfig {
 }
 
 /// 高级图像配置 Provider
-final advancedImageConfigProvider = Provider<AdvancedImageConfig>((ref) {
+@Riverpod(keepAlive: true)
+AdvancedImageConfig advancedImageConfig(Ref ref) {
   return const AdvancedImageConfig();
-});
+}
 
 /// 已解码图像的内存缓存
-final imageMemoryCacheProvider = Provider<CacheManager<ui.Image>>((ref) {
+@Riverpod(keepAlive: true)
+CacheManager<ui.Image> imageMemoryCache(Ref ref) {
   return CacheManager<ui.Image>(maxItems: 100);
-});
+}
 
 /// 图像缓存键 Provider
-final imageKeyProvider = Provider.family<String, String>((ref, imageUrl) {
+@Riverpod(keepAlive: true)
+String imageKey(Ref ref, String imageUrl) {
   final config = ref.watch(advancedImageConfigProvider);
 
   // 创建包含相关尺寸参数的缓存键
@@ -73,7 +80,7 @@ final imageKeyProvider = Provider.family<String, String>((ref, imageUrl) {
   }
 
   return key;
-});
+}
 
 /// 支持缓存、处理和占位符的高级图像 widget
 class AdvancedImage extends ConsumerStatefulWidget {

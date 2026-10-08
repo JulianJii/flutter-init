@@ -2,7 +2,9 @@
 // 提供网络连接信息
 
 import 'dart:io';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+part 'network_info.g.dart';
 
 /// 网络连接信息的抽象接口
 abstract class NetworkInfo {
@@ -24,6 +26,5 @@ class NetworkInfoImpl implements NetworkInfo {
 }
 
 /// NetworkInfo 的 Riverpod provider
-final networkInfoProvider = Provider<NetworkInfo>(
-  (ref) => NetworkInfoImpl(),
-);
+@Riverpod(keepAlive: true)
+NetworkInfo networkInfo(Ref ref) => NetworkInfoImpl();

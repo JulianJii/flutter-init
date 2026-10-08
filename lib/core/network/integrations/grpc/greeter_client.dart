@@ -1,8 +1,10 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'greeter_client_stub.dart'
     if (dart.library.io) 'greeter_client_io.dart'
     as platform;
+
+part 'greeter_client.g.dart';
 
 /// 对生成的 `GreeterClient` gRPC 存根（`greeter.pbgrpc.dart`）的轻量封装，
 /// 演示两种 RPC 风格：
@@ -33,10 +35,9 @@ abstract class GrpcGreeterClient {
 }
 
 /// 每个订阅者一个新客户端，不再被观察时自动断开连接。
-final grpcGreeterClientProvider = Provider.autoDispose<GrpcGreeterClient>((
-  ref,
-) {
+@riverpod
+GrpcGreeterClient grpcGreeterClient(Ref ref) {
   final client = GrpcGreeterClient();
   ref.onDispose(client.disconnect);
   return client;
-});
+}

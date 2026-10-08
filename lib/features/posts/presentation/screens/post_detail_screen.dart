@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:init/features/posts/domain/entities/post_entity.dart';
 import 'package:intl/intl.dart';
+import '../../domain/entities/post_entity.dart';
 
 class PostDetailScreen extends StatelessWidget {
   final PostEntity post;

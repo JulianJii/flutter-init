@@ -1,10 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 import '../../utils/logger.dart';
+
+part 'websocket_client.g.dart';
 
 /// [WebSocketClient] 连接的生命周期状态。
 enum WebSocketConnectionState { disconnected, connecting, connected, error }
@@ -139,8 +141,9 @@ class WebSocketClient {
 }
 
 /// 每个订阅者一个新 [WebSocketClient]，不再被观察时自动释放。
-final webSocketClientProvider = Provider.autoDispose<WebSocketClient>((ref) {
+@riverpod
+WebSocketClient webSocketClient(Ref ref) {
   final client = WebSocketClient();
   ref.onDispose(client.dispose);
   return client;
-});
+}

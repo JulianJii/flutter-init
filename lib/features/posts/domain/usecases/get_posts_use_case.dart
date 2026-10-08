@@ -1,7 +1,7 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:init/core/error/failures.dart';
-import 'package:init/features/posts/domain/entities/post_entity.dart';
-import 'package:init/features/posts/domain/repositories/post_repository.dart';
+import '../entities/post_entity.dart';
+import '../repositories/post_repository.dart';
 
 class GetPostsUseCase {
   final PostRepository _repository;

@@ -1,9 +1,11 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:init/core/error/exceptions.dart';
 import 'package:init/core/network/api_client.dart';
 import 'package:init/core/providers/network_providers.dart';
 import 'package:init/core/utils/app_utils.dart';
-import 'package:init/features/auth/data/models/user_model.dart';
+import '../models/user_model.dart';
+
+part 'auth_remote_data_source.g.dart';
 
 abstract class AuthRemoteDataSource {
   /// 使用邮箱和密码登录用户
@@ -113,13 +115,15 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 }
 
 // Provider 定义
-final authRemoteDataSourceProvider = Provider<AuthRemoteDataSource>((ref) {
+@Riverpod(keepAlive: true)
+AuthRemoteDataSource authRemoteDataSource(Ref ref) {
   // final apiClient = ref.watch(apiClientProvider);
   return AuthRemoteDataSourceImpl(/*apiClient*/);
-});
+}
 
 // ApiClient provider 定义
-final apiClientProvider = Provider.autoDispose<ApiClient>((ref) {
+@riverpod
+ApiClient apiClient(Ref ref) {
   final dio = ref.watch(dioProvider);
   return ApiClient(dio);
-});
+}

@@ -1,13 +1,16 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:init/core/analytics/analytics_providers.dart';
 import 'package:init/core/auth/biometric_service.dart';
 import 'package:init/core/auth/debug_biometric_service.dart';
 import 'package:init/core/auth/local_biometric_service.dart';
 import 'package:init/core/feature_flags/feature_flag_providers.dart';
 
+part 'biometric_providers.g.dart';
+
 /// 生物识别认证服务的 provider
-final biometricServiceProvider = Provider<BiometricService>((ref) {
+@Riverpod(keepAlive: true)
+BiometricService biometricService(Ref ref) {
   // 检查是否处于 debug 模式或是否设置了 feature flag
   final useDebugService =
       kDebugMode &&
@@ -25,7 +28,7 @@ final biometricServiceProvider = Provider<BiometricService>((ref) {
 
   // 返回一个记录分析的代理服务
   return _AnalyticsBiometricServiceProxy(service, analytics);
-});
+}
 
 /// 为生物识别操作添加分析日志的代理服务
 class _AnalyticsBiometricServiceProxy implements BiometricService {
@@ -82,18 +85,18 @@ class _AnalyticsBiometricServiceProxy implements BiometricService {
 }
 
 /// 检查生物识别认证是否可用的 provider
-final biometricsAvailableProvider = FutureProvider<bool>((ref) async {
+@Riverpod(keepAlive: true)
+Future<bool> biometricsAvailable(Ref ref) async {
   final service = ref.watch(biometricServiceProvider);
   return await service.isAvailable();
-});
+}
 
 /// 获取可用生物识别类型的 provider
-final availableBiometricsProvider = FutureProvider<List<BiometricType>>((
-  ref,
-) async {
+@Riverpod(keepAlive: true)
+Future<List<BiometricType>> availableBiometrics(Ref ref) async {
   final service = ref.watch(biometricServiceProvider);
   return await service.getAvailableBiometrics();
-});
+}
 
 /// 用于管理认证状态的控制器
 /// 生物识别认证的状态
@@ -122,7 +125,8 @@ class BiometricAuthState {
 }
 
 /// 用于管理认证状态的控制器
-class BiometricAuthController extends Notifier<BiometricAuthState> {
+@Riverpod(keepAlive: true)
+class BiometricAuthController extends _$BiometricAuthController {
   @override
   BiometricAuthState build() {
     return const BiometricAuthState();
@@ -203,9 +207,3 @@ class BiometricAuthController extends Notifier<BiometricAuthState> {
     return false;
   }
 }
-
-/// 生物识别认证控制器的 provider
-final biometricAuthControllerProvider =
-    NotifierProvider<BiometricAuthController, BiometricAuthState>(
-      BiometricAuthController.new,
-    );

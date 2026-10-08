@@ -1,10 +1,13 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:init/core/analytics/analytics_event.dart';
 import 'package:init/core/analytics/analytics_service.dart';
 import 'package:init/core/analytics/firebase_analytics_service.dart';
 import 'package:init/core/feature_flags/feature_flag_providers.dart';
+
+part 'analytics_providers.g.dart';
 
 /// 供开发使用的调试分析服务
 class DebugAnalyticsService implements AnalyticsService {
@@ -56,7 +59,8 @@ class DebugAnalyticsService implements AnalyticsService {
 }
 
 /// 分析服务的 provider
-final analyticsServiceProvider = Provider<AnalyticsService>((ref) {
+@Riverpod(keepAlive: true)
+AnalyticsService analyticsService(Ref ref) {
   // 通过 feature flag 检查分析功能是否启用
   final analyticsEnabled = ref.watch(
     featureFlagProvider('enable_analytics', defaultValue: true),
@@ -89,13 +93,14 @@ final analyticsServiceProvider = Provider<AnalyticsService>((ref) {
   }
 
   return service;
-});
+}
 
 /// 用于访问分析事件记录器的 provider
-final analyticsProvider = Provider<Analytics>((ref) {
+@Riverpod(keepAlive: true)
+Analytics analytics(Ref ref) {
   final service = ref.watch(analyticsServiceProvider);
   return Analytics(service);
-});
+}
 
 /// 用于记录分析事件的辅助类
 class Analytics {

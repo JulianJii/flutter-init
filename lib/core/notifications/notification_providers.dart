@@ -1,10 +1,13 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:init/core/analytics/analytics_providers.dart';
 import 'package:init/core/notifications/debug_notification_service.dart';
 import 'package:init/core/notifications/notification_service.dart';
 
+part 'notification_providers.g.dart';
+
 /// 通知服务的 Provider
-final notificationServiceProvider = Provider<NotificationService>((ref) {
+@Riverpod(keepAlive: true)
+NotificationService notificationService(Ref ref) {
   // 在真实应用中，你会使用真实的通知服务实现
   // 例如 FirebaseNotificationService
   final service = DebugNotificationService();
@@ -48,19 +51,20 @@ final notificationServiceProvider = Provider<NotificationService>((ref) {
   });
 
   return service;
-});
+}
 
 /// 通知是否启用的 Provider
-final notificationsEnabledProvider = FutureProvider<bool>((ref) async {
+@Riverpod(keepAlive: true)
+Future<bool> notificationsEnabled(Ref ref) async {
   final service = ref.watch(notificationServiceProvider);
   final status = await service.getPermissionStatus();
   return status == NotificationPermissionStatus.authorized ||
       status == NotificationPermissionStatus.provisional;
-});
+}
 
 /// 处理来自通知的深层链接的控制器
-/// 处理来自通知的深层链接的控制器
-class NotificationDeepLinkHandler extends Notifier<String?> {
+@Riverpod(keepAlive: true)
+class NotificationDeepLinkHandler extends _$NotificationDeepLinkHandler {
   @override
   String? build() {
     final service = ref.watch(notificationServiceProvider);
@@ -89,9 +93,3 @@ class NotificationDeepLinkHandler extends Notifier<String?> {
     }
   }
 }
-
-/// 通知深层链接处理器的 Provider
-final notificationDeepLinkHandlerProvider =
-    NotifierProvider<NotificationDeepLinkHandler, String?>(
-      NotificationDeepLinkHandler.new,
-    );

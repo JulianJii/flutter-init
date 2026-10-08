@@ -1,5 +1,5 @@
-import 'package:init/features/survey/data/models/survey_model.dart';
 import 'package:init/core/error/exceptions.dart';
+import '../models/survey_model.dart';
 
 abstract class SurveyRemoteDataSource {
   Future<void> submitSurvey(SurveyModel survey);

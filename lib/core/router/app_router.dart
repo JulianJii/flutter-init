@@ -1,5 +1,5 @@
 import 'package:material_ui/material_ui.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:init/core/router/app_routes.dart';
 import 'package:init/examples/localization_assets_demo.dart';
 import 'package:init/features/auth/presentation/screens/login_screen.dart';
@@ -13,7 +13,10 @@ import 'package:go_router/go_router.dart';
 import 'package:init/features/chat/presentation/screens/chat_screen.dart';
 import 'package:init/features/survey/presentation/screens/survey_screen.dart';
 
-final routerProvider = Provider<GoRouter>((ref) {
+part 'app_router.g.dart';
+
+@Riverpod(keepAlive: true)
+GoRouter router(Ref ref) {
   // ⚠️ 这里一律用 read，不要 watch。
   // watch 会让依赖变化重建 GoRouter —— 新实例等于导航栈清空回到 initialLocation。
   // 语言由 main.dart 的 MaterialApp.locale 负责；登录/登出由调用点显式 context.go()。
@@ -139,4 +142,4 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
     ),
   );
-});
+}

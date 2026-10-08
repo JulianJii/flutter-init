@@ -1,38 +1,46 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:init/features/tasks/data/datasources/task_local_data_source.dart';
-import 'package:init/features/tasks/data/repositories/task_repository_impl.dart';
-import 'package:init/features/tasks/domain/repositories/task_repository.dart';
-import 'package:init/features/tasks/domain/usecases/add_task_use_case.dart';
-import 'package:init/features/tasks/domain/usecases/delete_task_use_case.dart';
-import 'package:init/features/tasks/domain/usecases/get_tasks_use_case.dart';
-import 'package:init/features/tasks/domain/usecases/toggle_task_use_case.dart';
-import 'package:init/features/tasks/domain/usecases/update_task_use_case.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+import '../data/datasources/task_local_data_source.dart';
+import '../data/repositories/task_repository_impl.dart';
+import '../domain/repositories/task_repository.dart';
+import '../domain/usecases/add_task_use_case.dart';
+import '../domain/usecases/delete_task_use_case.dart';
+import '../domain/usecases/get_tasks_use_case.dart';
+import '../domain/usecases/toggle_task_use_case.dart';
+import '../domain/usecases/update_task_use_case.dart';
+
+part 'task_providers.g.dart';
 
 /// 数据层依赖注入提供者
 /// 这些提供者负责创建和管理数据层实例
 
 // --- Repository ---
-final taskRepositoryProvider = Provider<TaskRepository>((ref) {
+@Riverpod(keepAlive: true)
+TaskRepository taskRepository(Ref ref) {
   return TaskRepositoryImpl(ref.watch(taskLocalDataSourceProvider));
-});
+}
 
 // --- Use Cases ---
-final getTasksUseCaseProvider = Provider<GetTasksUseCase>((ref) {
+@Riverpod(keepAlive: true)
+GetTasksUseCase getTasksUseCase(Ref ref) {
   return GetTasksUseCase(ref.watch(taskRepositoryProvider));
-});
+}
 
-final addTaskUseCaseProvider = Provider<AddTaskUseCase>((ref) {
+@Riverpod(keepAlive: true)
+AddTaskUseCase addTaskUseCase(Ref ref) {
   return AddTaskUseCase(ref.watch(taskRepositoryProvider));
-});
+}
 
-final updateTaskUseCaseProvider = Provider<UpdateTaskUseCase>((ref) {
+@Riverpod(keepAlive: true)
+UpdateTaskUseCase updateTaskUseCase(Ref ref) {
   return UpdateTaskUseCase(ref.watch(taskRepositoryProvider));
-});
+}
 
-final deleteTaskUseCaseProvider = Provider<DeleteTaskUseCase>((ref) {
+@Riverpod(keepAlive: true)
+DeleteTaskUseCase deleteTaskUseCase(Ref ref) {
   return DeleteTaskUseCase(ref.watch(taskRepositoryProvider));
-});
+}
 
-final toggleTaskUseCaseProvider = Provider<ToggleTaskUseCase>((ref) {
+@Riverpod(keepAlive: true)
+ToggleTaskUseCase toggleTaskUseCase(Ref ref) {
   return ToggleTaskUseCase(ref.watch(taskRepositoryProvider));
-});
+}

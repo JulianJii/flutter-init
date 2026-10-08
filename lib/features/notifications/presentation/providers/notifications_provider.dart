@@ -1,8 +1,10 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:init/core/notifications/notification_providers.dart';
 import 'package:init/core/notifications/notification_service.dart';
-import 'package:init/features/notifications/domain/entities/notification_item_entity.dart';
-import 'package:init/features/notifications/providers/notification_feature_providers.dart';
+import '../../domain/entities/notification_item_entity.dart';
+import '../../providers/notification_feature_providers.dart';
+
+part 'notifications_provider.g.dart';
 
 /// 表现层状态管理
 /// 本文件仅包含与 UI 相关的状态提供者
@@ -35,7 +37,8 @@ class NotificationsState {
   }
 }
 
-class NotificationsNotifier extends Notifier<NotificationsState> {
+@Riverpod(keepAlive: true)
+class NotificationsNotifier extends _$NotificationsNotifier {
   @override
   NotificationsState build() {
     // 将设备级通知（见 core/notifications）桥接到持久化的应用内通知列表中。
@@ -132,7 +135,3 @@ class NotificationsNotifier extends Notifier<NotificationsState> {
   }
 }
 
-final notificationsProvider =
-    NotifierProvider<NotificationsNotifier, NotificationsState>(
-      NotificationsNotifier.new,
-    );

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:init/core/utils/app_utils.dart';
-import 'package:init/features/notifications/presentation/providers/notifications_provider.dart';
 import 'package:intl/intl.dart';
+import '../providers/notifications_provider.dart';
 
 class NotificationsScreen extends ConsumerStatefulWidget {
   const NotificationsScreen({super.key});

@@ -4,12 +4,16 @@ import 'dart:ui' as ui;
 import 'package:flutter/foundation.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:init/core/storage/cache_manager.dart';
 
+part 'svg_renderer.g.dart';
+
 /// SVG 缓存 Provider
-final svgCacheProvider = Provider<CacheManager<ui.Image>>((ref) {
+@Riverpod(keepAlive: true)
+CacheManager<ui.Image> svgCache(Ref ref) {
   return CacheManager<ui.Image>(maxItems: 50);
-});
+}
 
 /// 处理 SVG 渲染的服务
 class SvgRenderer {
@@ -164,10 +168,11 @@ class SvgRenderer {
 }
 
 /// SVG 渲染器 Provider
-final svgRendererProvider = Provider<SvgRenderer>((ref) {
+@Riverpod(keepAlive: true)
+SvgRenderer svgRenderer(Ref ref) {
   final cache = ref.watch(svgCacheProvider);
   return SvgRenderer(cache);
-});
+}
 
 /// 渲染 SVG 文件的 widget
 class SvgImage extends ConsumerWidget {

@@ -1,6 +1,6 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:init/core/error/failures.dart';
-import 'package:init/features/auth/domain/repositories/auth_repository.dart';
+import '../repositories/auth_repository.dart';
 
 class LogoutUseCase {
   final AuthRepository _repository;

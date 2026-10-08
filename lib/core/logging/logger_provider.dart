@@ -1,24 +1,30 @@
 import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:init/core/logging/console_logger.dart';
 import 'package:init/core/logging/logger.dart';
 
+part 'logger_provider.g.dart';
+
 /// 全局日志记录器实例的 Provider
-final loggerProvider = Provider<Logger>((ref) {
+/// （函数名不叫 `logger`，避免与 `LoggerMixin.logger` 等同名成员冲突）
+@Riverpod(keepAlive: true, name: 'loggerProvider')
+Logger appLogger(Ref ref) {
   // 创建根日志记录器实例
   return ConsoleLogger(
     logLevel: kDebugMode ? LogLevel.debug : LogLevel.info,
     includeTimestamp: true,
     includeLogLevel: true,
   );
-});
+}
 
 /// 带特定标签的日志记录器 Provider
-final taggedLoggerProvider = Provider.family<Logger, String>((ref, tag) {
+@Riverpod(keepAlive: true, name: 'taggedLoggerProvider')
+Logger appTaggedLogger(Ref ref, String tag) {
   final rootLogger = ref.watch(loggerProvider);
   return rootLogger.child(tag);
-});
+}
 
 /// 用于自动计时操作的性能日志扩展方法
 extension LoggerPerformanceExtension on Logger {

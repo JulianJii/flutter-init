@@ -1,51 +1,51 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:init/features/notifications/data/datasources/notification_local_data_source.dart';
-import 'package:init/features/notifications/data/repositories/notification_repository_impl.dart';
-import 'package:init/features/notifications/domain/repositories/notification_repository.dart';
-import 'package:init/features/notifications/domain/usecases/clear_notifications_use_case.dart';
-import 'package:init/features/notifications/domain/usecases/get_notifications_use_case.dart';
-import 'package:init/features/notifications/domain/usecases/mark_notification_read_use_case.dart';
-import 'package:init/features/notifications/domain/usecases/upsert_notification_use_case.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+import '../data/datasources/notification_local_data_source.dart';
+import '../data/repositories/notification_repository_impl.dart';
+import '../domain/repositories/notification_repository.dart';
+import '../domain/usecases/clear_notifications_use_case.dart';
+import '../domain/usecases/get_notifications_use_case.dart';
+import '../domain/usecases/mark_notification_read_use_case.dart';
+import '../domain/usecases/upsert_notification_use_case.dart';
+
+part 'notification_feature_providers.g.dart';
 
 /// 数据层依赖注入提供者
 /// 这些提供者负责创建和管理数据层实例
 
 // --- Repository ---
-final notificationRepositoryProvider = Provider<NotificationRepository>((ref) {
+@Riverpod(keepAlive: true)
+NotificationRepository notificationRepository(Ref ref) {
   return NotificationRepositoryImpl(
     ref.watch(notificationLocalDataSourceProvider),
   );
-});
+}
 
 // --- Use Cases ---
-final getNotificationsUseCaseProvider = Provider<GetNotificationsUseCase>((
-  ref,
-) {
+@Riverpod(keepAlive: true)
+GetNotificationsUseCase getNotificationsUseCase(Ref ref) {
   return GetNotificationsUseCase(ref.watch(notificationRepositoryProvider));
-});
+}
 
-final upsertNotificationUseCaseProvider = Provider<UpsertNotificationUseCase>((
-  ref,
-) {
+@Riverpod(keepAlive: true)
+UpsertNotificationUseCase upsertNotificationUseCase(Ref ref) {
   return UpsertNotificationUseCase(ref.watch(notificationRepositoryProvider));
-});
+}
 
-final markNotificationReadUseCaseProvider =
-    Provider<MarkNotificationReadUseCase>((ref) {
-      return MarkNotificationReadUseCase(
-        ref.watch(notificationRepositoryProvider),
-      );
-    });
+@Riverpod(keepAlive: true)
+MarkNotificationReadUseCase markNotificationReadUseCase(Ref ref) {
+  return MarkNotificationReadUseCase(
+    ref.watch(notificationRepositoryProvider),
+  );
+}
 
-final markAllNotificationsReadUseCaseProvider =
-    Provider<MarkAllNotificationsReadUseCase>((ref) {
-      return MarkAllNotificationsReadUseCase(
-        ref.watch(notificationRepositoryProvider),
-      );
-    });
+@Riverpod(keepAlive: true)
+MarkAllNotificationsReadUseCase markAllNotificationsReadUseCase(Ref ref) {
+  return MarkAllNotificationsReadUseCase(
+    ref.watch(notificationRepositoryProvider),
+  );
+}
 
-final clearNotificationsUseCaseProvider = Provider<ClearNotificationsUseCase>((
-  ref,
-) {
+@Riverpod(keepAlive: true)
+ClearNotificationsUseCase clearNotificationsUseCase(Ref ref) {
   return ClearNotificationsUseCase(ref.watch(notificationRepositoryProvider));
-});
+}

@@ -1,6 +1,8 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:init/features/chat/domain/entities/message_entity.dart';
-import 'package:init/features/chat/providers/chat_providers.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+import '../../domain/entities/message_entity.dart';
+import '../../providers/chat_providers.dart';
+
+part 'chat_provider.g.dart';
 
 /// 表现层状态管理
 /// 本文件只包含与 UI 相关的 state providers
@@ -20,7 +22,8 @@ class ChatState {
   }
 }
 
-class ChatNotifier extends Notifier<ChatState> {
+@Riverpod(keepAlive: true)
+class ChatNotifier extends _$ChatNotifier {
   @override
   ChatState build() {
     // 自动连接并监听
@@ -57,6 +60,3 @@ class ChatNotifier extends Notifier<ChatState> {
   }
 }
 
-final chatProvider = NotifierProvider<ChatNotifier, ChatState>(
-  ChatNotifier.new,
-);

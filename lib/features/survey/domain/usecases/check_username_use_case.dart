@@ -1,6 +1,6 @@
 import 'package:init/core/error/failures.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:init/features/survey/domain/repositories/survey_repository.dart';
+import '../repositories/survey_repository.dart';
 
 class CheckUsernameUseCase {
   final SurveyRepository _repository;

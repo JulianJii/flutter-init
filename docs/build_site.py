@@ -27,7 +27,7 @@ os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 def get_layout_template():
     """Load the layout template"""
-    with open(LAYOUT_PATH, 'r') as file:
+    with open(LAYOUT_PATH, 'r', encoding='utf-8') as file:
         return file.read()
 
 def read_front_matter(content):
@@ -57,7 +57,7 @@ def process_markdown_file(file_path):
     print(f"Converting {file_path}")
     
     # Read markdown content
-    with open(file_path, 'r') as file:
+    with open(file_path, 'r', encoding='utf-8') as file:
         content = file.read()
     
     # Extract front matter
@@ -100,7 +100,7 @@ def process_markdown_file(file_path):
                 a_tag['class'] = a_tag.get('class', []) + ['active']
     
     # Write the output file
-    with open(output_path, 'w') as file:
+    with open(output_path, 'w', encoding='utf-8') as file:
         file.write(str(soup))
 
 def process_html_file(file_path):
@@ -112,7 +112,7 @@ def process_html_file(file_path):
         return
         
     # Read HTML content
-    with open(file_path, 'r') as file:
+    with open(file_path, 'r', encoding='utf-8') as file:
         content = file.read()
     
     # Extract front matter
@@ -140,7 +140,7 @@ def process_html_file(file_path):
                     a_tag['class'] = a_tag.get('class', []) + ['active']
         
         # Write the output file
-        with open(output_path, 'w') as file:
+        with open(output_path, 'w', encoding='utf-8') as file:
             file.write(str(soup))
     else:
         # If no layout is specified, just copy the file

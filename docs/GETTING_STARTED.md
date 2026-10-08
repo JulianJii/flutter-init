@@ -18,19 +18,16 @@ cd init
 flutter pub get
 ```
 
-### 方式二：作为模板使用
-
-1. 前往 [GitHub 仓库](https://github.com/JulianJii/init)
-2. 点击「Use this template」按钮
-3. 按照 GitHub 的指引创建你的仓库
-4. 将新仓库克隆到本地
-
-### 方式三：基于模板创建新项目
+### 方式二：作为 GitHub 模板创建新项目
 
 1. 前往 [GitHub 仓库](https://github.com/JulianJii/init)
 2. 点击「Use this template」创建新仓库
 3. 克隆新仓库到本地
 4. 运行 `flutter pub get` 安装依赖
+
+> 生成物（`*.g.dart`、`lib/gen/**`、`lib/l10n/gen/**`）**已入库**，克隆后无需先跑 build_runner。
+> 之后只要改了 `@riverpod` / `@JsonSerializable` 注解或 ARB 文件，才需要
+> `dart run build_runner build --delete-conflicting-outputs` / `flutter gen-l10n`。
 
 ## 运行项目
 
@@ -44,6 +41,7 @@ flutter run
 
 ## 下一步
 
-- 浏览项目结构，了解整体架构
-- 查看 `lib/examples` 文件夹中的示例
-- 阅读[架构指南]，深入了解项目架构
+- 阅读 [架构指南](./architecture.html)，理解 domain / data / presentation / providers 四层
+- 阅读 [编码规范](./coding_standards.html)，再动手写代码
+- 浏览 `lib/examples/` 里的示例页面（主题、本地化、集成能力 demo）
+- 仓库根目录的 `AGENTS.md` 是 AI 速查表，但**未入库**（`.gitignore`）——新克隆的仓库里没有它，规则看上面两篇文档与源码

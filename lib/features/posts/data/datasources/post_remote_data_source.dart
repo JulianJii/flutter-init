@@ -1,7 +1,9 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:init/core/error/exceptions.dart';
 import 'package:init/core/utils/app_utils.dart';
-import 'package:init/features/posts/data/models/post_model.dart';
+import '../models/post_model.dart';
+
+part 'post_remote_data_source.g.dart';
 
 abstract class PostRemoteDataSource {
   Future<List<PostModel>> getPosts();
@@ -45,6 +47,7 @@ class PostRemoteDataSourceImpl implements PostRemoteDataSource {
   }
 }
 
-final postRemoteDataSourceProvider = Provider<PostRemoteDataSource>((ref) {
+@Riverpod(keepAlive: true)
+PostRemoteDataSource postRemoteDataSource(Ref ref) {
   return PostRemoteDataSourceImpl();
-});
+}

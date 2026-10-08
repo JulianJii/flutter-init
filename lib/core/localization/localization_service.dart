@@ -1,8 +1,11 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:init/core/providers/localization_providers.dart';
 import 'package:init/gen/l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
+
+part 'localization_service.g.dart';
 
 /// 语言在其母语中的名称。gen-l10n 不提供，需自行维护。
 String localeDisplayName(Locale locale) => switch (locale.languageCode) {
@@ -87,9 +90,10 @@ class LocalizationService {
 }
 
 /// 本地化服务的 Provider
-final localizationServiceProvider = Provider<LocalizationService>((ref) {
+@Riverpod(keepAlive: true)
+LocalizationService localizationService(Ref ref) {
   return LocalizationService(ref);
-});
+}
 
 /// BuildContext 的扩展方法，用于便捷地访问本地化功能
 extension LocalizationServiceExtension on BuildContext {

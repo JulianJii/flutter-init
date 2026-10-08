@@ -3,8 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:init/core/router/app_routes.dart';
 import 'package:init/core/utils/app_utils.dart';
-import 'package:init/features/auth/domain/entities/user_entity.dart';
-import 'package:init/features/auth/presentation/providers/auth_provider.dart';
+import '../../domain/entities/user_entity.dart';
+import '../providers/auth_provider.dart';
 
 class ProfileScreen extends ConsumerStatefulWidget {
   const ProfileScreen({super.key});

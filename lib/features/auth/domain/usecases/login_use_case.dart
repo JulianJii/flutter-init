@@ -1,7 +1,7 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:init/core/error/failures.dart';
-import 'package:init/features/auth/domain/entities/user_entity.dart';
-import 'package:init/features/auth/domain/repositories/auth_repository.dart';
+import '../entities/user_entity.dart';
+import '../repositories/auth_repository.dart';
 
 class LoginUseCase {
   final AuthRepository _repository;

@@ -1,10 +1,10 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:init/core/error/exceptions.dart';
 import 'package:init/core/error/failures.dart';
-import 'package:init/features/posts/data/datasources/post_cache_data_source.dart';
-import 'package:init/features/posts/data/datasources/post_remote_data_source.dart';
-import 'package:init/features/posts/domain/entities/post_entity.dart';
-import 'package:init/features/posts/domain/repositories/post_repository.dart';
+import '../datasources/post_cache_data_source.dart';
+import '../datasources/post_remote_data_source.dart';
+import '../../domain/entities/post_entity.dart';
+import '../../domain/repositories/post_repository.dart';
 
 class PostRepositoryImpl implements PostRepository {
   final PostRemoteDataSource _remoteDataSource;

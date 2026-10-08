@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:init/core/utils/app_utils.dart';
-import 'package:init/features/tasks/domain/entities/task_entity.dart';
-import 'package:init/features/tasks/presentation/providers/task_provider.dart';
 import 'package:intl/intl.dart';
+import '../../domain/entities/task_entity.dart';
+import '../providers/task_provider.dart';
 
 class TasksScreen extends ConsumerStatefulWidget {
   const TasksScreen({super.key});

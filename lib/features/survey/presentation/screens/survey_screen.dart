@@ -3,8 +3,8 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:init/core/utils/app_utils.dart';
-import 'package:init/features/survey/presentation/providers/survey_provider.dart';
-import 'package:init/features/survey/providers/survey_providers.dart';
+import '../providers/survey_provider.dart';
+import '../../providers/survey_providers.dart';
 
 class SurveyScreen extends ConsumerStatefulWidget {
   const SurveyScreen({super.key});

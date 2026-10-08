@@ -11,11 +11,11 @@
     <img src="https://logosandtypes.com/wp-content/uploads/2021/04/flutter.svg" alt="Flutter Logo" style="max-width: 120px; margin-bottom: 30px; filter: drop-shadow(0 6px 12px rgba(0,0,0,0.18));">
     <h1 style="font-size: 4.2em; margin: 0; font-weight: 900; letter-spacing: 2px; color: white; text-shadow: 0 4px 16px rgba(0,0,0,0.18); background: linear-gradient(to right, #fff, #e6f7ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Flutter Riverpod</h1>
     <h2 style="color: white; font-size: 2.2em; margin: 18px 0 0 0; font-weight: 700; text-shadow: 0 2px 8px rgba(0,0,0,0.13);">Clean Architecture 模板</h2>
-    <p style="font-size: 1.5em; max-width: 800px; margin: 38px auto 0 auto; line-height: 1.6; color: white; font-weight: 300; text-shadow: 0 2px 4px rgba(0,0,0,0.10); text-align: center;">一个<b style="font-weight: 600; text-decoration: underline; text-decoration-color: rgba(255,255,255,0.3);">生产就绪</b>的 Flutter 模板，适用于可扩展、可维护、可测试的应用。基于 Riverpod、Clean Architecture 和现代最佳实践构建。</p>
+    <p style="font-size: 1.5em; max-width: 800px; margin: 38px auto 0 auto; line-height: 1.6; color: white; font-weight: 300; text-shadow: 0 2px 4px rgba(0,0,0,0.10); text-align: center;">一个<b style="font-weight: 600; text-decoration: underline; text-decoration-color: rgba(255,255,255,0.3);">生产就绪</b>的 Flutter 模板，适用于可扩展、可维护、可测试的应用。基于 Riverpod、Clean Architecture 和现代最佳实践构建。<br><span style="font-size: 0.72em; opacity: 0.85;">架构、分层与测试骨架是完整的；各 feature 的业务数据源目前为模拟实现（延时后返回假数据），接入真实后端时替换 <code>features/*/data/datasources/</code> 即可，上层无需改动。</span></p>
     <div style="background: linear-gradient(90deg, rgba(255,255,255,0.9), rgba(255,255,255,0.7)); border-radius: 6px; padding: 8px 20px; color: #0175C2; font-weight: 700; margin: 25px auto 0; display: inline-block; box-shadow: 0 4px 15px rgba(0,0,0,0.15); transform: rotate(-1deg); font-size: 1.2em; animation: pulse 2s infinite ease-in-out;">⚡️ 比以往更快地构建应用！⚡️</div>
     <div style="margin: 40px 0 0 0; display: flex; gap: 18px; flex-wrap: wrap; justify-content: center;">
-      <span style="display: inline-block; background: rgba(255,255,255,0.22); border-radius: 30px; font-size: 1.1em; color: white; font-weight: 600; padding: 10px 22px; box-shadow: 0 5px 15px rgba(0,0,0,0.10);">⚡ Flutter 3.7+</span>
-      <span style="display: inline-block; background: rgba(255,255,255,0.22); border-radius: 30px; font-size: 1.1em; color: white; font-weight: 600; padding: 10px 22px; box-shadow: 0 5px 15px rgba(0,0,0,0.10);">💎 Dart 3.10+</span>
+      <span style="display: inline-block; background: rgba(255,255,255,0.22); border-radius: 30px; font-size: 1.1em; color: white; font-weight: 600; padding: 10px 22px; box-shadow: 0 5px 15px rgba(0,0,0,0.10);">⚡ Flutter 3.47.5</span>
+      <span style="display: inline-block; background: rgba(255,255,255,0.22); border-radius: 30px; font-size: 1.1em; color: white; font-weight: 600; padding: 10px 22px; box-shadow: 0 5px 15px rgba(0,0,0,0.10);">💎 Dart 3.11+</span>
       <span style="display: inline-block; background: rgba(255,255,255,0.22); border-radius: 30px; font-size: 1.1em; color: white; font-weight: 600; padding: 10px 22px; box-shadow: 0 5px 15px rgba(0,0,0,0.10);">🔄 Riverpod 3</span>
       <span style="display: inline-block; background: rgba(255,255,255,0.22); border-radius: 30px; font-size: 1.1em; color: white; font-weight: 600; padding: 10px 22px; box-shadow: 0 5px 15px rgba(0,0,0,0.10);">📜 MIT 许可证</span>
     </div>
@@ -527,7 +527,7 @@ document.addEventListener('DOMContentLoaded', function() {
         <span class="faq-icon" style="display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; background: linear-gradient(135deg, #4CAF50, #81C784); border-radius: 50%; color: white; font-size: 1.2em; box-shadow: 0 4px 10px rgba(76,175,80,0.25); transition: all 0.3s ease;">⌄</span>
       </summary>
       <div style="padding: 5px 30px 26px 30px; border-top: 1px solid var(--faq-content-border); background: linear-gradient(to bottom right, rgba(76,175,80,0.02), transparent);">
-        <p style="color: var(--faq-text); line-height: 1.8; font-size: 1.1em; margin-top: 16px;">此模板支持 Flutter 3.10+ 和 Dart >=3.10.0 <4.0.0。它会定期更新以兼容最新的稳定版 Flutter，并利用模式匹配和记录等新语言特性。</p>
+        <p style="color: var(--faq-text); line-height: 1.8; font-size: 1.1em; margin-top: 16px;">此模板要求 Flutter 3.47.5（`pubspec.yaml` 中已固定）和 Dart >=3.11.0 <4.0.0。它会定期更新以兼容最新的稳定版Flutter，并利用模式匹配和记录等新语言特性。</p>
       </div>
     </details>
     

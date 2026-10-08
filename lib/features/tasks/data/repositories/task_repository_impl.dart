@@ -2,10 +2,10 @@ import 'package:fpdart/fpdart.dart';
 import 'package:uuid/uuid.dart';
 import 'package:init/core/error/exceptions.dart';
 import 'package:init/core/error/failures.dart';
-import 'package:init/features/tasks/data/datasources/task_local_data_source.dart';
-import 'package:init/features/tasks/data/models/task_model.dart';
-import 'package:init/features/tasks/domain/entities/task_entity.dart';
-import 'package:init/features/tasks/domain/repositories/task_repository.dart';
+import '../datasources/task_local_data_source.dart';
+import '../models/task_model.dart';
+import '../../domain/entities/task_entity.dart';
+import '../../domain/repositories/task_repository.dart';
 
 class TaskRepositoryImpl implements TaskRepository {
   final TaskLocalDataSource _localDataSource;

@@ -1,6 +1,8 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:init/features/tasks/domain/entities/task_entity.dart';
-import 'package:init/features/tasks/providers/task_providers.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+import '../../domain/entities/task_entity.dart';
+import '../../providers/task_providers.dart';
+
+part 'task_provider.g.dart';
 
 /// 表现层状态管理
 /// 本文件仅包含与 UI 相关的状态提供者
@@ -51,7 +53,8 @@ class TasksState {
   }
 }
 
-class TasksNotifier extends Notifier<TasksState> {
+@Riverpod(keepAlive: true)
+class TasksNotifier extends _$TasksNotifier {
   @override
   TasksState build() {
     return const TasksState();
@@ -161,6 +164,3 @@ class TasksNotifier extends Notifier<TasksState> {
   }
 }
 
-final tasksProvider = NotifierProvider<TasksNotifier, TasksState>(
-  TasksNotifier.new,
-);

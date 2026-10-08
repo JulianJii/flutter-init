@@ -1,6 +1,8 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:init/features/auth/domain/entities/user_entity.dart';
-import 'package:init/features/auth/providers/auth_providers.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+import '../../domain/entities/user_entity.dart';
+import '../../providers/auth_providers.dart';
+
+part 'auth_provider.g.dart';
 
 // Auth 状态
 class AuthState {
@@ -33,7 +35,8 @@ class AuthState {
 
 // Auth 通知器
 // Auth 通知器
-class AuthNotifier extends Notifier<AuthState> {
+@Riverpod(keepAlive: true)
+class AuthNotifier extends _$AuthNotifier {
   @override
   AuthState build() {
     return const AuthState();
@@ -145,7 +148,3 @@ class AuthNotifier extends Notifier<AuthState> {
   }
 }
 
-// Auth provider 定义
-final authProvider = NotifierProvider<AuthNotifier, AuthState>(
-  AuthNotifier.new,
-);

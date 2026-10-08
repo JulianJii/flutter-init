@@ -1,4 +1,4 @@
-import 'package:init/features/chat/domain/entities/message_entity.dart';
+import '../entities/message_entity.dart';
 
 abstract class ChatRepository {
   Stream<MessageEntity> getMessages();

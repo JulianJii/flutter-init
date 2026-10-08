@@ -1,6 +1,6 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:init/core/error/failures.dart';
-import 'package:init/features/auth/domain/entities/user_entity.dart';
+import '../entities/user_entity.dart';
 
 abstract class AuthRepository {
   /// 使用邮箱和密码登录用户

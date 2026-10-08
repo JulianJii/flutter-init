@@ -1,28 +1,34 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:init/features/chat/data/datasources/chat_remote_data_source.dart';
-import 'package:init/features/chat/data/repositories/chat_repository_impl.dart';
-import 'package:init/features/chat/domain/repositories/chat_repository.dart';
-import 'package:init/features/chat/domain/usecases/observe_messages_use_case.dart';
-import 'package:init/features/chat/domain/usecases/send_message_use_case.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+import '../data/datasources/chat_remote_data_source.dart';
+import '../data/repositories/chat_repository_impl.dart';
+import '../domain/repositories/chat_repository.dart';
+import '../domain/usecases/observe_messages_use_case.dart';
+import '../domain/usecases/send_message_use_case.dart';
+
+part 'chat_providers.g.dart';
 
 /// 数据层依赖注入 providers
 /// 这些 providers 负责创建和管理数据层实例
 
 // --- 数据源 ---
-final chatRemoteDataSourceProvider = Provider<ChatRemoteDataSource>((ref) {
+@Riverpod(keepAlive: true)
+ChatRemoteDataSource chatRemoteDataSource(Ref ref) {
   return ChatRemoteDataSourceImpl();
-});
+}
 
 // --- 仓库 ---
-final chatRepositoryProvider = Provider<ChatRepository>((ref) {
+@Riverpod(keepAlive: true)
+ChatRepository chatRepository(Ref ref) {
   return ChatRepositoryImpl(ref.watch(chatRemoteDataSourceProvider));
-});
+}
 
 // --- 用例 ---
-final observeMessagesUseCaseProvider = Provider<ObserveMessagesUseCase>((ref) {
+@Riverpod(keepAlive: true)
+ObserveMessagesUseCase observeMessagesUseCase(Ref ref) {
   return ObserveMessagesUseCase(ref.watch(chatRepositoryProvider));
-});
+}
 
-final sendMessageUseCaseProvider = Provider<SendMessageUseCase>((ref) {
+@Riverpod(keepAlive: true)
+SendMessageUseCase sendMessageUseCase(Ref ref) {
   return SendMessageUseCase(ref.watch(chatRepositoryProvider));
-});
+}

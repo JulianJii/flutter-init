@@ -1,7 +1,9 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:workmanager/workmanager.dart';
+
+part 'background_task_service.g.dart';
 
 /// 后台隔离区记录任务最后运行时间的键，
 /// 以便前台 UI（无法直接观察后台隔离区）可以轮询任务执行的证据。
@@ -83,6 +85,5 @@ class BackgroundTaskService {
   }
 }
 
-final backgroundTaskServiceProvider = Provider<BackgroundTaskService>(
-  (ref) => BackgroundTaskService(),
-);
+@Riverpod(keepAlive: true)
+BackgroundTaskService backgroundTaskService(Ref ref) => BackgroundTaskService();
