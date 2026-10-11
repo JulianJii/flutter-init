@@ -1,3 +1,4 @@
+import 'package:init/core/logging/logger_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../data/datasources/chat_remote_data_source.dart';
 import '../data/repositories/chat_repository_impl.dart';
@@ -13,7 +14,9 @@ part 'chat_providers.g.dart';
 // --- 数据源 ---
 @Riverpod(keepAlive: true)
 ChatRemoteDataSource chatRemoteDataSource(Ref ref) {
-  return ChatRemoteDataSourceImpl();
+  return ChatRemoteDataSourceImpl(
+    logger: ref.watch(taggedLoggerProvider('chat_remote_data_source')),
+  );
 }
 
 // --- 仓库 ---

@@ -29,11 +29,11 @@
 |---|---|---|
 | `flutter_ci.yml` | push / PR 到 `main` | `flutter pub get` → `flutter analyze` → `flutter test`（真实有效） |
 | `docs.yml` | push 到 `main` 且改动 `docs/**`，或手动触发 | 用 Python 执行 `docs/build_site.py`，上传 artifact 并部署 GitHub Pages |
-| `flutter_ci_cd.yml` | push / PR 到 `main`、`develop` | **仅有 `flutter pub get`**：analyze / test / build / deploy 步骤目前全部被注释，待后续启用 |
+| `flutter_ci_cd.yml` | push 到 `main`、`v*` tag，或手动触发 | 按 pubspec 版本打 tag → 构建 Android APK（`--split-per-abi`）与 Windows x64，并发布到对应 GitHub Release |
 
 ### 静态分析 / 测试 / 构建 / 部署
 
-`flutter_ci_cd.yml` 中预留了 `analyze`、`test`、`build_android`、`build_ios`、`deploy_android`、`deploy_ios` 等作业定义，但**均为注释状态，当前不会运行**。真正生效的检查是 `flutter_ci.yml` 中的 analyze + test。
+真正生效的检查是 `flutter_ci.yml`（analyze + test）。`flutter_ci_cd.yml` 负责构建与发布：Android job 先创建 Release 并上传 APK，Windows job 依赖它，再把 `init-windows-x64.zip` 挂到同一个 Release 上。iOS 构建未配置。
 
 ## Fastlane 集成
 
@@ -86,11 +86,6 @@ fastlane ios deploy env:production
 - `APP_SPECIFIC_PASSWORD`: App-specific password
 - `TEAM_ID`: Apple developer team ID
 
-### 环境文件
-
-> **现状说明**：`flutter_dotenv` 虽在 `pubspec.yaml` 中声明，但 **Dart 代码中没有任何读取 `.env` 的位置，`.env` 也未加入 assets**；仓库根的 `.env.example` 是空占位。
-
-环境文件目前仅被 **Fastlane** 使用：`fastlane/Fastfile` 通过 Ruby `dotenv` 按环境读取 `.env.development` / `.env.staging` / `.env.production`，并用其中的版本号改写 `android/app/build.gradle.kts`。这些 `.env*` 实际文件已被 `.gitignore` 忽略，**不要提交**。
 
 ## 手动部署
 

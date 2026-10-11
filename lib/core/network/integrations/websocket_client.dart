@@ -4,7 +4,8 @@ import 'dart:convert';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
-import '../../utils/logger.dart';
+import '../../logging/logger.dart';
+import '../../logging/logger_provider.dart';
 
 part 'websocket_client.g.dart';
 
@@ -19,9 +20,12 @@ enum WebSocketConnectionState { disconnected, connecting, connected, error }
 /// 此类展示了底层的可复用原语，包含重连机制和类型化的连接状态流。
 class WebSocketClient {
   WebSocketClient({
+    required Logger logger,
     this.autoReconnect = true,
     this.reconnectDelay = const Duration(seconds: 2),
-  });
+  }) : _logger = logger;
+
+  final Logger _logger;
 
   /// 是否在意外关闭后自动尝试重连。
   final bool autoReconnect;
@@ -70,16 +74,16 @@ class WebSocketClient {
 
       _channelSubscription = channel.stream.listen(
         (data) {
-          Logger.debug('WebSocket message: $data');
+          _logger.d('WebSocket message: $data');
           _messageController.add(data);
         },
         onError: (Object error) {
-          Logger.error('WebSocket stream error', error);
+          _logger.e('WebSocket stream error', error: error);
           _setState(WebSocketConnectionState.error);
           _scheduleReconnect();
         },
         onDone: () {
-          Logger.info('WebSocket closed (code=${channel.closeCode})');
+          _logger.i('WebSocket closed (code=${channel.closeCode})');
           _channel = null;
           if (!_manuallyClosed) {
             _setState(WebSocketConnectionState.disconnected);
@@ -88,7 +92,7 @@ class WebSocketClient {
         },
       );
     } catch (e, st) {
-      Logger.error('WebSocket connect failed', e, st);
+      _logger.e('WebSocket connect failed', error: e, stackTrace: st);
       _setState(WebSocketConnectionState.error);
       _scheduleReconnect();
     }
@@ -143,7 +147,9 @@ class WebSocketClient {
 /// 每个订阅者一个新 [WebSocketClient]，不再被观察时自动释放。
 @riverpod
 WebSocketClient webSocketClient(Ref ref) {
-  final client = WebSocketClient();
+  final client = WebSocketClient(
+    logger: ref.watch(taggedLoggerProvider('websocket_client')),
+  );
   ref.onDispose(client.dispose);
   return client;
 }

@@ -5,7 +5,8 @@ import 'package:fpdart/fpdart.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../error/failures.dart';
-import '../../utils/logger.dart' as core_logger;
+import '../../logging/logger.dart';
+import '../../logging/logger_provider.dart';
 import 'webhook_signature.dart';
 
 part 'webhook_sender.g.dart';
@@ -33,9 +34,10 @@ class WebhookDeliveryResult {
 /// [WebhookSignature] 持有共享的签名逻辑，
 /// `local_webhook_receiver.dart` 展示了用于本地开发/测试的接收端。
 class WebhookSender {
-  WebhookSender(this._dio);
+  WebhookSender(this._dio, {required Logger logger}) : _logger = logger;
 
   final Dio _dio;
+  final Logger _logger;
 
   Future<Either<Failure, WebhookDeliveryResult>> send({
     required String url,
@@ -60,9 +62,7 @@ class WebhookSender {
           },
         ),
       );
-      core_logger.Logger.info(
-        'Webhook delivered to $url (status ${response.statusCode})',
-      );
+      _logger.i('Webhook delivered to $url (status ${response.statusCode})');
       return Right(
         WebhookDeliveryResult(
           statusCode: response.statusCode ?? 0,
@@ -71,7 +71,7 @@ class WebhookSender {
         ),
       );
     } on DioException catch (e) {
-      core_logger.Logger.error('Webhook delivery failed', e);
+      _logger.e('Webhook delivery failed', error: e);
       return Left(
         ServerFailure(
           message: e.response != null
@@ -84,4 +84,7 @@ class WebhookSender {
 }
 
 @riverpod
-WebhookSender webhookSender(Ref ref) => WebhookSender(Dio());
+WebhookSender webhookSender(Ref ref) => WebhookSender(
+  Dio(),
+  logger: ref.watch(taggedLoggerProvider('webhook_sender')),
+);

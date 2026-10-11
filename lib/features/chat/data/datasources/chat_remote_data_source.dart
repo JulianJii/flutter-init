@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:init/core/utils/logger.dart';
+import 'package:init/core/logging/logger.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import '../models/message_model.dart';
 
@@ -11,6 +11,9 @@ abstract class ChatRemoteDataSource {
 }
 
 class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
+  ChatRemoteDataSourceImpl({required Logger logger}) : _logger = logger;
+
+  final Logger _logger;
   WebSocketChannel? _channel;
   final StreamController<MessageModel> _messageController =
       StreamController<MessageModel>.broadcast();
@@ -33,23 +36,23 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
 
       _channel!.stream.listen(
         (data) {
-          Logger.debug('WebSocket received: $data');
+          _logger.d('WebSocket received: $data');
           // 该服务器会返回简单的文本回显
           if (data is String) {
             _messageController.add(MessageModel.fromText(data));
           }
         },
         onError: (error) {
-          Logger.error('WebSocket error', error);
+          _logger.e('WebSocket error', error: error);
           // 重连逻辑可放在这里
         },
         onDone: () {
-          Logger.info('WebSocket closed');
+          _logger.i('WebSocket closed');
           _channel = null;
         },
       );
     } catch (e) {
-      Logger.error('WebSocket Connection Failed', e);
+      _logger.e('WebSocket Connection Failed', error: e);
       rethrow;
     }
   }
