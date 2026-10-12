@@ -8,8 +8,8 @@ import 'package:init/core/analytics/analytics_service.dart';
 class FirebaseAnalyticsService implements AnalyticsService {
   bool _isEnabled = true;
 
-  /// 模拟的 Firebase Analytics 实例
-  /// 在实际应用中，这会是一个 FirebaseAnalytics 实例
+  /// 本地缓存的用户属性
+  /// 在实际应用中，这会由 FirebaseAnalytics 的 setUserProperties 写入 SDK
   final Map<String, dynamic> _userProperties = {};
 
   @override

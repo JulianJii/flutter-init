@@ -9,6 +9,10 @@ import '../core/router/app_routes.dart';
 /// 代码库的其余部分实现了许多真实、可用的模式，但从运行的应用中无法明显找到；
 /// 这个中心的存在是为了让新项目从此模板开始时能立即看到"所有可用功能"，
 /// 而不是需要进行源代码考古。
+///
+/// 注意：列表项跳转的 AppRoutes 常量（posts、各类 examples/* 等）目前都未在
+/// core/router/app_router.dart 中注册，点击后会落到 404 页面；本页自身（AppRoutes.examplesHub）
+/// 也未注册。要真正可用需先补齐 GoRoute 注册。
 class ExamplesHubScreen extends StatelessWidget {
   const ExamplesHubScreen({super.key});
 

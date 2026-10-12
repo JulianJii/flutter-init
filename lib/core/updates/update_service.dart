@@ -175,6 +175,8 @@ class BasicUpdateService implements UpdateService {
 
     // 在真实应用中，这里会向用户显示对话框
     // 若用户同意更新则返回 true
+    // 注意：当前无条件返回 true，且 force 参数未被读取；_fetchUpdateInfo 总返回非空，
+    // 因此上方的 return false 分支不可达
     return true;
   }
 

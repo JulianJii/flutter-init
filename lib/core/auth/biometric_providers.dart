@@ -98,8 +98,8 @@ Future<List<BiometricType>> availableBiometrics(Ref ref) async {
   return await service.getAvailableBiometrics();
 }
 
-/// 用于管理认证状态的控制器
 /// 生物识别认证的状态
+/// 不可变数据类，仅由 [BiometricAuthController] 读写
 class BiometricAuthState {
   final bool isAuthenticated;
   final BiometricResult? lastResult;

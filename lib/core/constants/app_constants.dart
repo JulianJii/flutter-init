@@ -20,20 +20,20 @@ class AppConstants {
 
   // 路由常量见 core/router/app_routes.dart（唯一 Source of Truth）
 
-  // Hive box names
+  // 本地存储分区名（项目未依赖 Hive；offlineSyncBox 被当作 SharedPreferences 键前缀使用）
   static const String settingsBox = 'settings';
   static const String cacheBox = 'cache';
   static const String offlineSyncBox = 'offlineSync';
 
-  // Local storage keys
+  // 本地存储键
   static const String tasksStorageKey = 'tasks_data';
   static const String notificationsStorageKey = 'notifications_data';
   static const String postsCacheKey = 'posts_cache_data';
 
-  // Animation durations
+  // 动画时长
   static const Duration defaultAnimationDuration = Duration(milliseconds: 300);
 
-  // Accessibility
+  // 无障碍
   static const Duration accessibilityTooltipDuration = Duration(seconds: 5);
   static const double accessibilityTouchTargetMinSize = 48.0;
 }

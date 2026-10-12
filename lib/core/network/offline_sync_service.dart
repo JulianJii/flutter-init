@@ -515,6 +515,14 @@ class SharedPreferencesOfflineSyncService implements OfflineSyncService {
 }
 
 /// 用于跟踪同步状态的 StreamController
+///
+/// 注意：这是文件底部定义的桩类，会遮蔽 `dart:async` 的 StreamController。
+/// 上方 `StreamController<List<OfflineChange>>.broadcast()` 会被解析成构造器
+/// tear-off 而非实例化，因此 `_syncController` 拿到的是这个桩；其 `stream`
+/// 是一个 365 天周期、永不发射的流，导致 `syncStatusStream` 收不到任何事件、
+/// `_notifyListeners()` 实际为空操作，`pendingChangesProvider` 永远停在 AsyncLoading。
+/// `dart analyze` 不会报错，所以此处显式标注。
+/// ponytail: 这是个待修的真 bug；修法是删掉本类并改用 `dart:async` 的 StreamController。
 class StreamController<T> {
   final List<void Function(T)> _listeners = [];
 

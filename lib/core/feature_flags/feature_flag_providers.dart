@@ -60,7 +60,7 @@ FeatureFlagService featureFlagService(Ref ref) {
 
   // 当 provider 被销毁时释放服务
   ref.onDispose(() {
-    // 由于我们在上方创建了它，因此可知它是 LocalFeatureFlagService
+    // dispose 定义在基类 FeatureFlagService 上，无需判断具体实现
     service.dispose();
   });
 

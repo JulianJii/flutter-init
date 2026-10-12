@@ -205,7 +205,8 @@ class ConsoleLogger implements Logger {
     );
   }
 
-  /// 将日志级别转换为带颜色的字符串表示
+  /// 将日志级别转换为字符串表示（如 '[INFO]'）
+  /// 注意：仅返回纯文本，不做任何终端着色
   String _getLevelString(LogLevel level) {
     switch (level) {
       case LogLevel.verbose:

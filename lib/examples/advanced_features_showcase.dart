@@ -12,7 +12,7 @@ import 'package:init/core/logging/logger_provider.dart';
 import 'package:init/core/network/offline_sync_providers.dart';
 import 'package:init/core/network/offline_sync_service.dart';
 import 'package:init/core/notifications/notification_providers.dart';
-// 主题处理通过 feature flag 来管理
+// 更新检查服务与其 provider
 import 'package:init/core/updates/update_providers.dart';
 import 'package:init/core/updates/update_service.dart';
 

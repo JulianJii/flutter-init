@@ -5,14 +5,14 @@ import 'package:init/core/providers/localization_providers.dart';
 /// 处理应用中语言特定资源的服务
 class LocalizedAssetService {
   /// 获取当前语言环境的图像路径
-  /// 如果语言特定的资源不存在，则回退到英文
+  /// 仅拼接路径，不检查资源是否存在；英文回退由 [LocalizedImage] 的 errorBuilder 负责
   static String getLocalizedImagePath(BuildContext context, String imageName) {
     final locale = Localizations.localeOf(context);
     return 'assets/images/${locale.languageCode}/$imageName';
   }
 
   /// 获取特定语言的图像路径
-  /// 如果该语言的资源不存在，则回退到英文
+  /// 仅拼接路径，不检查资源是否存在；英文回退由 [LocalizedImage] 的 errorBuilder 负责
   static String getImagePathForLanguage(String languageCode, String imageName) {
     return 'assets/images/$languageCode/$imageName';
   }

@@ -70,6 +70,7 @@ AnalyticsService analyticsService(Ref ref) {
   final services = <AnalyticsService>[];
 
   // 在生产环境始终添加 Firebase Analytics
+  // 注意：FirebaseAnalyticsService 目前只是 debugPrint 桩，未接入 firebase_analytics 包
   if (!kDebugMode ||
       ref.watch(
         featureFlagProvider('force_firebase_analytics', defaultValue: false),
