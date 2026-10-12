@@ -336,20 +336,20 @@
     .hero {
         padding: 40px 20px;
     }
-    
+
     .hero h1 {
         font-size: 2.2em;
     }
-    
+
     .hero .buttons {
         flex-direction: column;
         gap: 10px;
     }
-    
+
     .comparison-table {
         font-size: 0.9em;
     }
-    
+
     .feature-grid,
     .card-container {
         grid-template-columns: 1fr;

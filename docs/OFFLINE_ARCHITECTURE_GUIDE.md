@@ -2,15 +2,8 @@
 
 本指南介绍如何在 Flutter Riverpod Clean Architecture 模板中使用离线优先架构，以创建在有无网络连接时都能无缝运行的应用。
 
-## 目录
-
-- [概述](#introduction)
-- [核心组件](#key-components)
-- [基本用法](#basic-usage)
-- [冲突解决](#conflict-resolution)
-- [UI 集成](#ui-integration)
-- [高级用法](#advanced-usage)
-- [最佳实践](#best-practices)
+> **现状（先读）**：`offlineSyncServiceProvider`、`pendingChangesProvider` 与三种冲突策略（ClientWins / ServerWins / SmartMerge）**类型都在，流程是模拟的**——`queueChange` 只写内存、`syncChanges` 的 `_processChange` 延时后直接返回成功、冲突策略没有被接线、`pendingChangesProvider` 依赖的流是坏的 mock，也没有和 WorkManager 联动。
+> 本文按"设计形态"讲用法，**接入真实后端前不要当作可用能力**；`lib/core/network/` 下的 `ApiClient` 同样尚未被业务使用。
 
 ## 概述
 
@@ -76,7 +69,7 @@ await offlineSyncService.queueChange(
 
 ### 同步更改
 
-当设备上线时会自动进行同步。你也可以手动触发：
+`syncChanges()` 是同步入口（**当前实现只是延时后返回成功**，没有真实网络同步）：
 
 ```dart
 await offlineSyncService.syncChanges();
@@ -182,54 +175,6 @@ return pendingChanges.when(
 
 ## 高级用法
 
-### 与 Repository 模式结合
-
-与你的 domain repositories 集成：
-
-```dart
-class TaskRepository {
-  final OfflineSyncService _offlineSyncService;
-  final ApiService _apiService;
-  
-  // In-memory cache for quick access
-  final Map<String, Task> _localCache = {};
-  
-  Future<Task> createTask(Task task) async {
-    // Store locally
-    final newTask = task.copyWith(id: const Uuid().v4());
-    _localCache[newTask.id] = newTask;
-    
-    // Queue for sync
-    await _offlineSyncService.queueChange(
-      entityType: 'task',
-      entityId: newTask.id,
-      operationType: OfflineOperationType.create,
-      data: newTask.toJson(),
-    );
-    
-    return newTask;
-  }
-  
-  Future<List<Task>> getAllTasks() async {
-    // Try to get from API if online
-    if (await _offlineSyncService.isOnline()) {
-      try {
-        final remoteTasks = await _apiService.getTasks();
-        _localCache.clear();
-        for (final task in remoteTasks) {
-          _localCache[task.id] = task;
-        }
-      } catch (_) {
-        // Fall back to cache if API fails
-      }
-    }
-    
-    // Return cached tasks
-    return _localCache.values.toList();
-  }
-}
-```
-
 ### 后台同步
 
 > **现状**：`lib/core/background/background_task_service.dart` 对 workmanager 做了真实封装，但**没有与离线同步接线**：回调只把"最后运行时间"写进 SharedPreferences，`main.dart` 也未调用 `initialize()`（目前仅 `examples/integrations/background_tasks_example_screen.dart` 在用）。要做真正的后台同步需自行补回调逻辑。
@@ -256,15 +201,3 @@ void backgroundTaskCallbackDispatcher() {
 }
 ```
 
-## 最佳实践
-
-1. **存储最小数据**：仅缓存离线功能所需的内容
-2. **使用乐观更新**：立即更新 UI，然后在后台同步
-3. **显示同步状态**：让用户了解更改的状态
-4. **优雅处理冲突**：提供清晰的 UI 用于解决冲突
-5. **添加时间戳**：包含创建/更新时间戳以帮助解决冲突
-6. **优先同步**：优先同步关键操作
-7. **节流同步**：不要每次更改都同步，批量处理操作
-8. **测试离线场景**：定期在飞行模式下测试你的应用
-
-通过遵循这些模式，你可以创建一个健壮的离线优先应用，无论连接状态如何都能提供无缝体验。

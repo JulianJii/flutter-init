@@ -41,7 +41,7 @@ flutter run
 
 ## 下一步
 
-- 阅读 [架构指南](./architecture.html)，理解 domain / data / presentation / providers 四层
-- 阅读 [编码规范](./coding_standards.html)，再动手写代码
+- 阅读 [架构指南](./ARCHITECTURE_GUIDE.md)，理解 domain / data / presentation / providers 四层
+- 阅读 [编码规范](./CODING_STANDARDS.md)，再动手写代码
 - 浏览 `lib/examples/` 里的示例页面（主题、本地化、集成能力 demo）
 - 仓库根目录的 `AGENTS.md` 是 AI 速查表，但**未入库**（`.gitignore`）——新克隆的仓库里没有它，规则看上面两篇文档与源码

@@ -2,22 +2,6 @@
 
 本指南介绍如何在 Flutter Riverpod Clean Architecture 项目中使用和扩展本地化系统。
 
-## 目录
-
-- [概述](#overview)
-- [设置](#setup)
-- [使用方法](#usage)
-  - [基本翻译](#basic-translation)
-  - [带参数的翻译](#translation-with-parameters)
-  - [复数形式](#pluralization)
-  - [日期和货币格式](#date-and-currency-formatting)
-- [添加新语言](#adding-new-languages)
-- [更新翻译](#updating-translations)
-- [UI 组件](#ui-components)
-- [语言特定资源](#language-specific-assets)
-- [与 Riverpod 集成](#working-with-riverpod)
-- [最佳实践](#best-practices)
-
 ## 概述
 
 本项目实现了一个完整的国际化 (i18n) 系统，包含：
@@ -290,13 +274,10 @@ ref.read(persistentLocaleProvider.notifier).setLocale(const Locale('es'));
 ref.read(persistentLocaleProvider.notifier).resetToSystemLocale();
 ```
 
-## 最佳实践
+## 注意事项
 
-1. **使用扁平键** - 翻译键使用扁平命名（例如 `login_title`、`welcome_message`），不使用点分隔
-2. **添加描述** - 在 ARB 文件中为所有键包含描述
-3. **处理缺失翻译** - 如果翻译缺失，系统将回退到英语
-4. **使用强类型 getter** - 优先使用 `AppLocalizations.of(context).xxx`，不要用字符串 key 取文案
-5. **保持 ARB 文件一致性** - 确保所有语言具有相同的键集
-6. **使用参数** - 避免字符串拼接，使用参数代替
-7. **测试所有语言** - 在所有支持的语言中验证 UI 布局（某些语言可能更长/更短）
-8. **更新所有文件** - 添加新键时，更新所有 ARB 文件以避免缺失翻译
+- `AppLocalizations.of(context).xxx` 是唯一入口，键用扁平命名（`login_title`），不要用字符串 key 取文案。
+- 加新键时**同步改所有 ARB**（模板是 `intl_zh.arb`），再跑 `flutter gen-l10n`；key 一致性由
+  `test/l10n/arb_consistency_test.dart` 守护（从仓库根运行）。
+- 缺键时 gen-l10n 回退到**模板语言（中文）**，不是英语。
+- 各语言文案长度不同，切换语言后过一遍 UI 布局。

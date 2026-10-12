@@ -162,9 +162,9 @@ final service = CompositeAnalyticsService([
 
 ### 开发环境与生产环境
 
-- Debug 构建包含 `DebugAnalyticsService`，用于开发时的可见性
-- Production 构建使用 `FirebaseAnalyticsService`
-- 两种实现共享相同的接口
+- Debug 构建包含 `DebugAnalyticsService`，用于开发时的可见性。
+- Release 构建会拼上 `FirebaseAnalyticsService`，但它同样是 stub（见下节），接好 Firebase 前不要指望线上有数据。
+- 两种实现共享同一个 `AnalyticsService` 接口。
 
 ## Firebase 集成
 
@@ -174,22 +174,8 @@ final service = CompositeAnalyticsService([
 2. 在您的应用中配置 Firebase
 3. 更新 `FirebaseAnalyticsService` 实现以使用真实的 Firebase SDK
 
-## 最佳实践
+## 调试与隐私
 
-1. **一致性**：使用标准化的事件名称和参数
-2. **隐私**：仅收集必要数据并尊重用户选择
-3. **性能**：避免跟踪可能影响性能的高频事件
-4. **清晰性**：使用描述性的事件名称和结构化参数
-5. **测试**：在生产环境之前，在开发环境中验证分析事件
-
-## 调试
-
-在开发环境中，所有分析事件通过 `DebugAnalyticsService` 记录到控制台。
-
-## 隐私注意事项
-
-- �终为用户提供退出分析的选择
-- 在隐私政策中记录收集了哪些数据
-- 遵守 GDPR 和 CCPA 等法规
-- 避免收集个人身份信息（PII）
-- 尽可能对用户数据进行匿名化处理
+在开发环境中所有事件都走 `DebugAnalyticsService`（打印到日志），这是当前唯一的可见手段。
+开关用 `analytics.enable()` / `disable()`，也可用 `featureFlagProvider('enable_analytics', ...)`
+统一控制；上线前在隐私政策里写明收集范围，且不要把 PII 放进 `parameters`。

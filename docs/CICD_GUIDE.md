@@ -2,24 +2,9 @@
 
 本指南介绍如何使用 Flutter Riverpod Clean Architecture 模板中的 CI/CD 配置来自动化构建、测试和部署流程。
 
-## 目录
-
-- [简介](#introduction)
-- [GitHub Actions 配置](#github-actions-configuration)
-- [Fastlane 集成](#fastlane-integration)
-- [环境变量和密钥](#environment-variables-and-secrets)
-- [手动部署](#manual-deployment)
-- [环境特定配置](#environment-specific-configuration)
-- [最佳实践](#best-practices)
-
 ## 简介
 
-持续集成和持续部署（CI/CD）自动化了应用的构建、测试和部署过程。该模板包含：
-
-- GitHub Actions 工作流用于 CI/CD
-- Fastlane 配置用于简化部署
-- 环境特定的配置
-- 密钥管理
+持续集成和持续部署（CI/CD）自动化了构建、测试与发布流程。本模板包含三个 GitHub Actions 工作流（见下表）；`fastlane/` 目前只有骨架，CI 不经过它。
 
 ## GitHub Actions 配置
 
@@ -35,86 +20,21 @@
 
 真正生效的检查是 `flutter_ci.yml`（analyze + test）。`flutter_ci_cd.yml` 负责构建与发布：Android job 先创建 Release 并上传 APK，Windows job 依赖它，再把 `init-windows-x64.zip` 挂到同一个 Release 上。iOS 构建未配置。
 
-## Fastlane 集成
+## Fastlane
 
-> **注意**：当前项目仅包含基本的 `fastlane/Fastfile` 配置。完整的 Fastlane 设置（包括 `Gemfile`、`Appfile` 和平台特定目录）待后续添加。
-
-### Android 命令
-
-```bash
-# Build for development
-fastlane android build env:development
-
-# Build for production
-fastlane android build env:production
-
-# Deploy to Google Play internal track
-fastlane android deploy env:production track:internal
-
-# Deploy to Google Play production
-fastlane android deploy env:production track:production
-```
-
-### iOS 命令
-
-```bash
-# Build for development
-fastlane ios build env:development
-
-# Build for production
-fastlane ios build env:production
-
-# Deploy to TestFlight
-fastlane ios deploy env:production
-```
+仓库里只有 `fastlane/Fastfile` 这个骨架：**没有** `Gemfile`、`Appfile`、平台目录，**CI 也不经过 Fastlane**（工作流直接跑 `flutter build apk`）。`Fastfile` 读的是 `.env.<env>`（`fastlane/README` 里有用法），但 Dart 侧不读 `.env`。
 
 ## 环境变量和密钥
 
-### 必需的密钥（GitHub）
+`flutter_ci_cd.yml` 的 Android job 需要以下 4 个 secret，缺任何一个签名都会失败：
 
-在 GitHub 仓库设置中添加以下密钥：
+- `ANDROID_KEYSTORE_BASE64`：keystore 文件的 Base64
+- `ANDROID_KEYSTORE_PASSWORD`
+- `ANDROID_KEY_ALIAS`
+- `ANDROID_KEY_PASSWORD`
 
-#### Android
-- `ANDROID_KEYSTORE_BASE64`: Base64-encoded Android keystore
-- `ANDROID_KEYSTORE_PASSWORD`: Keystore password
-- `ANDROID_KEY_ALIAS`: Key alias
-- `ANDROID_KEY_PASSWORD`: Key password
-- `PLAY_STORE_JSON_KEY`: Google Play service account JSON key
-
-#### iOS
-- `APPLE_ID`: Apple ID email
-- `APP_SPECIFIC_PASSWORD`: App-specific password
-- `TEAM_ID`: Apple developer team ID
-
-
-## 手动部署
-
-### 首次设置 Fastlane
-
-```bash
-# Install Fastlane
-gem install fastlane
-
-# For Android, set up Google Play credentials
-fastlane supply init
-
-# For iOS, set up App Store Connect credentials
-fastlane pilot init
-```
-
-### Android 手动部署
-
-```bash
-cd android
-fastlane android deploy env:production track:internal
-```
-
-### iOS 手动部署
-
-```bash
-cd ios
-fastlane ios deploy env:production
-```
+`PLAY_STORE_JSON_KEY`、`APPLE_ID`、`APP_SPECIFIC_PASSWORD`、`TEAM_ID` 只有 Fastlane 发布流程才用得到，
+而 Fastlane 尚未接线——现在配上也不会被 CI 读取。Windows job 不需要 secret。
 
 ## 环境特定配置
 
@@ -122,17 +42,8 @@ fastlane ios deploy env:production
 
 > **注意**：当前项目**不使用 flavor 系统**，所有环境共享单个 `lib/main.dart` 入口（Android/iOS 工程与 CI 中均无 `productFlavors` / `--flavor`）。多环境目前仅体现在 Fastlane 读取 `.env.<env>` 的流程上，Dart 侧尚未接入。
 
-## 最佳实践
+## 注意事项
 
-1. **绝不提交密钥**：始终使用环境变量或密钥管理
-2. **将 CI/CD 配置纳入版本控制**：将工作流文件纳入版本控制
-3. **部署前先测试**：确保所有测试通过后再部署
-4. **使用 feature flags**：将部署与功能发布解耦
-5. **语义化版本**：使用正确的版本号规范（MAJOR.MINOR.PATCH）
-6. **自动化一切**：避免部署过程中的手动步骤
-7. **监控发布**：部署后跟踪崩溃和问题
-8. **保持构建快速**：优化并缓存依赖
-9. **编写发布说明**：为用户记录变更
-10. **规划回滚方案**：准备回退到之前版本的策略
-
-通过遵循这些实践，你可以构建一个强大的 CI/CD 流水线，简化开发流程并降低生产环境中的错误风险。
+- 密钥只放 GitHub Secrets，不要提交 keystore 或 `.env.*`。
+- 版本号取自 `pubspec.yaml`，打 `v*` tag 才会触发发布。
+- 发布前确认 `flutter_ci.yml` 的 analyze + test 是绿的。

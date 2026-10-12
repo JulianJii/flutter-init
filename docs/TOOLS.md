@@ -95,22 +95,3 @@ cd docs && ./build_docs.sh
 ```
 
 脚本安装 Python 依赖（`markdown`、`pyyaml`、`beautifulsoup4`、`lxml`）并执行 `build_site.py`，把 `docs/*.md` 套用 `_layouts/default.html` 转成 HTML，输出到 `docs/_site`。
-
-## 高级用法示例
-
-### 创建新 Feature 和测试
-
-```bash
-# 1. 生成骨架
-./generate_feature.sh --name user_profile
-
-# 2. 手动补 providers/ 与 presentation/providers/，并编写测试
-# 3. 用运行器执行
-./test_generator.sh --target test/features/user_profile
-```
-
-### 为生产环境重命名应用
-
-```bash
-./rename_app.sh --app-name "My Awesome App" --package-name com.mycompany.awesomeapp
-```

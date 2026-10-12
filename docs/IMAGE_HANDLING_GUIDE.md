@@ -157,26 +157,6 @@ final customImageCacheProvider = Provider<CacheManager<ui.Image>>((ref) {
 final config = ref.watch(advancedImageConfigProvider);
 ```
 
-## 最佳实践
-
-### 图像优化
-
-1. **使用合适的图像尺寸**：避免加载超过需要的大尺寸图像
-2. **启用自动调整大小**：在 `AdvancedImageConfig` 中设置 `enableAutoResize` 为 true
-3. **使用缩略图**：为列表和网格生成并显示缩略图
-
-### 性能
-
-1. **启用缓存**：确保 `AdvancedImageConfig` 中的 `enableCaching` 为 true
-2. **使用模糊预览**：启用 `useThumbnailPreview` 以获得更好的感知性能
-3. **懒加载图像**：仅在图像可见时加载
-
-### 无障碍
-
-1. **提供语义标签**：为屏幕阅读器添加描述性文本
-2. **优雅处理错误**：始终提供有意义的错误 widget
-3. **显示加载指示器**：加载过程中使用闪烁占位符
-
 ## 示例
 
 ### 基本图像画廊
@@ -286,15 +266,7 @@ Future<void> prefetchImagesForGallery(Ref ref, List<String> imageUrls) async {
 }
 ```
 
-## 故障排除
-
-### 常见问题
-
-1. **图像无法加载**：检查网络连接并验证 URL
-2. **性能不佳**：减小图像尺寸或启用自动调整大小
-3. **内存使用过高**：减少内存缓存大小或启用积极缓存
-
-### 测试图像加载
+## 测试
 
 用 `testWidgets` + ProviderScope override 注入替身（注意 widget 测试里 `NetworkImage` 默认会失败，真实项目需配合 mock HTTP）：
 

@@ -52,6 +52,23 @@ def normalize_filename(filename):
     # Remove _GUIDE suffix and convert to lowercase
     return base_name.replace('_GUIDE', '').lower() + '.html'
 
+def link_md_to_html(html):
+    """Rewrite links pointing at *.md to the generated page name.
+
+    Docs link each other with real markdown filenames so the links also work
+    when browsing the repo on GitHub; the site still needs .html targets.
+    """
+    return re.sub(
+        r'href="(?:\./)?([A-Za-z0-9_\-]+)\.md"',
+        lambda m: 'href="./%s"' % normalize_filename(m.group(1) + '.md'),
+        html,
+    )
+
+def render_page(layout, html_content, page_title):
+    """Apply the shared layout template"""
+    output = layout.replace('{{ content }}', html_content)
+    return output.replace('{{ page.title }}', page_title)
+
 def process_markdown_file(file_path):
     """Convert a markdown file to HTML using the layout template"""
     print(f"Converting {file_path}")
@@ -78,11 +95,7 @@ def process_markdown_file(file_path):
             'markdown.extensions.toc'
         ]
     )
-    
-    # Apply layout template
-    layout = get_layout_template()
-    output = layout.replace('{{ content }}', html_content)
-    output = output.replace('{{ page.title }}', page_title)
+    html_content = link_md_to_html(html_content)
     
     # Determine output path
     output_filename = normalize_filename(filename)
@@ -90,6 +103,8 @@ def process_markdown_file(file_path):
         # Special case for README.md
         output_filename = 'index.html' 
     output_path = os.path.join(OUTPUT_DIR, output_filename)
+    
+    output = render_page(get_layout_template(), html_content, page_title)
     
     # Highlight active page in sidebar
     soup = BeautifulSoup(output, 'html.parser')
@@ -120,16 +135,10 @@ def process_html_file(file_path):
     
     if 'layout' in front_matter:
         # If it has a layout defined, apply the layout
-        layout = get_layout_template()
-        output = layout.replace('{{ content }}', html_content)
-        
-        # Get title from front matter
-        page_title = front_matter.get('title', 'Untitled')
-        output = output.replace('{{ page.title }}', page_title)
-        
-        # Output filename
         output_filename = os.path.basename(file_path)
         output_path = os.path.join(OUTPUT_DIR, output_filename)
+        page_title = front_matter.get('title', 'Untitled')
+        output = render_page(get_layout_template(), html_content, page_title)
         
         # Highlight active page in sidebar
         soup = BeautifulSoup(output, 'html.parser')
